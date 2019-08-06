@@ -1,0 +1,41 @@
+<div class="container custom-container-2">
+
+  <!-- Show it when there is no brand -->
+  <div class="no-data text-center" *ngIf="Brand.length == 0">
+    <p>There is no brand added yet!</p>
+    <button class="btn btn-outline-primary" routerLink="/create-brand">Add Empoyee</button>
+  </div>
+
+  <!-- Brands list table, it hides when there is no brand -->
+  <div *ngIf="Brand.length !== 0">
+    <h3 class="mb-3 text-center">Brands List</h3>
+
+    <div class="col-md-12">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th scope="col">User Id</th>
+            <th scope="col">Name</th>
+            <th scope="col">Email</th>
+            <th scope="col">Phone</th>
+            <th scope="col">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let brand of Brand">
+            <td>{{brand.id}}</td>
+            <td>{{brand.name}}</td>
+            <td>{{brand.email}}</td>
+            <td>{{brand.phone}}</td>
+            <td>
+              <span class="edit" routerLink="/brand-edit/{{brand.id}}">Edit</span>
+              <span class="delete" (click)="deleteBrand(brand.id)">Delete</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+</div>
