@@ -2,7 +2,7 @@
 import { Router } from '@angular/router';
 
 import { AuthenticationService } from './_services';
-import { User } from './_models';
+import { User, Role } from './_models';
 
 @Component({ selector: 'app', templateUrl: 'app.component.html' })
 export class AppComponent {
@@ -14,6 +14,10 @@ export class AppComponent {
     ) {
         this.authenticationService.currentUser.subscribe(
           x => this.currentUser = x);
+    }
+
+    get isAdmin() {
+      return this.currentUser && this.currentUser.role === Role.Admin;
     }
 
     logout() {
