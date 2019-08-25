@@ -14,6 +14,7 @@ import { HomeComponent } from './home';
 import { LoginComponent } from './auth/login';
 import { RegisterComponent } from './auth/register/register.component';
 import { BrandComponent } from './equipment/brand/brand.component';
+import { LogService } from './_services/log.service';
 
 @NgModule({
     imports: [
