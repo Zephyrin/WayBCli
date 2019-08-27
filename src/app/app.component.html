@@ -4,7 +4,7 @@
         <a class="nav-item nav-link" routerLink="/">{{currentUser.username | titlecase}}, what about your backpack ?</a>
         <a class="nav-item nav-link" (click)="logout()">Logout</a>
         <a class="nav-item nav-link" *ngIf="isAdmin">Admin</a>
-        <a class="nav-item nav-link" *ngIf="isAdmin == false">Not admin</a>
+        <a class="nav-item nav-link" *ngIf="!isAdmin">Not admin</a>
     </div>
     <div class="navbar-nav" *ngIf="!currentUser">
         <a class="nav-item nav-link" routerLink="/">What About Your Backpack ?</a>

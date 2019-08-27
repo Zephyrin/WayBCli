@@ -21,7 +21,8 @@ export class EquipmentService {
   }
 
   add(equipment: Equipment): Observable<Equipment> {
-    return this.http.post<Equipment>(`${environment.apiUrl}/equipment`, equipment)
+    return this.http.post<Equipment>(
+      `${environment.apiUrl}/user/${this.authenticationService.currentUserValue.id}/equipment`, equipment)
       .pipe(map(equipment => {
         return equipment;
       }));

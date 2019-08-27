@@ -23,7 +23,39 @@
             </button>
         </div>
         <div class="modal-body">
-            <p>Modal body text goes here.</p>
+            <form [formGroup]="equipmentForm" (ngSubmit)="onSubmit()">
+                <div *ngIf="submitted && f.message" class="invalid-feedback">
+                    <div *ngIf="f.message">{{f.message}}</div>
+                </div>
+                <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" formControlName="name" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.name.errors }" />
+                <div *ngIf="submitted && f.name.errors" class="invalid-feedback">
+                    <div *ngIf="f.name.errors.required">Name is required</div>
+                </div>
+                </div>
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <input type="text" formControlName="description" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.description.errors }" />
+                    <div *ngIf="submitted && f.description.errors" class="invalid-feedback">
+                        <div *ngIf="f.description.errors.required">Description is required</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="brand">Brand</label>
+                    <input type="text" formControlName="brand" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.brand.errors }" />
+                    <div *ngIf="submitted && f.brand.errors" class="invalid-feedback">
+                        <div *ngIf="f.brand.errors.required">Brand is required</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                  <button [disabled]="loading" class="btn btn-primary">
+                      <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                      Create
+                  </button>
+                  <a routerLink="/" class="btn btn-link">Cancel</a>
+                </div>
+              </form>
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-primary">Save changes</button>

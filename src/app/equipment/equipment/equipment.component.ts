@@ -56,10 +56,10 @@ export class EquipmentComponent implements OnInit {
       return;
     }
     this.loading = true;
-    this.equipmentService.add(this.equipmentForm.value).subscribe(brand =>{
+    this.equipmentService.add(this.equipmentForm.value).subscribe(equipment =>{
       this.loading = false;
       this.submitted = false;
-      this.equipments.push(brand);
+      this.equipments.push(equipment);
 
     }, error => {
       this.error = error;
