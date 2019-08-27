@@ -1,24 +1,23 @@
 ﻿<!-- nav -->
-<nav class="navbar navbar-expand navbar-dark bg-dark" *ngIf="currentUser">
-    <div class="navbar-nav">
-        <a class="nav-item nav-link" routerLink="/">Home</a>
+<nav class="navbar navbar-expand navbar-dark bg-dark" >
+    <div class="navbar-nav" *ngIf="currentUser">
+        <a class="nav-item nav-link" routerLink="/">{{currentUser.username | titlecase}}, what about your backpack ?</a>
         <a class="nav-item nav-link" (click)="logout()">Logout</a>
         <a class="nav-item nav-link" *ngIf="isAdmin">Admin</a>
         <a class="nav-item nav-link" *ngIf="isAdmin == false">Not admin</a>
     </div>
+    <div class="navbar-nav" *ngIf="!currentUser">
+        <a class="nav-item nav-link" routerLink="/">What About Your Backpack ?</a>
+        <a class="nav-item nav-link" (click)="login()">Login</a>
+    </div>
 </nav>
-
+<div class="nav" *ngIf="currentUser">
+    <a class="nav-iten nav-link" routerLink="equipment">Equipment</a>
+    <a class="nav-iten nav-link" routerLink="trip">Tri</a>
+    <a class="nav-iten nav-link" routerLink="profil">Profil</a>
+</div>
 <!-- main app container -->
 <div class="container">
     <router-outlet></router-outlet>
-</div>
-
-<!-- credits -->
-<div class="text-center mt-4">
-    <p>
-        <a href="https://jasonwatmore.com/post/2019/06/22/angular-8-jwt-authentication-example-tutorial" target="_top">Angular 8 - JWT Authentication Example & Tutorial</a>
-    </p>
-    <p>
-        <a href="http://jasonwatmore.com" target="_top">JasonWatmore.com</a>
-    </p>
+    
 </div>

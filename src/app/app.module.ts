@@ -14,7 +14,8 @@ import { HomeComponent } from './home';
 import { LoginComponent } from './auth/login';
 import { RegisterComponent } from './auth/register/register.component';
 import { BrandComponent } from './equipment/brand/brand.component';
-import { LogService } from './_services/log.service';
+import { LogService } from './_services/log.service';;
+import { EquipmentComponent } from './equipment/equipment/equipment.component'
 
 @NgModule({
     imports: [
@@ -28,7 +29,8 @@ import { LogService } from './_services/log.service';
         HomeComponent,
         LoginComponent,
         RegisterComponent,
-        BrandComponent
+        BrandComponent,
+        EquipmentComponent
     ],
     providers: [
         { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
