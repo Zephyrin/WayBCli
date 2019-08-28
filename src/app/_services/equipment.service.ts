@@ -5,7 +5,7 @@ import { map } from 'rxjs/operators';
 import { catchError, retry } from 'rxjs/operators';
 
 import { environment } from '@environments/environment';
-import { Equipment, User } from '@app/_models';
+import { Equipment } from '@app/_models';
 import { AuthenticationService } from './authentication.service';
 
 @Injectable({

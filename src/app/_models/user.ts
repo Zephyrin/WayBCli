@@ -5,5 +5,6 @@
     password: string;
     email: string;
     roles: string[];
+    enabled: boolean;
     token?: string;
 }

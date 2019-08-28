@@ -15,6 +15,8 @@
     <a class="nav-iten nav-link" routerLink="equipment">Equipment</a>
     <a class="nav-iten nav-link" routerLink="trip">Tri</a>
     <a class="nav-iten nav-link" routerLink="profil">Profil</a>
+    <a class="nav-iten nav-link" routerLink="category" *ngIf="isAdmin">Category</a>
+    <a class="nav-iten nav-link" routerLink="users" *ngIf="isAdmin">User</a>
 </div>
 <!-- main app container -->
 <div class="container">
