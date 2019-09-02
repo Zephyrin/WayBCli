@@ -14,7 +14,7 @@ const routes: Routes = [
     { path: 'register', component: RegisterComponent },
     { path: 'equipment', component: EquipmentComponent},
     { path: 'users', component: UserComponent},
-    { path: 'category', component: CategoryComponent}
+    { path: 'category', component: CategoryComponent},
 
     // otherwise redirect to home
     { path: '**', redirectTo: '' }
