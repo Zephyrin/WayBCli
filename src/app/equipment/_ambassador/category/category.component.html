@@ -1,1 +1,18 @@
-<p>category works!</p>
+<div class="btn-toulbar" role="group" aria-label="Tools">
+    <button type="button" class="btn btn-light" data-toggle="modal" data-target="#updateCategory" (click)="addCategory()">Add</button>
+    <button type="button" class="btn btn-light" data-toggle="modal" data-target="#updateCategory" [disabled]="isSelectedCategory" (click)="editCategory()">Edit</button>
+    <button type="button" class="btn btn-light" [disabled]="isSelectedCategory">Delete</button>
+</div>
+
+<div class="card" *ngFor="let category of categories">
+    <div class="card-header">
+        {{category.id}} - {{category.name}} 
+    </div>
+    <div class="card-body">
+        <div class="btn-toulbar" role="group" aria-label="Tools">
+            <button type="button" class="btn btn-light" data-toggle="modal" data-target="#updateSubCategory" (click)="addSubCategory()">Add</button>
+            <button type="button" class="btn btn-light" data-toggle="modal" data-target="#updateSubCategory" [disabled]="isSelectedSubCategory" (click)="editSubCategory()">Edit</button>
+            <button type="button" class="btn btn-light" [disabled]="isSelectedSubCategory">Delete</button>
+        </div>
+    </div>
+</div>
