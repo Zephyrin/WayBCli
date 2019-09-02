@@ -22,6 +22,13 @@ export class AppComponent {
         && this.currentUser.roles.indexOf(Role.Admin) !== -1;
     }
 
+    get isAmbassador() {
+        return this.currentUser
+        && this.currentUser.roles
+        && (this.currentUser.roles.indexOf(Role.Ambassador) !== -1
+          || this.currentUser.roles.indexOf(Role.Admin) !== -1);
+    }
+
     logout() {
         this.authenticationService.logout();
         this.router.navigate(['/login']);

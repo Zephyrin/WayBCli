@@ -20,9 +20,7 @@ export class UserService {
     update(user: User): Observable<User> {
         return this.http.patch<User>(
           `${environment.apiUrl}/user/${user.id}`, user)
-          .pipe(map(user => {
-            return user;
-          }));
+          ;
       }
     
       delete(user: User): Observable<{}> {

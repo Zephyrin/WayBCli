@@ -6,6 +6,7 @@ import { AuthGuard } from './_helpers';
 import { RegisterComponent } from './auth/register/register.component';
 import { EquipmentComponent } from './equipment/equipment/equipment.component';
 import { UserComponent } from './equipment/_admin/user/user.component';
+import { CategoryComponent } from './equipment/_ambassador/category/category.component';
 
 const routes: Routes = [
     { path: '', component: HomeComponent, canActivate: [AuthGuard] },
@@ -13,6 +14,7 @@ const routes: Routes = [
     { path: 'register', component: RegisterComponent },
     { path: 'equipment', component: EquipmentComponent},
     { path: 'users', component: UserComponent},
+    { path: 'category', component: CategoryComponent}
 
     // otherwise redirect to home
     { path: '**', redirectTo: '' }

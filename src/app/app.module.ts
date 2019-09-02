@@ -16,7 +16,8 @@ import { RegisterComponent } from './auth/register/register.component';
 import { BrandComponent } from './equipment/brand/brand.component';
 import { LogService } from './_services/log.service';;
 import { EquipmentComponent } from './equipment/equipment/equipment.component';
-import { UserComponent } from './equipment/_admin/user/user.component';
+import { UserComponent } from './equipment/_admin/user/user.component';;
+import { CategoryComponent } from './equipment/_ambassador/category/category.component'
 @NgModule({
     imports: [
         BrowserModule,
@@ -31,7 +32,8 @@ import { UserComponent } from './equipment/_admin/user/user.component';
         RegisterComponent,
         BrandComponent,
         EquipmentComponent,
-        UserComponent
+        UserComponent,
+        CategoryComponent
     ],
     providers: [
         { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },

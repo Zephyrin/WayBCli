@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { ViewChild } from '@angular/core';
+
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
 import { UserService } from '@app/_services/user.service';
@@ -6,12 +8,14 @@ import { User } from '@app/_models/user';
 import { AuthenticationService } from '@app/_services';
 import { Router } from '@angular/router';
 
+declare var $: any;
 @Component({
   selector: 'app-user',
   templateUrl: './user.component.html',
   styleUrls: ['./user.component.less']
 })
 export class UserComponent implements OnInit {
+  @ViewChild("updateUser", {static:true}) updateUser;
 
   userForm: FormGroup;
   loading = false;
@@ -20,7 +24,9 @@ export class UserComponent implements OnInit {
   deleteError = '';
   deleteHasError = false;
   users: User[];
-  selectedUser = null;
+  selectedUser : User;
+  formError = {};
+
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
@@ -31,7 +37,7 @@ export class UserComponent implements OnInit {
       }
      }
   
-  setSelectedUser(user){
+  setSelectedUser(user : User){
     if (user == this.selectedUser){
       this.selectedUser = null;
     }
@@ -60,7 +66,7 @@ export class UserComponent implements OnInit {
       username: ['', Validators.required],
       email: ['', Validators.required],
       enabled: ['', Validators.required],
-      message: ['']
+      gender: ['', Validators.required]
     });
   }
 
@@ -70,19 +76,32 @@ export class UserComponent implements OnInit {
     this.deleteHasError = false;
     this.submitted = true;
     if (this.userForm.invalid) {
-      console.log(this.userForm.status);
       return;
     }
     this.loading = true;
-    console.log(this.userForm.value);
     this.userService.update(this.userForm.value).subscribe(user =>{
       this.loading = false;
       this.submitted = false;
-      this.selectedUser = this.userForm.value;
-    }, error => {
+      this.formError = {};
+      Object.assign(this.selectedUser, this.userForm.value);
+      $(this.updateUser.nativeElement).modal('hide');
+    }, (error: any) => {
+      this.formError = {};
+      // get the nested errors
+      /* let errorData = error.json().errors.children; */
+      let errorData = error.error.errors[0].children;
+      // iterate the keys in errors
+      for(let key in errorData) {
+        // if key has nested "errors", get and set the error message, else set null
+         errorData[key].errors ? this.formError[key] = errorData[key].errors : this.formError[key] = null;
+      }
       this.error = error;
       this.loading = false;
     });
+  }
+
+  onCancel() {
+    this.formError = {};
   }
 
   deleteUser(user: User) {
@@ -106,5 +125,9 @@ export class UserComponent implements OnInit {
         this.loading = false;
       }
     });
+  }
+
+  clearError(key) {
+    this.formError[key] = null;
   }
 }
