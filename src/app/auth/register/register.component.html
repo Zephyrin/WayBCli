@@ -1,41 +1,92 @@
 <div class="col-md-6 offset-md-3 mt-5">
   <div class="card">
-    <h4 class="card-header">Test</h4>
+    <h4 class="card-header">Register</h4>
     <div class="card-body">
+      <div *ngIf="submitted && errors.hasMessage" class="alert alert-warning">
+        <div>{{errors.message}}</div>
+      </div>
+      <div *ngIf="submitted && errors.hasFatalError" class="alert alert-danger">
+        <div [innerHTML]="errors.fatalError"></div>
+      </div>
       <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
-        <div class="form-group">
-            <label for="username">Username</label>
-            <input type="text" formControlName="username" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.username.errors }" />
-            <div *ngIf="submitted && f.username.errors" class="invalid-feedback">
-                <div *ngIf="f.username.errors.required">Username is required</div>
-            </div>
+
+        <div *ngIf="submitted && errors.message" class="alert alert-warning">
+          <div *ngIf="errors.message">{{errors.message}}</div>
         </div>
         <div class="form-group">
-            <label for="email">Email</label>
-            <input type="text" formControlName="email" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.email.errors }" />
-            <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
-                <div *ngIf="f.email.errors.required">Username is required</div>
+          <label for="username">Username</label>
+          <input type="text" formControlName="username" class="form-control"
+            [ngClass]="{ 'is-invalid':
+              (submitted && (f.username.errors || errors.hasErrors.username)) }" />
+          <div *ngIf="(submitted && (f.username.errors || errors.hasErrors.username))"
+            class="invalid-feedback">
+            <div *ngIf="f.username.errors && f.username.errors.required">
+              Username is required
             </div>
+            <div *ngIf="errors.hasErrors.username">
+              <div *ngFor="let child of errors.errors.username.errors">{{child}}</div>
+            </div>
+          </div>
         </div>
         <div class="form-group">
-            <label for="gender">Gender</label>
-            <input type="text" formControlName="gender" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.gender.errors }" />
-            <div *ngIf="submitted && f.gender.errors" class="invalid-feedback">
-                <div *ngIf="f.gender.errors.required">Username is required</div>
+          <label for="email">Email</label>
+          <input type="text" formControlName="email" class="form-control"
+            [ngClass]="{ 'is-invalid': (submitted
+              && (f.email.errors || errors.hasErrors.email)) }" />
+          <div *ngIf="(submitted && (f.email.errors || errors.hasErrors.email))"
+            class="invalid-feedback">
+            <div *ngIf="f.email.errors && f.email.errors.required">
+              Email is required
             </div>
+            <div *ngIf="errors.hasErrors.email">
+              <div *ngFor="let child of errors.errors.email.errors">{{child}}</div>
+            </div>
+          </div>
         </div>
         <div class="form-group">
-            <label for="password">Password</label>
-            <input type="password" formControlName="password" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.password.errors }" />
-            <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
-                <div *ngIf="f.password.errors.required">Password is required</div>
-                <div *ngIf="f.password.errors.minlength">Password must be at least 6 characters</div>
+          <label for="gender">Gender</label>
+          <select formControlName="gender"
+            class="form-control"
+            [ngClass]="{ 'is-invalid': (submitted
+              && (f.gender.errors || errors.hasErrors.gender)) }">
+            <option value="" disabled selected>Select your gender</option>
+            <option *ngFor="let key of genderKeys"
+              [ngValue]="key">{{genders[key]}}</option>
+          </select>
+          <div *ngIf="(submitted && (f.gender.errors || errors.hasErrors.gender))"
+            class="invalid-feedback">
+            <div *ngIf="f.gender.errors && f.gender.errors.required">
+              Gender is required
             </div>
+            <div *ngIf="errors.hasErrors.gender">
+              <div *ngFor="let child of errors.errors.gender.errors">{{child}}</div>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" formControlName="password"
+            class="form-control"
+            [ngClass]="{ 'is-invalid': (submitted
+              && (f.password.errors || errors.hasErrors.password)) }" />
+          <div *ngIf="(submitted && (f.password.errors || errors.hasErrors.password))"
+            class="invalid-feedback">
+            <div *ngIf="f.password.errors && f.password.errors.required">
+              Password is required
+            </div>
+            <div *ngIf="f.password.errors && f.password.errors.minlength">
+              Password must be at least 6 characters
+            </div>
+            <div *ngIf="errors.hasErrors.password">
+              <div *ngFor="let child of errors.errors.password.errors">{{child}}</div>
+            </div>
+          </div>
         </div>
         <div class="form-group">
             <button [disabled]="loading" class="btn btn-primary">
-                <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
-                Register
+              <span *ngIf="loading"
+              class="spinner-border spinner-border-sm mr-1"></span>
+              Register
             </button>
             <a routerLink="/login" class="btn btn-link">Cancel</a>
           </div>

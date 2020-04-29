@@ -4,7 +4,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 // used to create fake backend
-//import { fakeBackendProvider } from './_helpers';
+// import { fakeBackendProvider } from './_helpers';
 
 import { AppComponent } from './app.component';
 import { appRoutingModule } from './app.routing';
@@ -14,10 +14,11 @@ import { HomeComponent } from './home';
 import { LoginComponent } from './auth/login';
 import { RegisterComponent } from './auth/register/register.component';
 import { BrandComponent } from './equipment/brand/brand.component';
-import { LogService } from './_services/log.service';;
+import { LogService } from './_services/log.service';
 import { EquipmentComponent } from './equipment/equipment/equipment.component';
-import { UserComponent } from './equipment/_admin/user/user.component';;
-import { CategoryComponent } from './equipment/_ambassador/category/category.component'
+import { UserComponent } from './equipment/_admin/user/user.component';
+import { CategoryComponent } from './equipment/_ambassador/category/category.component';
+
 @NgModule({
     imports: [
         BrowserModule,
@@ -40,7 +41,7 @@ import { CategoryComponent } from './equipment/_ambassador/category/category.com
         { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
 
         // provider used to create fake backend
-        //fakeBackendProvider
+        // fakeBackendProvider
     ],
     bootstrap: [AppComponent]
 })

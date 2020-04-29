@@ -68,11 +68,10 @@ export class BrandComponent implements OnInit {
     this.deleteHasError = false;
     this.brandService.delete(brand).subscribe(next => {
       this.deleteBrand(brand);
-    },error => {
-      if(error.status == 404) {
+    }, error => {
+      if (error.status === 404) {
         this.deleteBrand(brand);
-      }
-      else {
+      } else {
         this.deleteHasError = true;
         this.deleteError = error.message;
         this.loading = false;

@@ -6,7 +6,7 @@ import { User, Role } from './_models';
 
 @Component({
     selector: 'app',
-    templateUrl: 'app.component.html',  
+    templateUrl: 'app.component.html',
     styleUrls: ['./app.component.less']
 })
 export class AppComponent {
@@ -21,7 +21,7 @@ export class AppComponent {
     }
 
     get isAdmin() {
-      return this.currentUser 
+      return this.currentUser
         && this.currentUser.roles
         && this.currentUser.roles.indexOf(Role.Admin) !== -1;
     }

@@ -23,15 +23,17 @@ export class AuthenticationService {
         return this.http.post<any>(`${environment.apiUrl}/auth/login`, { username, password })
             .pipe(map(token => {
                 // store user details and jwt token in local storage to keep user logged in between page refreshes
-                let user : User;
-                user = new User();
-                user.token = token.token;
-                this.currentUserSubject.next(user);
-                
-                localStorage.setItem('currentUser', JSON.stringify(user));
-                
-                return user;
+                return this.registerLogin(token);
             }));
+    }
+
+    registerLogin(token: any) {
+      let user : User;
+      user = new User();
+      user.token = token.token;
+      this.currentUserSubject.next(user);
+      localStorage.setItem('currentUser', JSON.stringify(user));
+      return user;
     }
 
     getUser(username: string) {
