@@ -1,7 +1,7 @@
 ﻿<!-- nav -->
 <nav class="navbar navbar-expand-lg navbar-light bg-light" *ngIf="currentUser">
     <a class="navbar-brand" routerLink="/">
-      {{currentUser.username | titlecase}}, what about your backpack ?
+      Hey {{currentUser.username | titlecase}}, what about your backpack ?
     </a>
     <button class="navbar-toggler" type="button" data-toggle="collapse"
       data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown"
@@ -9,41 +9,61 @@
         <span class="navbar-toggler-icon"></span>
     </button>
     <div id="navbarNavDropdown" class="navbar-collapse collapse">
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-                <a class="nav-link" href="#">
-                  Home <span class="sr-only">(current)</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" routerLink="equipment">Equipment</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" routerLink="trip">Trip</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" routerLink="profil">Profil</a>
-            </li>
-            <li role="separator" class="divider" *ngIf="isAmbassador"></li>
-            <li class="nav-item">
-                <a class="nav-link" *ngIf="isAdmin">Admin</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" *ngIf="!isAdmin">Not admin</a>
-            </li>
-            <li class="nav-item" *ngIf="isAmbassador">
-                <a class="nav-link" routerLink="category">Category</a>
-            </li>
-            <li class="separator" class="divider" *ngIf="isAdmin"></li>
-            <li class="nav-item" *ngIf="isAdmin">
-                <a class="nav-link" routerLink="users">User</a>
-            </li>
-        </ul>
-        <ul class="navbar-nav">
-            <li class="nav-item">
-                <a class="nav-link" (click)="logout()">Logout</a>
-            </li>
-        </ul>
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="#">
+            Home <span class="sr-only">(current)</span>
+          </a>
+        </li>
+        <div class="dropdown d-lg-none">
+          <a class="nav-link dropdown-toggle"
+             href="#"
+             id="dropdownInfo"
+             role="btn"
+             data-toggle="dropdown"
+             aria-haspopup="true"
+             aria-expanded="false">
+            Equipment
+          </a>
+          <div class="dropdown-menu" aria-labelledby="dropdownInfo">
+            <a class="dropdown-item" routerLink="equipment">Equipment</a>
+            <a class="dropdown-item" routerLink="trip">Trip</a>
+            <a class="dropdown-item" routerLink="profil">Profil</a>
+          </div>
+        </div>
+        <div class="nav-item dropdown d-lg-none" *ngIf="isAmbassador">
+          <a class="nav-link dropdown-toggle"
+             href="#"
+             id="dropdownInfo"
+             role="btn"
+             data-toggle="dropdown"
+             aria-haspopup="true"
+             aria-expanded="false">
+            Ambassador
+          </a>
+          <div class="dropdown-menu" aria-labelledby="dropdownInfo">
+            <a class="dropdown-item nav-link" routerLink="category">Category</a>
+            <a class="dropdown-item nav-link" routerLink="equipmentsValidator">
+              Equipments' validator
+            </a>
+          </div>
+        </div>
+        <li class="separator" class="divider" *ngIf="isAdmin"></li>
+        <li class="nav-item" *ngIf="isAdmin">
+            <a class="nav-link" routerLink="users">User</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" *ngIf="isAdmin">Admin</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" *ngIf="!isAdmin">Not admin</a>
+        </li>
+      </ul>
+      <ul class="navbar-nav">
+          <li class="nav-item">
+              <a class="nav-link" (click)="logout()">Logout</a>
+          </li>
+      </ul>
     </div>
 </nav>
 <nav class="navbar navbar-expand-lg navbar-light bg-light" *ngIf="!currentUser">
@@ -69,11 +89,28 @@
     </div>
 </nav>
 
-<div class="nav flex-column flex-sm-column" *ngIf="currentUser">
-
-</div>
-
 <!-- main app container -->
-<div class="container">
-    <router-outlet></router-outlet>
+<div class="container-fluid">
+  <div class="row flex-xl-nowrap">
+    <div class="col-12 col-md-3 col-xl-2 bd-sidebar d-none d-lg-block">
+
+      <div class="card mt-4" *ngIf="currentUser">
+        <h4 class="card-header">Equipment</h4>
+        <div class="card-body">
+          <a class="nav-link" routerLink="equipment">Equipment</a>
+          <a class="nav-link" routerLink="trip">Trip</a>
+          <a class="nav-link" routerLink="profil">Profil</a>
+        </div>
+      </div>
+      <div class="card mt-4" *ngIf="isAmbassador">
+        <h4 class="card-header">Ambassador</h4>
+        <div class="card-body">
+          <a class="nav-link" routerLink="category">Category</a>
+        </div>
+      </div>
+    </div>
+    <main class="col-12 col-md-9 col-xl-8 py-md-3 pl-md-5 bd-content" role="main">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
 </div>

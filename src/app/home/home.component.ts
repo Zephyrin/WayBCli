@@ -1,4 +1,4 @@
-﻿import { Component, NgModule } from '@angular/core';
+﻿import { Component, NgModule, OnInit } from '@angular/core';
 import { first } from 'rxjs/operators';
 
 import { User } from '@app/_models';
@@ -13,7 +13,7 @@ import { BrowserModule } from '@angular/platform-browser';
   declarations: [ HomeComponent, BrandComponent],
   bootstrap: [ HomeComponent ]
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit {
     loading = false;
     users: User[];
 
@@ -21,9 +21,9 @@ export class HomeComponent {
 
     ngOnInit() {
         this.loading = false;
-        // this.userService.getAll().pipe(first()).subscribe(users => {
-        //     this.loading = false;
-        //     this.users = users;
-        // });
+        this.userService.getAll().pipe(first()).subscribe(users => {
+            this.loading = false;
+            this.users = users;
+        });
     }
 }

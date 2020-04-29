@@ -4,11 +4,13 @@ import { first } from 'rxjs/operators';
 
 import { Brand } from '@app/_models';
 import { BrandService } from '@app/_services/brand.service';
+
 @Component({
   selector: 'app-brand',
   templateUrl: './brand.component.html',
   styleUrls: ['./brand.component.less']
 })
+
 export class BrandComponent implements OnInit {
   brandForm: FormGroup;
   loading = false;
@@ -62,6 +64,7 @@ export class BrandComponent implements OnInit {
     this.brands.splice(index, 1);
     this.loading = false;
   }
+
   onDelete(brand: Brand) {
     this.loading = true;
     this.deleteError = '';
