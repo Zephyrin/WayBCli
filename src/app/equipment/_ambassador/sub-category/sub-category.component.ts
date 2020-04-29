@@ -20,7 +20,7 @@ export class SubCategoryComponent implements OnInit {
   @Input() parentData;
   @Input('subCategories') subCategories;
 
-  @ViewChild('createModal', {static: true}) modal;
+  @ViewChild('modal', {static: true}) modal;
 
   form: FormGroup;
   isCreateForm: boolean;
@@ -48,7 +48,7 @@ export class SubCategoryComponent implements OnInit {
 
   ngOnInit() {
     this.loading = true;
-
+    this.isCreateForm = true;
     this.form = this.formBuilder.group({
       id: [''],
       name: ['', Validators.required]
@@ -69,6 +69,7 @@ export class SubCategoryComponent implements OnInit {
     this.form.patchValue(this.selected);
     this.isCreateForm = false;
   }
+
   create() {
     this.form.reset();
     this.isCreateForm = true;
@@ -78,46 +79,8 @@ export class SubCategoryComponent implements OnInit {
     this.errors.clearError(key);
   }
 
-  onDelete() {
-    this.loading = true;
-    this.service.delete(this.selected.id,
-         this.selected).subscribe(next => {
-      this.delete(this.selected);
-    }, error => {
-      if (error.status === 404) {
-        this.delete(this.selected);
-      } else {
-        this.manageDeleteError(error.message);
-        this.loading = false;
-      }
-    });
-  }
-
-  delete(deleteValue: SubCategory) {
-    this.manageDeleteError(undefined);
-    const index = this.subCategories.indexOf(deleteValue);
-    this.subCategories.splice(index, 1);
-    this.loading = false;
-  }
-
   onCancel() {
     this.errors = new FormErrors();
-  }
-
-  manageDeleteError(message: string) {
-    this.deleteError = message;
-    this.deleteHasError = message !== undefined;
-  }
-
-  endTransaction() {
-    this.loading = false;
-    this.submitted = false;
-    $(this.modal.nativeElement).modal('hide');
-  }
-
-  endTransactionError(error) {
-    this.errors.formatError(error);
-    this.loading = false;
   }
 
   onSubmitModal() {
@@ -129,6 +92,8 @@ export class SubCategoryComponent implements OnInit {
     }
     this.loading = true;
     if (this.isCreateForm) {
+      console.log(this.parentData.id);
+      console.log(this.subCategories);
       this.service.create(this.parentData.id, this.form.value)
         .subscribe(subCategory => {
           this.endTransaction();
@@ -145,5 +110,44 @@ export class SubCategoryComponent implements OnInit {
         this.endTransactionError(error);
       });
     }
+  }
+
+  onDelete() {
+    this.loading = true;
+    this.service.delete(this.selected.id,
+         this.selected).subscribe(next => {
+      this.delete(this.selected);
+      this.endTransaction();
+    }, error => {
+      if (error.status === 404) {
+        this.delete(this.selected);
+      } else {
+        this.manageDeleteError(error.message);
+      }
+      this.endTransaction();
+    });
+  }
+
+  delete(deleteValue: SubCategory) {
+    this.manageDeleteError(undefined);
+    const index = this.subCategories.indexOf(deleteValue);
+    this.subCategories.splice(index, 1);
+    this.loading = false;
+  }
+
+  manageDeleteError(message: string) {
+    this.deleteError = message;
+    this.deleteHasError = message !== undefined;
+  }
+
+  endTransaction() {
+    this.loading = false;
+    this.submitted = false;
+    $(this.modal.nativeElement).modal('hide');
+  }
+
+  endTransactionError(error) {
+    this.errors.formatError(error);
+    this.loading = false;
   }
 }
