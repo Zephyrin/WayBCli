@@ -42,7 +42,10 @@
             Ambassador
           </a>
           <div class="dropdown-menu" aria-labelledby="dropdownInfo">
-            <a class="dropdown-item nav-link" routerLink="category">Category</a>
+            <a class="dropdown-item nav-link"
+               routerLink="category">
+               Category <span class="badge badge-info">{{badgeCategory}}</span>
+            </a>
             <a class="dropdown-item nav-link" routerLink="equipmentsValidator">
               Equipments' validator
             </a>
@@ -105,7 +108,9 @@
       <div class="card mt-4" *ngIf="isAmbassador">
         <h4 class="card-header">Ambassador</h4>
         <div class="card-body">
-          <a class="nav-link" routerLink="category">Category</a>
+          <a class="nav-link" routerLink="category">
+            Category <span class="badge badge-info">{{badgeCategory}}</span>
+          </a>
         </div>
       </div>
     </div>

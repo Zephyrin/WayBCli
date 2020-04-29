@@ -18,10 +18,10 @@ declare var $: any;
   styleUrls: ['./category.component.less']
 })
 export class CategoryComponent implements OnInit {
-  @ViewChild("createModal", {static:true}) createModal;
-  @ViewChild("updateModal", {static:true}) updateModal;
-  @ViewChild("createModalChild", {static:true}) createModalChild;
-  @ViewChild("updateModalChild", {static:true}) updateModalChild;
+  @ViewChild('createModal', {static: true}) createModal;
+  @ViewChild('updateModal', {static: true}) updateModal;
+  @ViewChild('createModalChild', {static: true}) createModalChild;
+  @ViewChild('updateModalChild', {static: true}) updateModalChild;
 
   createForm: FormGroup;
   updateForm: FormGroup;
@@ -44,11 +44,11 @@ export class CategoryComponent implements OnInit {
     private childService: SubCategoryService,
     private authenticationService: AuthenticationService) {
       if (!this.authenticationService.currentUserValue) {
-        this.router.navigate(['/'])
+        this.router.navigate(['/']);
       }
     }
 
-  update(updateValue : Category){
+  update(updateValue: Category) {
     this.updateForm.patchValue(updateValue);
     this.updateValue = updateValue;
   }
@@ -96,7 +96,7 @@ export class CategoryComponent implements OnInit {
     }
     this.loading = true;
     this.service.create(this.createForm.value)
-      .subscribe(category =>{
+      .subscribe(category => {
         this.loading = false;
         this.submitted = false;
         this.formError = {};
@@ -108,7 +108,7 @@ export class CategoryComponent implements OnInit {
     });
   }
 
-  onSubmitUpdate(category : Category) {
+  onSubmitUpdate(category: Category) {
     this.deleteHasError = false;
     this.submitted = true;
     if (this.updateForm.invalid) {
@@ -116,7 +116,7 @@ export class CategoryComponent implements OnInit {
     }
     this.loading = true;
     this.service.update(this.updateForm.value)
-      .subscribe(returnValue =>{
+      .subscribe(returnValue => {
         this.loading = false;
         this.submitted = false;
         this.formError = {};
@@ -130,9 +130,9 @@ export class CategoryComponent implements OnInit {
 
   manageErrors(error: any) {
     this.formError = {};
-    let errorData = error.error.errors[0].children;
-    for(let key in errorData) {
-      errorData[key].errors 
+    const errorData = error.error.errors[0].children;
+    for (const key in errorData) {
+      errorData[key].errors
       ? this.formError[key] = errorData[key].errors
       : this.formError[key] = null;
     }
@@ -147,7 +147,7 @@ export class CategoryComponent implements OnInit {
   }
 
   delete(deleteValue: Category) {
-    var index = this.categories.indexOf(deleteValue);
+    let index = this.categories.indexOf(deleteValue);
     this.categories.splice(index, 1);
     this.loading = false;
   }
@@ -158,11 +158,10 @@ export class CategoryComponent implements OnInit {
     this.deleteHasError = false;
     this.service.delete(deleteValue).subscribe(next => {
       this.delete(deleteValue);
-    },error => {
-      if(error.status == 404) {
+    }, error => {
+      if (error.status == 404) {
         this.delete(deleteValue);
-      }
-      else {
+      } else {
         this.deleteHasError = true;
         this.deleteError = error.message;
         this.loading = false;
@@ -187,7 +186,7 @@ export class CategoryComponent implements OnInit {
     }
     this.loading = true;
     this.childService.create(this.updateValue.id, this.createFormChild.value)
-      .subscribe(subCategory =>{
+      .subscribe(subCategory => {
         this.loading = false;
         this.submitted = false;
         this.formError = {};
@@ -204,7 +203,7 @@ export class CategoryComponent implements OnInit {
     this.selectedChild = child;
   }
 
-  updateChild(){
+  updateChild() {
     this.updateFormChild.patchValue(this.selectedChild);
   }
 
@@ -216,7 +215,7 @@ export class CategoryComponent implements OnInit {
     }
     this.loading = true;
     this.childService.update(this.updateValue.id, this.updateFormChild.value)
-      .subscribe(returnValue =>{
+      .subscribe(returnValue => {
         this.loading = false;
         this.submitted = false;
         this.formError = {};
@@ -230,7 +229,7 @@ export class CategoryComponent implements OnInit {
   }
 
   deleteChild(deleteValue: SubCategory) {
-    var index = this.updateValue.subCategories.indexOf(deleteValue);
+    let index = this.updateValue.subCategories.indexOf(deleteValue);
     this.updateValue.subCategories.splice(index, 1);
     this.loading = false;
   }
@@ -241,11 +240,10 @@ export class CategoryComponent implements OnInit {
     this.deleteHasError = false;
     this.childService.delete(this.updateValue.id, this.selectedChild).subscribe(next => {
       this.deleteChild(this.selectedChild);
-    },error => {
-      if(error.status == 404) {
+    }, error => {
+      if (error.status === 404) {
         this.deleteChild(this.selectedChild);
-      }
-      else {
+      } else {
         this.deleteHasError = true;
         this.deleteError = error.message;
         this.loading = false;

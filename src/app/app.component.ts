@@ -3,6 +3,8 @@ import { Router } from '@angular/router';
 
 import { AuthenticationService } from './_services';
 import { User, Role } from './_models';
+import { CategoryService } from './_services/category.service';
+import { HttpResponse } from '@angular/common/http';
 
 @Component({
     selector: 'app',
@@ -10,14 +12,18 @@ import { User, Role } from './_models';
     styleUrls: ['./app.component.less']
 })
 export class AppComponent {
-    currentUser: User;
+  currentUser: User;
+  badgeCategory: number;
+  update = false;
 
     constructor(
         private router: Router,
-        private authenticationService: AuthenticationService
+        private authenticationService: AuthenticationService,
+        private categoryService: CategoryService
     ) {
         this.authenticationService.currentUser.subscribe(
           x => this.currentUser = x);
+        this.badgeCategory = 2;
     }
 
     get isAdmin() {
@@ -27,10 +33,20 @@ export class AppComponent {
     }
 
     get isAmbassador() {
-        return this.currentUser
-        && this.currentUser.roles
-        && (this.currentUser.roles.indexOf(Role.Ambassador) !== -1
-          || this.currentUser.roles.indexOf(Role.Admin) !== -1);
+      const isAmbassador = this.currentUser
+      && this.currentUser.roles
+      && (this.currentUser.roles.indexOf(Role.Ambassador) !== -1
+        || this.currentUser.roles.indexOf(Role.Admin) !== -1);
+      if (isAmbassador && !this.update) {
+        this.update = true;
+        this.categoryService.count()
+          .subscribe(
+          response => {
+            this.badgeCategory = Number(response.headers.get('X-Total-Count'));
+          }
+        );
+      }
+      return isAmbassador;
     }
 
     logout() {
