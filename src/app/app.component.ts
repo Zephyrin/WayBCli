@@ -14,31 +14,35 @@ import { HttpResponse } from '@angular/common/http';
 export class AppComponent {
   currentUser: User;
   badgeCategory: number;
-  update = false;
+  interval;
 
-    constructor(
-        private router: Router,
-        private authenticationService: AuthenticationService,
-        private categoryService: CategoryService
-    ) {
-        this.authenticationService.currentUser.subscribe(
-          x => this.currentUser = x);
-        this.badgeCategory = 2;
-    }
+  constructor(
+      private router: Router,
+      private authenticationService: AuthenticationService,
+      private categoryService: CategoryService
+  ) {
+      this.authenticationService.currentUser.subscribe(
+        x => this.currentUser = x);
+      this.startTimer();
+  }
 
-    get isAdmin() {
-      return this.currentUser
-        && this.currentUser.roles
-        && this.currentUser.roles.indexOf(Role.Admin) !== -1;
-    }
-
-    get isAmbassador() {
-      const isAmbassador = this.currentUser
+  get isAdmin() {
+    return this.currentUser
       && this.currentUser.roles
-      && (this.currentUser.roles.indexOf(Role.Ambassador) !== -1
-        || this.currentUser.roles.indexOf(Role.Admin) !== -1);
-      if (isAmbassador && !this.update) {
-        this.update = true;
+      && this.currentUser.roles.indexOf(Role.Admin) !== -1;
+  }
+
+  get isAmbassador() {
+    const isAmbassador = this.currentUser
+    && this.currentUser.roles
+    && (this.currentUser.roles.indexOf(Role.Ambassador) !== -1
+      || this.currentUser.roles.indexOf(Role.Admin) !== -1);
+    return isAmbassador;
+  }
+
+  startTimer() {
+    this.interval = setInterval(() => {
+      if (this.isAmbassador) {
         this.categoryService.count()
           .subscribe(
           response => {
@@ -46,15 +50,19 @@ export class AppComponent {
           }
         );
       }
-      return isAmbassador;
-    }
+    }, 1000);
+  }
 
-    logout() {
-        this.authenticationService.logout();
-        this.router.navigate(['/login']);
-    }
+  pauseTimer() {
+    clearInterval(this.interval);
+  }
 
-    login() {
-        this.router.navigate(['/login']);
-    }
+  logout() {
+      this.authenticationService.logout();
+      this.router.navigate(['/login']);
+  }
+
+  login() {
+      this.router.navigate(['/login']);
+  }
 }

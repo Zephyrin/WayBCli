@@ -1,189 +1,145 @@
 <div class="btn-toulbar" role="group" aria-label="Tools">
-    <div *ngIf="loading" class="spinner-border spinner-border-sm"></div>
+  <div *ngIf="loading" class="spinner-border spinner-border-sm"></div>
 
-    <button type="button" class="btn btn-light" data-toggle="modal" 
-        data-target="#createModal" (click)="create()"
-        [disabled]="loading">Add</button>
-    
+  <button type="button" class="btn btn-light" data-toggle="modal"
+      data-target="#createModal" (click)="create()"
+      [disabled]="loading">Add</button>
 </div>
 
 <div class="card" *ngFor="let category of categories">
-
-    <div class="card-header">
-        {{category.id}} - {{category.name}} 
-        <button type="button" class="btn btn-light" data-toggle="modal"
-            data-target="#updateModal"
-            (click)="update(category)">Edit</button>
-        <button type="button" class="btn btn-light" 
-            (click)="onDelete(category)">Delete</button>
-    </div>
-    <div class="card-body">
-        <div class="btn-toulbar" role="group" aria-label="Tools">
-            <button type="button" class="btn btn-light" data-toggle="modal"
-                data-target="#createModalChild"
-                (click)="createChild(category)">Add</button>
-            <button type="button" class="btn btn-light"
-                data-toggle="modal" data-target="#updateModalChild"
-                *ngIf="category.subCategories.length > 0 && updateValue == category && selectedChild"
-                (click)="updateChild()">Edit</button>
-            <button type="button" class="btn btn-light"
-                *ngIf="category.subCategories.length > 0 && updateValue == category && selectedChild"
-                (click)="onDeleteChild()">Delete</button>
-        </div>
-        <div class="table-responsive-sm">
-            <table class="table" *ngIf="category.subCategories.length > 0">
-                <thead>
-                    <tr>
-                        <th scope="col">Id</th>
-                        <th scope="col">Name</th>
-                    </tr>
-                </thead>
-                <tr *ngFor="let subCategory of category.subCategories" (click)="setSelectedChild(category, subCategory)" [class.active]="subCategory == selectedChild">
-                    <td >{{subCategory.id}}</td>
-                    <td>{{subCategory.name}}</td>
-                </tr>
-            </table>
-        </div>
-    </div>
+  <div class="card-header">
+    {{category.id}} - {{category.name}}
+    <button type="button" class="btn btn-light" data-toggle="modal"
+      data-target="#updateModal"
+      (click)="update(category)">Edit</button>
+    <button type="button" class="btn btn-light"
+      (click)="onDelete(category)">Delete</button>
+  </div>
+  <app-sub-category [parentData]="category"
+                    [subCategories]="category.subCategories"></app-sub-category>
 </div>
 
 <div class="modal" tabindex="-1" role="dialog" id="createModal" #createModal
-    aria-labelledby="addLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="addLabel">Add a category</h5>
-                <button type="button" class="close" data-dismiss="modal"
-                    aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+  aria-labelledby="addLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addLabel">Add a category</h5>
+        <button type="button" class="close" data-dismiss="modal"
+          aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div *ngIf="submitted && errors.hasMessage" class="alert alert-warning">
+        <div>{{errors.message}}</div>
+      </div>
+      <div *ngIf="submitted && errors.hasFatalError" class="alert alert-danger">
+        <div [innerHTML]="errors.fatalError"></div>
+      </div>
+      <form [formGroup]="createForm" (ngSubmit)="onSubmitCreate()">
+        <div class="modal-body">
+          <div *ngIf="submitted && fC.message" class="invalid-feedback">
+            <div *ngIf="fC.message">{{fC.message}}</div>
+          </div>
+          <div class="form-group row">
+            <label for="name" class="col-sm-2 col-form-label">Name</label>
+            <div class="col-sm-10">
+              <input type="text" formControlName="name"
+                (ngModelChange)="clearError('name')"
+                class="form-control"
+                [ngClass]="{ 'is-invalid': submitted
+                              && (fC.name.errors || errors.hasErrors.name) }"/>
+              <div *ngIf="submitted
+                          && (fC.name.errors || errors.hasErrors.name)"
+                class="invalid-feedback">
+                <div *ngIf="fC.name.errors && fC.name.errors.required">
+                  Name is required
+                </div>
+                <div *ngIf="errors.hasErrors.name">
+                  <div *ngFor="let child of errors.errors.name.errors">
+                    {{child}}
+                  </div>
+                </div>
+              </div>
             </div>
-            <form [formGroup]="createForm" (ngSubmit)="onSubmitCreate()">
-                <div class="modal-body">
-                    <div *ngIf="submitted && fC.message" class="invalid-feedback">
-                        <div *ngIf="fC.message">{{fC.message}}</div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="name" class="col-sm-2 col-form-label">Name</label>
-                        <div class="col-sm-10">
-                            <input type="text" formControlName="name"
-                                (ngModelChange)="clearError('name')"
-                                class="form-control"
-                                [ngClass]="{ 'is-invalid': submitted && (fC.name.errors || formError.name) }"/>
-                            <div *ngIf="submitted && (fC.name.errors || formError.name)"
-                                class="invalid-feedback">
-                                <div *ngIf="fC.name.errors.required">Name is required</div>
-                                <div *ngIf="formError.name">{{formError.name}}</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer form-group">
-                    <button [disabled]="loading" type="button" class="btn btn-primary"
-                        (click)="onSubmitCreate()">
-                        <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
-                        Add
-                    </button>
-                    <button [disabled]="loading" type="button" class="btn btn-secondary"
-                        data-dismiss="modal" (click)="onCancel()">Cancel</button>
-                </div>
-            </form>
-
+          </div>
         </div>
+        <div class="modal-footer form-group">
+          <button [disabled]="loading" type="button" class="btn btn-primary"
+            (click)="onSubmitCreate()">
+            <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+            Add
+          </button>
+          <button [disabled]="loading" type="button" class="btn btn-secondary"
+            data-dismiss="modal" (click)="onCancel()">Cancel</button>
+        </div>
+      </form>
     </div>
+  </div>
 </div>
-    
+
 <div class="modal" tabindex="-1" role="dialog" id="updateModal" #updateModal
-    aria-labelledby="updateLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="updateLabel">Update a category</h5>
-                <button type="button" class="close" data-dismiss="modal"
-                    aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+     aria-labelledby="updateLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+          <h5 class="modal-title" id="updateLabel">Update a category</h5>
+          <button type="button" class="close" data-dismiss="modal"
+              aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+          </button>
+      </div>
+      <div *ngIf="submitted && errors.hasMessage" class="alert alert-warning">
+        <div>{{errors.message}}</div>
+      </div>
+      <div *ngIf="submitted && errors.hasFatalError" class="alert alert-danger">
+        <div [innerHTML]="errors.fatalError"></div>
+      </div>
+      <form [formGroup]="updateForm">
+        <div class="modal-body">
+          <div *ngIf="submitted && fU.message" class="invalid-feedback">
+            <div *ngIf="fU.message">{{fU.message}}</div>
+          </div>
+          <div class="form-group row">
+            <label for="name" class="col-sm-2 col-form-label">Name</label>
+            <div class="col-sm-10">
+              <input type="text" formControlName="name"
+                (ngModelChange)="clearError('name')"
+                class="form-control"
+                [ngClass]="{ 'is-invalid': submitted
+                              && (fC.name.errors || errors.hasErrors.name) }"/>
+              <div *ngIf="submitted
+                          && (fC.name.errors || errors.hasErrors.name)"
+                class="invalid-feedback">
+                <div *ngIf="fC.name.errors && fC.name.errors.required">
+                  Name is required
+                </div>
+                <div *ngIf="errors.hasErrors.name">
+                  <div *ngFor="let child of errors.errors.name.errors">
+                    {{child}}
+                  </div>
+                </div>
+              </div>
             </div>
-            <form [formGroup]="updateForm">
-                <div class="modal-body">
-                    <div *ngIf="submitted && fU.message" class="invalid-feedback">
-                        <div *ngIf="fU.message">{{fU.message}}</div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="name" class="col-sm-2 col-form-label">Name</label>
-                        <div class="col-sm-10">
-                            <input type="text" formControlName="name"
-                                (ngModelChange)="clearError('name')"
-                                class="form-control"
-                                [ngClass]="{ 'is-invalid': submitted && (fU.name.errors || formError.name) }"/>
-                            <div *ngIf="submitted && (fU.name.errors || formError.name)"
-                                class="invalid-feedback">
-                                <div *ngIf="fU.name.errors.required">Name is required</div>
-                                <div *ngIf="formError.name">{{formError.name}}</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer form-group">
-                    <button [disabled]="loading" type="button" class="btn btn-primary"
-                        (click)="onSubmitUpdate()">
-                        <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
-                        Update
-                    </button>
-                    <button [disabled]="loading" type="button" class="btn btn-secondary"
-                        data-dismiss="modal" (click)="onCancel()">Cancel</button>
-                </div>
-            </form>
-
+          </div>
         </div>
+        <div class="modal-footer form-group">
+          <button [disabled]="loading" type="button" class="btn btn-primary"
+                  (click)="onSubmitUpdate()">
+              <span *ngIf="loading"
+                    class="spinner-border spinner-border-sm mr-1"></span>
+              Update
+          </button>
+          <button [disabled]="loading" type="button" class="btn btn-secondary"
+                 data-dismiss="modal" (click)="onCancel()">Cancel</button>
+        </div>
+      </form>
     </div>
+  </div>
 </div>
 
-<div class="modal" tabindex="-1" role="dialog" id="createModalChild" #createModalChild
-    aria-labelledby="addLabelChild" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="addLabelChid">Add a sub-category</h5>
-                <button type="button" class="close" data-dismiss="modal"
-                    aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <form [formGroup]="createFormChild" (ngSubmit)="onSubmitCreateChild()">
-                <div class="modal-body">
-                    <div *ngIf="submitted && fCC.message" class="invalid-feedback">
-                        <div *ngIf="fCC.message">{{fCC.message}}</div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="name" class="col-sm-2 col-form-label">Name</label>
-                        <div class="col-sm-10">
-                            <input type="text" formControlName="name"
-                                (ngModelChange)="clearError('name')"
-                                class="form-control"
-                                [ngClass]="{ 'is-invalid': submitted && (fCC.name.errors || formError.name) }"/>
-                            <div *ngIf="submitted && (fCC.name.errors || formError.name)"
-                                class="invalid-feedback">
-                                <div *ngIf="fCC.name.errors.required">Name is required</div>
-                                <div *ngIf="formError.name">{{formError.name}}</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer form-group">
-                    <button [disabled]="loading" type="button" class="btn btn-primary"
-                        (click)="onSubmitCreateChild()">
-                        <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
-                        Add
-                    </button>
-                    <button [disabled]="loading" type="button" class="btn btn-secondary"
-                        data-dismiss="modal" (click)="onCancel()">Cancel</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-    
+
+
 <div class="modal" tabindex="-1" role="dialog" id="updateModalChild" #updateModalChild
     aria-labelledby="updateLabelChild" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">

@@ -32,10 +32,12 @@ export class FormErrors {
   }
 
   formatError(error) {
-    this.message = error.error.Message;
+    this.message = error.error.message;
     this.hasMessage = this.message !== undefined;
     this.errors = [];
     this.hasErrors = [];
+    this.hasFatalError = false;
+    this.fatalError = undefined;
     if (error.status === 500) {
       this.hasFatalError = true;
       this.fatalError = '... :S Internal server error.<br /><br/>'
@@ -43,6 +45,9 @@ export class FormErrors {
         + 'You can try again in some hours.<br/><br/>'
         + 'If it will still show this error consider to sent an email to:<br/>'
         + 'damortien@gmail.com';
+    } else if (error.status === 404) {
+      this.message = error.statusText + ' ' + error.url;
+      this.hasMessage = this.message !== undefined;
     } else {
       this.hasFatalError = false;
       this.fatalError = undefined;
@@ -58,6 +63,25 @@ export class FormErrors {
       Object.keys(this.errors).forEach(key => {
         this.hasErrors[key] = this.errors[key].has;
       });
+    }
+  }
+
+  clearError(name) {
+    if (this.errors[name] !== undefined) {
+      this.errors[name] = undefined;
+    }
+    if (this.hasErrors[name] !== undefined) {
+      this.hasErrors[name] = false;
+    }
+    let hasError = false;
+    Object.keys(this.errors).forEach(key => {
+      if (this.hasErrors[key]) {
+        hasError = true;
+      }
+    });
+    if (!hasError) {
+      this.message = undefined;
+      this.hasMessage = false;
     }
   }
 }

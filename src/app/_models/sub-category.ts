@@ -1,5 +1,5 @@
 export class SubCategory {
-    "id": number;
-    "name": string;
-    /* "extraFieldDefs": ExtraFieldDef[]; */
+  'id': number;
+  'name': string;
+  /* 'extraFieldDefs': ExtraFieldDef[]; */
 }

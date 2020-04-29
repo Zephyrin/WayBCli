@@ -9,6 +9,7 @@ import { Category, SubCategory } from '@app/_models/';
 
 import { AuthenticationService } from '@app/_services';
 import { Router, ChildActivationStart } from '@angular/router';
+import { FormErrors } from '@app/_errors';
 
 declare var $: any;
 
@@ -29,8 +30,7 @@ export class CategoryComponent implements OnInit {
   updateFormChild: FormGroup;
   updateValue: Category;
   selectedChild: SubCategory;
-  formError = {};
-  globalError = {};
+  errors = new FormErrors();
   deleteError = '';
   deleteHasError = false;
   categories: Category[];
@@ -55,6 +55,11 @@ export class CategoryComponent implements OnInit {
 
   create() {
     this.createForm.reset();
+  }
+
+  createChild(category: Category) {
+    this.updateValue = category;
+    this.createFormChild.reset();
   }
 
   ngOnInit() {
@@ -90,6 +95,7 @@ export class CategoryComponent implements OnInit {
 
   onSubmitCreate() {
     this.deleteHasError = false;
+    this.errors = new FormErrors();
     this.submitted = true;
     if (this.createForm.invalid) {
       return;
@@ -99,18 +105,18 @@ export class CategoryComponent implements OnInit {
       .subscribe(category => {
         this.loading = false;
         this.submitted = false;
-        this.formError = {};
-        this.globalError = '';
         $(this.createModal.nativeElement).modal('hide');
         this.categories.push(category);
     }, (error: any) => {
-      this.manageErrors(error);
+      this.errors.formatError(error);
+      this.loading = false;
     });
   }
 
   onSubmitUpdate(category: Category) {
     this.deleteHasError = false;
     this.submitted = true;
+    this.errors = new FormErrors();
     if (this.updateForm.invalid) {
       return;
     }
@@ -119,35 +125,22 @@ export class CategoryComponent implements OnInit {
       .subscribe(returnValue => {
         this.loading = false;
         this.submitted = false;
-        this.formError = {};
         $(this.updateModal.nativeElement).modal('hide');
         Object.assign(this.updateValue, this.updateForm.value);
         this.updateValue = null;
       }, (error: any) => {
-        this.manageErrors(error);
+        this.errors.formatError(error);
+        this.loading = false;
       });
   }
 
-  manageErrors(error: any) {
-    this.formError = {};
-    const errorData = error.error.errors[0].children;
-    for (const key in errorData) {
-      errorData[key].errors
-      ? this.formError[key] = errorData[key].errors
-      : this.formError[key] = null;
-    }
-    this.globalError = error;
-    this.loading = false;
-  }
-
   onCancel() {
-    this.formError = {};
-    this.globalError = {};
+    this.errors = new FormErrors();
     this.updateValue = null;
   }
 
   delete(deleteValue: Category) {
-    let index = this.categories.indexOf(deleteValue);
+    const index = this.categories.indexOf(deleteValue);
     this.categories.splice(index, 1);
     this.loading = false;
   }
@@ -159,7 +152,7 @@ export class CategoryComponent implements OnInit {
     this.service.delete(deleteValue).subscribe(next => {
       this.delete(deleteValue);
     }, error => {
-      if (error.status == 404) {
+      if (error.status === 404) {
         this.delete(deleteValue);
       } else {
         this.deleteHasError = true;
@@ -170,17 +163,15 @@ export class CategoryComponent implements OnInit {
   }
 
   clearError(key) {
-    this.formError[key] = null;
+    this.errors.clearError(key);
   }
 
-  createChild(category: Category) {
-    this.updateValue = category;
-    this.createFormChild.reset();
-  }
+
 
   onSubmitCreateChild() {
     this.deleteHasError = false;
     this.submitted = true;
+    this.errors = new FormErrors();
     if (this.createFormChild.invalid) {
       return;
     }
@@ -189,12 +180,10 @@ export class CategoryComponent implements OnInit {
       .subscribe(subCategory => {
         this.loading = false;
         this.submitted = false;
-        this.formError = {};
-        this.globalError = '';
         $(this.createModalChild .nativeElement).modal('hide');
         this.updateValue.subCategories.push(subCategory);
     }, (error: any) => {
-      this.manageErrors(error);
+      this.errors.formatError(error);
     });
   }
 
@@ -210,6 +199,7 @@ export class CategoryComponent implements OnInit {
   onSubmitUpdateChild() {
     this.deleteHasError = false;
     this.submitted = true;
+    this.errors = new FormErrors();
     if (this.updateFormChild.invalid) {
       return;
     }
@@ -218,18 +208,17 @@ export class CategoryComponent implements OnInit {
       .subscribe(returnValue => {
         this.loading = false;
         this.submitted = false;
-        this.formError = {};
         $(this.updateModalChild.nativeElement).modal('hide');
         Object.assign(this.selectedChild, this.updateFormChild.value);
         this.updateValue = null;
         this.selectedChild = null;
       }, (error: any) => {
-        this.manageErrors(error);
+        this.errors.formatError(error);
       });
   }
 
   deleteChild(deleteValue: SubCategory) {
-    let index = this.updateValue.subCategories.indexOf(deleteValue);
+    const index = this.updateValue.subCategories.indexOf(deleteValue);
     this.updateValue.subCategories.splice(index, 1);
     this.loading = false;
   }
@@ -238,7 +227,8 @@ export class CategoryComponent implements OnInit {
     this.loading = true;
     this.deleteError = '';
     this.deleteHasError = false;
-    this.childService.delete(this.updateValue.id, this.selectedChild).subscribe(next => {
+    this.childService.delete(this.updateValue.id,
+         this.selectedChild).subscribe(next => {
       this.deleteChild(this.selectedChild);
     }, error => {
       if (error.status === 404) {

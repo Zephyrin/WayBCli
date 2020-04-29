@@ -17,7 +17,8 @@ import { BrandComponent } from './equipment/brand/brand.component';
 import { LogService } from './_services/log.service';
 import { EquipmentComponent } from './equipment/equipment/equipment.component';
 import { UserComponent } from './equipment/_admin/user/user.component';
-import { CategoryComponent } from './equipment/_ambassador/category/category.component';
+import { CategoryComponent } from './equipment/_ambassador/category/category.component';;
+import { SubCategoryComponent } from './equipment/_ambassador/sub-category/sub-category.component'
 
 @NgModule({
     imports: [
@@ -35,7 +36,8 @@ import { CategoryComponent } from './equipment/_ambassador/category/category.com
         EquipmentComponent,
         UserComponent,
         CategoryComponent
-    ],
+,
+        SubCategoryComponent    ],
     providers: [
         { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
         { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
