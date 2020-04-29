@@ -54,7 +54,10 @@ export class RegisterComponent implements OnInit {
     }
 
     this.loading = true;
-    this.registerForm.value.gender = this.genders[this.registerForm.value.gender].toUpperCase();
+    const gender = this.genders[this.registerForm.value.gender];
+    if (gender !== undefined && gender !== gender.toUpperCase()) {
+      this.registerForm.value.gender = gender.toUpperCase();
+    }
     this.registerService.register(this.registerForm.value)
       .pipe(first())
       .subscribe(
