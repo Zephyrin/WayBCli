@@ -17,14 +17,18 @@
           <label for="username">Username</label>
           <input type="text" formControlName="username" class="form-control"
             [ngClass]="{ 'is-invalid':
-              (submitted && (f.username.errors || errors.hasErrors.username)) }" />
-          <div *ngIf="(submitted && (f.username.errors || errors.hasErrors.username))"
+              (submitted && (f.username.errors || errors.hasErrors.username))
+              }" />
+          <div *ngIf="(submitted
+            && (f.username.errors || errors.hasErrors.username))"
             class="invalid-feedback">
             <div *ngIf="f.username.errors && f.username.errors.required">
               Username is required
             </div>
             <div *ngIf="errors.hasErrors.username">
-              <div *ngFor="let child of errors.errors.username.errors">{{child}}</div>
+              <div *ngFor="let child of errors.errors.username.errors">
+                {{child}}
+              </div>
             </div>
           </div>
         </div>
@@ -39,7 +43,9 @@
               Email is required
             </div>
             <div *ngIf="errors.hasErrors.email">
-              <div *ngFor="let child of errors.errors.email.errors">{{child}}</div>
+              <div *ngFor="let child of errors.errors.email.errors">
+                {{child}}
+              </div>
             </div>
           </div>
         </div>
@@ -53,13 +59,16 @@
             <option *ngFor="let key of genderKeys"
               [ngValue]="key">{{genders[key]}}</option>
           </select>
-          <div *ngIf="(submitted && (f.gender.errors || errors.hasErrors.gender))"
+          <div *ngIf="(submitted
+            && (f.gender.errors || errors.hasErrors.gender))"
             class="invalid-feedback">
             <div *ngIf="f.gender.errors && f.gender.errors.required">
               Gender is required
             </div>
             <div *ngIf="errors.hasErrors.gender">
-              <div *ngFor="let child of errors.errors.gender.errors">{{child}}</div>
+              <div *ngFor="let child of errors.errors.gender.errors">
+                {{child}}
+              </div>
             </div>
           </div>
         </div>
@@ -69,7 +78,8 @@
             class="form-control"
             [ngClass]="{ 'is-invalid': (submitted
               && (f.password.errors || errors.hasErrors.password)) }" />
-          <div *ngIf="(submitted && (f.password.errors || errors.hasErrors.password))"
+          <div *ngIf="(submitted
+            && (f.password.errors || errors.hasErrors.password))"
             class="invalid-feedback">
             <div *ngIf="f.password.errors && f.password.errors.required">
               Password is required
@@ -78,7 +88,9 @@
               Password must be at least 6 characters
             </div>
             <div *ngIf="errors.hasErrors.password">
-              <div *ngFor="let child of errors.errors.password.errors">{{child}}</div>
+              <div *ngFor="let child of errors.errors.password.errors">
+                {{child}}
+              </div>
             </div>
           </div>
         </div>
