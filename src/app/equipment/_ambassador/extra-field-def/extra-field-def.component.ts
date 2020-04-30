@@ -2,8 +2,8 @@ import { Component, OnInit, Input } from '@angular/core';
 
 import { ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { SubCategoryService } from '@app/_services/sub-category.service';
-import { SubCategory } from '@app/_models/';
+import { ExtraFieldDefService } from '@app/_services/extra-field-def.service';
+import { ExtraFieldDef, Category, SubCategory } from '@app/_models/';
 
 import { AuthenticationService } from '@app/_services';
 import { Router } from '@angular/router';
@@ -12,13 +12,14 @@ import { FormErrors } from '@app/_errors';
 declare var $: any;
 
 @Component({
-  selector: 'app-sub-category',
-  templateUrl: './sub-category.component.html',
-  styleUrls: ['./sub-category.component.less']
+  selector: 'app-extra-field-def',
+  templateUrl: './extra-field-def.component.html',
+  styleUrls: ['./extra-field-def.component.less']
 })
-export class SubCategoryComponent implements OnInit {
-  @Input() parentData;
-  @Input('subCategories') subCategories;
+export class ExtraFieldDefComponent implements OnInit {
+  @Input('category') category;
+  @Input('subCategory') subCategory;
+  @Input('extraFieldDefs') extraFieldDefs;
 
   @ViewChild('modal', {static: true}) modal;
 
@@ -27,7 +28,7 @@ export class SubCategoryComponent implements OnInit {
   errors = new FormErrors();
   loading = false;
   submitted = false;
-  selected = undefined;
+  selected: ExtraFieldDef = undefined;
 
   deleteError: string = undefined;
   deleteHasError = false;
@@ -35,7 +36,7 @@ export class SubCategoryComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
-    private service: SubCategoryService,
+    private service: ExtraFieldDefService,
     private authenticationService: AuthenticationService) {
       if (!this.authenticationService.currentUserValue) {
         this.router.navigate(['/']);
@@ -44,20 +45,24 @@ export class SubCategoryComponent implements OnInit {
 
   get f() { return this.form.controls; }
 
-  get invalid() { return this.submitted && this.f.message; }
+  get isCreateFormUndefined() { return this.isCreateForm === undefined; }
 
   ngOnInit() {
     this.loading = true;
-    this.isCreateForm = true;
+    this.isCreateForm = undefined;
     this.form = this.formBuilder.group({
       id: [''],
-      name: ['', Validators.required]
+      name: ['', Validators.required],
+      type: ['', Validators.required],
+      isPrice: ['', Validators.required],
+      isWeight: ['', Validators.required],
+      linkTo: ['']
     });
 
     this.loading = false;
   }
 
-  setSelected(selected: SubCategory) {
+  setSelected(selected: ExtraFieldDef) {
     if (selected === this.selected) {
       this.selected = undefined;
     } else {
@@ -81,6 +86,7 @@ export class SubCategoryComponent implements OnInit {
 
   onCancel() {
     this.errors = new FormErrors();
+    this.isCreateForm = undefined;
   }
 
   onSubmitModal() {
@@ -92,17 +98,18 @@ export class SubCategoryComponent implements OnInit {
     }
     this.loading = true;
     if (this.isCreateForm) {
-      this.service.create(this.parentData.id, this.form.value)
-        .subscribe(subCategory => {
+      this.service.create(this.category.id, this.subCategory.id, this.form.value)
+        .subscribe(extraFieldDef => {
           this.endTransaction();
-          this.subCategories.push(subCategory);
+          this.extraFieldDefs.push(extraFieldDef);
       }, (error: any) => {
         this.endTransactionError(error);
       });
     } else {
-      this.service.update(this.parentData.id, this.form.value)
+      this.service.update(this.category.id, this.subCategory.id, this.form.value)
       .subscribe(returnValue => {
         this.endTransaction();
+        console.log(returnValue);
         Object.assign(this.selected, this.form.value);
       }, (error: any) => {
         this.endTransactionError(error);
@@ -112,8 +119,11 @@ export class SubCategoryComponent implements OnInit {
 
   onDelete() {
     this.loading = true;
-    this.service.delete(this.selected.id,
-         this.selected).subscribe(next => {
+    this.service.delete(this.category.id,
+                        this.subCategory.id,
+                        this.selected)
+                        .subscribe(
+                          next => {
       this.delete(this.selected);
       this.endTransaction();
     }, error => {
@@ -126,10 +136,10 @@ export class SubCategoryComponent implements OnInit {
     });
   }
 
-  delete(deleteValue: SubCategory) {
+  delete(deleteValue: ExtraFieldDef) {
     this.manageDeleteError(undefined);
-    const index = this.subCategories.indexOf(deleteValue);
-    this.subCategories.splice(index, 1);
+    const index = this.extraFieldDefs.indexOf(deleteValue);
+    this.extraFieldDefs.splice(index, 1);
     this.loading = false;
   }
 
@@ -141,11 +151,13 @@ export class SubCategoryComponent implements OnInit {
   endTransaction() {
     this.loading = false;
     this.submitted = false;
-    $(this.modal.nativeElement).modal('hide');
+    this.isCreateForm = undefined;
+    $(this.modal.nativeElement).hide();
   }
 
   endTransactionError(error) {
     this.errors.formatError(error);
     this.loading = false;
   }
+
 }

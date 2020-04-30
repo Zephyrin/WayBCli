@@ -27,6 +27,7 @@
         <tr>
           <th scope="col">Id</th>
           <th scope="col">Name</th>
+          <th scope="col">Number of extra field definition</th>
         </tr>
       </thead>
       <tr *ngFor="let subCategory of subCategories"
@@ -35,6 +36,7 @@
           class="pointer">
         <td >{{subCategory.id}}</td>
         <td>{{subCategory.name}}</td>
+        <td>{{subCategory.extraFieldDefs?.length || '0'}}</td>
       </tr>
     </table>
   </div>
@@ -102,6 +104,10 @@
                 </div>
               </div>
             </div>
+            <app-extra-field-def [subCategory]="selected"
+                      [category]="parentData"
+                      [extraFieldDefs]="selected?.extraFieldDefs">
+                    </app-extra-field-def>
           </div>
         </div>
         <div class="modal-footer form-group">
