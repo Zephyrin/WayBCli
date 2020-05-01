@@ -4,6 +4,5 @@ export class Equipment {
     name: string;
     description: string;
     brand: Brand;
-    //extraField: ExtraField;
-    //haves: Have;
+    // haves: Have;
 }

@@ -74,9 +74,8 @@ export class EquipmentComponent implements OnInit {
       id: [''],
       name: ['', Validators.required],
       description: [''],
-      brand: [null],
-      subCategory: [null, Validators.required],
-      extraFields: [[]]
+      // brand: [null],
+      subCategory: [null, Validators.required]
     });
     this.categoryForm = this.formBuilder.group({
       category: [null, Validators.required]
@@ -93,6 +92,8 @@ export class EquipmentComponent implements OnInit {
 
   onCategoryChange() {
     this.selectedCategory = this.categoryForm.get('category').value;
+    this.selectedSubCategory = null;
+    this.form.controls.subCategory.setValue(null);
   }
 
   onSubCategoryChange() {
@@ -100,6 +101,7 @@ export class EquipmentComponent implements OnInit {
   }
 
   update() {
+    this.selectedSubCategory = this.selected.subCategory;
     this.update_category();
     this.form.reset(new Equipment());
     this.form.patchValue(this.selected);
@@ -120,6 +122,16 @@ export class EquipmentComponent implements OnInit {
       .subscribe(categories => {
         this.loading = false;
         this.categories = categories;
+        // retrieve subcategory
+        if (this.selectedSubCategory !== undefined) {
+          this.categories.forEach(category => {
+            const id = this.selectedSubCategory.id;
+            if (category.subCategories.some(e => e.id === id)) {
+              this.selectedCategory = category;
+              this.categoryForm.controls.category.setValue(category);
+            }
+          });
+        }
       });
   }
 
@@ -176,7 +188,7 @@ export class EquipmentComponent implements OnInit {
     }
   }
 
-  delete(deleteValue: Equipment) {
+  delete(deleteValue) {
     const index = this.equipments.indexOf(deleteValue);
     this.equipments.splice(index, 1);
     this.loading = false;
@@ -184,15 +196,15 @@ export class EquipmentComponent implements OnInit {
     this.selected = null;
   }
 
-  onDelete(deleteValue: Equipment) {
+  onDelete() {
     this.loading = true;
     this.manageDeleteError(undefined);
-    this.service.delete(deleteValue).subscribe(next => {
-      this.delete(deleteValue);
+    this.service.delete(this.selected).subscribe(next => {
+      this.delete(this.selected);
       this.endTransaction();
     }, error => {
       if (error.status === 404) {
-        this.delete(deleteValue);
+        this.delete(this.selected);
       } else {
         this.manageDeleteError(error.message);
       }

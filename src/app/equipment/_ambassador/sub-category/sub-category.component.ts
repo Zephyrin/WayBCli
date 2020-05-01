@@ -51,8 +51,7 @@ export class SubCategoryComponent implements OnInit {
     this.isCreateForm = true;
     this.form = this.formBuilder.group({
       id: [''],
-      name: ['', Validators.required],
-      extraFieldDefs: [[]]
+      name: ['', Validators.required]
     });
 
     this.loading = false;
