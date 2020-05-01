@@ -1,45 +1,43 @@
-<div class="card-body">
-  <div *ngIf="loading"
-       class="spinner-border spinner-border-sm"></div>
-  <div class="btn-toulbar"
-       role="group"
-       aria-label="Tools">
-    <button type="button"
-            class="btn btn-light"
-            data-toggle="modal"
-            attr.data-target="#subModal{{parentData.id}}"
-            (click)="create()">Add</button>
-    <button type="button"
-            class="btn btn-light"
-            data-toggle="modal"
-            attr.data-target="#subModal{{parentData.id}}"
-            *ngIf="selected"
-            (click)="update()">Edit</button>
-    <button type="button"
-            class="btn btn-light"
-            *ngIf="selected"
-            (click)="onDelete()">Delete</button>
-  </div>
-  <div class="table-responsive-sm">
-    <table class="table"
-           *ngIf="subCategories.length > 0">
-      <thead>
-        <tr>
-          <th scope="col">Id</th>
-          <th scope="col">Name</th>
-          <th scope="col">Number of extra field definition</th>
-        </tr>
-      </thead>
-      <tr *ngFor="let subCategory of subCategories"
-          (click)="setSelected(subCategory)"
-          [class.active]="subCategory == selected"
-          class="pointer">
-        <td >{{subCategory.id}}</td>
-        <td>{{subCategory.name}}</td>
-        <td>{{subCategory.extraFieldDefs?.length || '0'}}</td>
+<div *ngIf="loading"
+      class="spinner-border spinner-border-sm"></div>
+<div class="btn-toulbar"
+      role="group"
+      aria-label="Tools">
+  <button type="button"
+          class="btn btn-light"
+          data-toggle="modal"
+          attr.data-target="#subModal{{parentData.id}}"
+          (click)="create()">Add a sub-category</button>
+  <button type="button"
+          class="btn btn-light"
+          data-toggle="modal"
+          attr.data-target="#subModal{{parentData.id}}"
+          *ngIf="selected && selected.id !== 0"
+          (click)="update()">Edit {{selected.name}}</button>
+  <button type="button"
+          class="btn btn-light"
+          *ngIf="selected && selected.id !== 0"
+          (click)="onDelete()">Delete {{selected.name}}</button>
+</div>
+<div class="table-responsive-sm">
+  <table class="table"
+          *ngIf="subCategories.length > 0">
+    <thead>
+      <tr>
+        <th scope="col">Id</th>
+        <th scope="col">Name</th>
+        <th scope="col">Number of extra field definition</th>
       </tr>
-    </table>
-  </div>
+    </thead>
+    <tr *ngFor="let subCategory of subCategories"
+        (click)="setSelected(subCategory)"
+        [class.active]="subCategory == selected"
+        class="pointer">
+      <td >{{subCategory.id}}</td>
+      <td>{{subCategory.name}}</td>
+      <td>{{subCategory.extraFieldDefs?.length || '0'}}</td>
+    </tr>
+  </table>
 </div>
 
 <div class="modal"
@@ -49,7 +47,7 @@
      #modal
      aria-labelledby="addLabel"
      aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered"
+  <div class="modal-dialog modal-dialog-centered modal-lg"
        role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -104,11 +102,11 @@
                 </div>
               </div>
             </div>
-            <app-extra-field-def [subCategory]="selected"
+          </div>
+          <app-extra-field-def [subCategory]="selected"
                       [category]="parentData"
                       [extraFieldDefs]="selected?.extraFieldDefs">
                     </app-extra-field-def>
-          </div>
         </div>
         <div class="modal-footer form-group">
           <button [disabled]="loading"
@@ -119,6 +117,7 @@
                   class="spinner-border spinner-border-sm mr-1"></span>
             <span *ngIf="isCreateForm">Add</span>
             <span *ngIf="!isCreateForm">Update</span>
+            sub-category
           </button>
           <button [disabled]="loading"
                   type="button"

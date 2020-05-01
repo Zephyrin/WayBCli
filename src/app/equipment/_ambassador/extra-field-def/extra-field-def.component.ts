@@ -8,6 +8,7 @@ import { ExtraFieldDef, Category, SubCategory } from '@app/_models/';
 import { AuthenticationService } from '@app/_services';
 import { Router } from '@angular/router';
 import { FormErrors } from '@app/_errors';
+import { EnumType } from '@app/_enums';
 
 declare var $: any;
 
@@ -22,6 +23,7 @@ export class ExtraFieldDefComponent implements OnInit {
   @Input('extraFieldDefs') extraFieldDefs;
 
   @ViewChild('modal', {static: true}) modal;
+  @ViewChild('selectType', {static: true}) selectType;
 
   form: FormGroup;
   isCreateForm: boolean;
@@ -32,6 +34,8 @@ export class ExtraFieldDefComponent implements OnInit {
 
   deleteError: string = undefined;
   deleteHasError = false;
+
+  typeKeys: any[] = [];
 
   constructor(
     private formBuilder: FormBuilder,
@@ -49,14 +53,20 @@ export class ExtraFieldDefComponent implements OnInit {
 
   ngOnInit() {
     this.loading = true;
+    Object.keys(EnumType).filter(Number).forEach(key => {
+      this.typeKeys.push({
+        key: EnumType[key].toUpperCase(),
+        display: EnumType[key]
+      });
+    });
     this.isCreateForm = undefined;
     this.form = this.formBuilder.group({
       id: [''],
       name: ['', Validators.required],
       type: ['', Validators.required],
-      isPrice: ['', Validators.required],
-      isWeight: ['', Validators.required],
-      linkTo: ['']
+      isPrice: [false, Validators.required],
+      isWeight: [false, Validators.required],
+      linkTo: [null]
     });
 
     this.loading = false;
@@ -67,17 +77,40 @@ export class ExtraFieldDefComponent implements OnInit {
       this.selected = undefined;
     } else {
       this.selected = selected;
+      this.form.reset(new ExtraFieldDef());
+      this.form.patchValue(this.selected);
     }
   }
 
   update() {
+    this.form.reset(new ExtraFieldDef());
     this.form.patchValue(this.selected);
     this.isCreateForm = false;
   }
 
   create() {
-    this.form.reset();
+    this.form.reset(new ExtraFieldDef());
+    this.selected = undefined;
     this.isCreateForm = true;
+  }
+
+  filter(array: ExtraFieldDef[]): ExtraFieldDef[] {
+    let result: ExtraFieldDef[] = [];
+    if (array !== undefined && array !== null) {
+      array.forEach(value => {
+        if (this.selected === undefined || value.id !== this.selected.id) {
+          result.push(value);
+        }
+      });
+    }
+    return result;
+  }
+
+  compareByID(itemOne, itemTwo) {
+    if (itemOne === null && itemTwo === null) {
+      return true;
+    }
+    return itemOne && itemTwo && itemOne.id === itemTwo.id;
   }
 
   clearError(key) {
@@ -98,22 +131,47 @@ export class ExtraFieldDefComponent implements OnInit {
     }
     this.loading = true;
     if (this.isCreateForm) {
-      this.service.create(this.category.id, this.subCategory.id, this.form.value)
-        .subscribe(extraFieldDef => {
-          this.endTransaction();
-          this.extraFieldDefs.push(extraFieldDef);
-      }, (error: any) => {
-        this.endTransactionError(error);
-      });
-    } else {
-      this.service.update(this.category.id, this.subCategory.id, this.form.value)
-      .subscribe(returnValue => {
+      if (this.subCategory === undefined
+          || this.subCategory.id === undefined
+          || this.subCategory.id === 0) {
         this.endTransaction();
-        console.log(returnValue);
+        this.extraFieldDefs.push(this.form.value);
+      } else {
+        const linkTo = this.form.value.linkTo;
+        if (linkTo !== undefined && linkTo !== null && linkTo.id !== undefined) {
+          this.form.value.linkTo = linkTo.id;
+        }
+        this.service.create(this.category.id
+                            , this.subCategory.id
+                            , this.form.value)
+          .subscribe(extraFieldDef => {
+            this.form.value.linkTo = linkTo;
+            this.endTransaction();
+            this.extraFieldDefs.push(extraFieldDef);
+        }, (error: any) => {
+          this.form.value.linkTo = linkTo;
+          this.endTransactionError(error);
+        });
+      }
+    } else {
+      if (this.subCategory === undefined || this.subCategory.id === 0) {
+        this.endTransaction();
         Object.assign(this.selected, this.form.value);
-      }, (error: any) => {
-        this.endTransactionError(error);
-      });
+      } else {
+        const linkTo = this.form.value.linkTo;
+        if (linkTo !== undefined && linkTo !== null && linkTo.id !== undefined) {
+          this.form.value.linkTo = linkTo.id;
+        }
+        this.service.update(this.category.id, this.subCategory.id, this.form.value)
+        .subscribe(returnValue => {
+          this.endTransaction();
+          this.form.value.linkTo = linkTo;
+          Object.assign(this.selected, this.form.value);
+        }, (error: any) => {
+          this.form.value.linkTo = linkTo;
+          this.endTransactionError(error);
+        });
+      }
     }
   }
 
@@ -124,8 +182,14 @@ export class ExtraFieldDefComponent implements OnInit {
                         this.selected)
                         .subscribe(
                           next => {
+      this.extraFieldDefs.forEach(extra => {
+        if (extra.linkTo && extra.linkTo.id === this.selected.id) {
+          extra.linkTo = null;
+        }
+      });
       this.delete(this.selected);
       this.endTransaction();
+      this.selected = null;
     }, error => {
       if (error.status === 404) {
         this.delete(this.selected);
@@ -133,6 +197,7 @@ export class ExtraFieldDefComponent implements OnInit {
         this.manageDeleteError(error.message);
       }
       this.endTransaction();
+      this.selected = null;
     });
   }
 
@@ -152,12 +217,11 @@ export class ExtraFieldDefComponent implements OnInit {
     this.loading = false;
     this.submitted = false;
     this.isCreateForm = undefined;
-    $(this.modal.nativeElement).hide();
+    $(this.modal.nativeElement).collapse('hide');
   }
 
   endTransactionError(error) {
     this.errors.formatError(error);
     this.loading = false;
   }
-
 }

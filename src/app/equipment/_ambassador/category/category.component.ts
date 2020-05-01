@@ -43,6 +43,14 @@ export class CategoryComponent implements OnInit {
 
   get f() { return this.form.controls; }
 
+  collapse(category: Category) {
+    if ($('#categoryCardCollapse_' + category.id).hasClass('show')) {
+      $('#categoryCardCollapse_' + category.id).collapse('hide');
+    } else {
+      $('#categoryCardCollapse_' + category.id).collapse('show');
+    }
+  }
+
   ngOnInit() {
     this.loading = true;
     this.deleteHasError = false;
@@ -63,10 +71,12 @@ export class CategoryComponent implements OnInit {
   update(updateValue: Category) {
     this.form.patchValue(updateValue);
     this.selected = updateValue;
+    this.isCreateForm = false;
   }
 
   create() {
     this.form.reset();
+    this.isCreateForm = true;
   }
 
   clearError(key) {

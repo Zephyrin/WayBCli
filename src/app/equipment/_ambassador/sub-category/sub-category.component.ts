@@ -51,7 +51,8 @@ export class SubCategoryComponent implements OnInit {
     this.isCreateForm = true;
     this.form = this.formBuilder.group({
       id: [''],
-      name: ['', Validators.required]
+      name: ['', Validators.required],
+      extraFieldDefs: [[]]
     });
 
     this.loading = false;
@@ -66,12 +67,15 @@ export class SubCategoryComponent implements OnInit {
   }
 
   update() {
+    this.form.reset(new SubCategory());
     this.form.patchValue(this.selected);
     this.isCreateForm = false;
   }
 
   create() {
-    this.form.reset();
+    this.form.reset(new SubCategory());
+    this.selected = new SubCategory();
+    this.form.patchValue(this.selected);
     this.isCreateForm = true;
   }
 
@@ -81,6 +85,9 @@ export class SubCategoryComponent implements OnInit {
 
   onCancel() {
     this.errors = new FormErrors();
+    if (this.selected.id === undefined || this.selected.id === 0) {
+      this.selected = null;
+    }
   }
 
   onSubmitModal() {
@@ -131,6 +138,7 @@ export class SubCategoryComponent implements OnInit {
     const index = this.subCategories.indexOf(deleteValue);
     this.subCategories.splice(index, 1);
     this.loading = false;
+    this.selected = null;
   }
 
   manageDeleteError(message: string) {
