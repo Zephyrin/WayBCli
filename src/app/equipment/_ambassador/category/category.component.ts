@@ -37,7 +37,7 @@ export class CategoryComponent implements OnInit {
     private service: CategoryService,
     private authenticationService: AuthenticationService) {
       if (!this.authenticationService.currentUserValue) {
-        this.router.navigate(['/']);
+        this.router.navigate(['/login']);
       }
     }
 

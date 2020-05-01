@@ -31,7 +31,7 @@
     <button type="button"
             class="btn btn-light"
             (click)="onDelete(category)">Delete</button>
-    <span (click)="collapse(category)" class="pointer mr-auto"></span>
+    <span (click)="collapse(category)" class="pointer"></span>
   </div>
   <div id="categoryCardCollapse_{{category.id}}"
        class="collapse show"
@@ -76,18 +76,20 @@
            class="alert alert-danger">
         <div [innerHTML]="errors.fatalError"></div>
       </div>
-      <form [formGroup]="form"
-            (ngSubmit)="onSubmit()">
-        <div class="modal-body">
+      <div class="modal-body">
+        <form [formGroup]="form"
+              class="form-horizontal"
+              (ngSubmit)="onSubmit()">
           <div *ngIf="submitted && f.message"
                class="invalid-feedback">
             <div *ngIf="f.message">{{f.message}}</div>
           </div>
           <div class="form-group row">
-            <label for="name"
-                   class="col-sm-2 col-form-label">Name</label>
+            <label for="category_name"
+                   class="col-sm-2 col-form-label pointer">Name</label>
             <div class="col-sm-10">
               <input type="text"
+                     id="category_name"
                      formControlName="name"
                      (ngModelChange)="clearError('name')"
                      class="form-control"
@@ -108,25 +110,25 @@
               </div>
             </div>
           </div>
-        </div>
-        <div class="modal-footer form-group">
-          <button [disabled]="loading"
-                  type="button"
-                  class="btn btn-primary"
-                  (click)="onSubmitCreate()">
-            <span *ngIf="loading"
-                  class="spinner-border spinner-border-sm mr-1"></span>
-            <span *ngIf="isCreateForm">Add</span>
-            <span *ngIf="!isCreateForm">Update</span>
-            category
-          </button>
-          <button [disabled]="loading"
-                  type="button"
-                  class="btn btn-secondary"
-                  data-dismiss="modal"
-                  (click)="onCancel()">Cancel</button>
-        </div>
-      </form>
+        </form>
+      </div>
+      <div class="modal-footer form-group">
+        <button [disabled]="loading"
+                type="button"
+                class="btn btn-primary"
+                (click)="onSubmitCreate()">
+          <span *ngIf="loading"
+                class="spinner-border spinner-border-sm mr-1"></span>
+          <span *ngIf="isCreateForm">Add</span>
+          <span *ngIf="!isCreateForm">Update</span>
+          category
+        </button>
+        <button [disabled]="loading"
+                type="button"
+                class="btn btn-secondary"
+                data-dismiss="modal"
+                (click)="onCancel()">Cancel</button>
+      </div>
     </div>
   </div>
 </div>

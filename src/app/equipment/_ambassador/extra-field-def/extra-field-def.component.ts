@@ -43,7 +43,7 @@ export class ExtraFieldDefComponent implements OnInit {
     private service: ExtraFieldDefService,
     private authenticationService: AuthenticationService) {
       if (!this.authenticationService.currentUserValue) {
-        this.router.navigate(['/']);
+        this.router.navigate(['/login']);
       }
   }
 

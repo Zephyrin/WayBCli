@@ -13,18 +13,17 @@ import { AuthenticationService } from './authentication.service';
 })
 export class EquipmentService {
 
-  constructor(private http: HttpClient,
-    private authenticationService: AuthenticationService) { }
+  constructor(private http: HttpClient) { }
   getAll() {
     return this.http.get<Equipment[]>(
-      `${environment.apiUrl}/user/${this.authenticationService.currentUserValue.id}/equipment`);
+      `${environment.apiUrl}/equipment`);
   }
 
   add(equipment: Equipment): Observable<Equipment> {
     return this.http.post<Equipment>(
-      `${environment.apiUrl}/user/${this.authenticationService.currentUserValue.id}/equipment`, equipment)
-      .pipe(map(equipment => {
-        return equipment;
+      `${environment.apiUrl}/equipment`, equipment)
+      .pipe(map(eq => {
+        return eq;
       }));
   }
 
@@ -37,10 +36,9 @@ export class EquipmentService {
 
   private handleError(error: any) {
     if (error instanceof String
-      || typeof(error) === 'string'){
+      || typeof(error) === 'string') {
       console.error(error);
-    }
-    else if (error.error instanceof ErrorEvent) {
+    } else if (error.error instanceof ErrorEvent) {
       // A client-side or network error occurred. Handle it accordingly.
       console.error('An error occurred:', error.error.message);
     } else {

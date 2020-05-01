@@ -38,7 +38,7 @@ export class SubCategoryComponent implements OnInit {
     private service: SubCategoryService,
     private authenticationService: AuthenticationService) {
       if (!this.authenticationService.currentUserValue) {
-        this.router.navigate(['/']);
+        this.router.navigate(['/login']);
       }
   }
 
