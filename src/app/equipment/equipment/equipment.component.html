@@ -1,66 +1,212 @@
-<div class="btn-group" role="group" aria-label="Tools">
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addEquipment">Add</button>
-    <button type="button" class="btn btn-secondary">Edit</button>
-    <button type="button" class="btn btn-warning">Delete</button>
+<div class="btn-toolbar"
+     role="group"
+     aria-label="Tools">
+    <div *ngIf="loading"
+         class="spinner-border spinner-border-sm"></div>
+    <button type="button"
+            class="btn btn-light"
+            data-toggle="modal"
+            data-target="#addEquipmentModal"
+            (click)="create()">Add an equipment</button>
+    <button type="button"
+            class="btn btn-light"
+            *ngIf="selected && selected.id !== undefined"
+            (click)="update()">
+            Edit {{selected.name}}
+    </button>
+    <button type="button"
+            class="btn btn-light"
+            *ngIf="selected && selected.id !== undefined"
+            (click)="onDelete()">
+            Delete {{selected.name}}
+    </button>
 </div>
-<div class="table-responsive-sm">
-    <div *ngIf="loading" class="spinner-border spinner-border-sm"></div>
-    <table class="table" *ngIf="equipments">
-        <tr *ngFor="let equipment of equipments">
-        <td >{{equipment.name}}</td>
-        <td>{{equipment.description}}</td>
-        <td>{{equipment.uri}}</td>
+
+<div class="table-responsive-sm table-responsive-md table-responsive-lg table-responsive-xl">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Id</th>
+          <th scope="col">Name</th>
+          <th scope="col">Description</th>
+          <th scope="col">Brand</th>
         </tr>
+      </thead>
+      <tr *ngFor="let equipment of equipments"
+          (click)="setSelected(equipment)"
+          [class.active]="equipment == selected"
+          class="pointer">
+        <td>{{equipment.id}}</td>
+        <td>{{equipment.name}}</td>
+        <td>{{equipment.description}}</td>
+        <td></td>
+      </tr>
     </table>
 </div>
-<div class="modal" tabindex="-1" role="dialog" id="addEquipment" aria-labelledby="addEquipmentLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-        <div class="modal-header">
-            <h5 class="modal-title" id="addEquipmentLabel">Add an equipment</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-            </button>
+
+<div class="modal"
+     tabindex="-1"
+     role="dialog"
+     id="addEquipmentModal"
+     aria-labelledby="addEquipmentLabelModal"
+     aria-hidden="true"
+     #modal>
+  <div class="modal-dialog modal-dialog-centered modal-lg"
+       role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div *ngIf="loading"
+             class="spinner-border spinner-border-sm"></div>
+        <h5 class="modal-title"
+            id="addEquipmentLabelModal">Add an equipment</h5>
+        <button type="button"
+                class="close"
+                data-dismiss="modal"
+                aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div *ngIf="submitted && errors.hasMessage"
+            class="alert alert-warning">
+          <div>{{errors.message}}</div>
         </div>
-        <div class="modal-body">
-            <form [formGroup]="equipmentForm" (ngSubmit)="onSubmit()">
-                <div *ngIf="submitted && f.message" class="invalid-feedback">
-                    <div *ngIf="f.message">{{f.message}}</div>
-                </div>
-                <div class="form-group">
-                <label for="name">Name</label>
-                <input type="text" formControlName="name" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.name.errors }" />
-                <div *ngIf="submitted && f.name.errors" class="invalid-feedback">
-                    <div *ngIf="f.name.errors.required">Name is required</div>
-                </div>
-                </div>
-                <div class="form-group">
-                    <label for="description">Description</label>
-                    <input type="text" formControlName="description" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.description.errors }" />
-                    <div *ngIf="submitted && f.description.errors" class="invalid-feedback">
-                        <div *ngIf="f.description.errors.required">Description is required</div>
+        <div *ngIf="submitted && errors.hasFatalError"
+              class="alert alert-danger">
+          <div [innerHTML]="errors.fatalError"></div>
+        </div>
+        <form [formGroup]="categoryForm">
+          <div class="form-group row">
+            <label for="category"
+                    class="col-sm-2 col-form-label">
+              Category
+            </label>
+            <div class="col-sm-10">
+              <select id="category"
+                      formControlName="category"
+                      class="form-control"
+                      [compareWith]="compareByID"
+                      (change)="onCategoryChange()">
+                <option [ngValue]="null">None</option>
+                <option *ngFor="let category of categories"
+                        [ngValue]="category">{{category.name}}</option>
+              </select>
+            </div>
+          </div>
+        </form>
+        <form [formGroup]="form"
+              (ngSubmit)="onSubmit()">
+          <fieldset [disabled]="selectedCategory === null">
+            <div class="form-group row">
+              <label for="subCategory"
+                      class="col-sm-2 col-form-label">
+                Sub-Category
+              </label>
+              <div class="col-sm-10">
+                <select id="subCategory"
+                        formControlName="subCategory"
+                        class="form-control"
+                        [compareWith]="compareByID"
+                        (change)="onSubCategoryChange()">
+                  <option [ngValue]="null">None</option>
+                  <option *ngFor="let subCategory of selectedCategory?.subCategories"
+                          [ngValue]="subCategory">{{subCategory.name}}</option>
+                </select>
+              </div>
+            </div>
+          </fieldset>
+          <fieldset [disabled]="selectedCategory === null || selectedSubCategory === null">
+            <div *ngIf="submitted && f.message"
+                class="invalid-feedback">
+              <div *ngIf="f.message">{{f.message}}</div>
+            </div>
+            <div class="form-group row">
+              <label for="equipmentName"
+                    class="col-sm-2 col-form-label pointer">Name</label>
+              <div class="col-sm-10">
+                <input id="equipmentName"
+                      type="text"
+                      formControlName="name"
+                      class="form-control"
+                      (ngModelChange)="clearError('name')"
+                      [ngClass]="{ 'is-invalid': hasError('name') }" />
+                <div *ngIf="hasError('name')"
+                    class="invalid-feedback">
+                  <div *ngIf="f.name.errors && f.name.errors.required">
+                    Name is required
+                  </div>
+                  <div *ngIf="errors.hasErrors.name">
+                    <div *ngFor="let child of errors.errors.name.errors">
+                      {{child}}
                     </div>
+                  </div>
                 </div>
-                <div class="form-group">
-                    <label for="brand">Brand</label>
-                    <input type="text" formControlName="brand" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.brand.errors }" />
-                    <div *ngIf="submitted && f.brand.errors" class="invalid-feedback">
-                        <div *ngIf="f.brand.errors.required">Brand is required</div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="equipmentDescription"
+                    class="col-sm-2 col-form-label pointer">Description</label>
+              <div class="col-sm-10">
+                <input id="equipmentDescription"
+                      type="text"
+                      formControlName="description"
+                      class="form-control"
+                      [ngClass]="{ 'is-invalid': hasError('description') }" />
+                <div *ngIf="hasError('description')"
+                    class="invalid-feedback">
+                  <div *ngIf="f.description.error
+                            && f.description.errors.required">
+                    Description is required
+                  </div>
+                  <div *ngIf="errors.hasErrors.description">
+                    <div *ngFor="let child of errors.errors.description.errors">
+                      {{child}}
                     </div>
+                  </div>
                 </div>
-                <div class="form-group">
-                  <button [disabled]="loading" class="btn btn-primary">
-                      <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
-                      Create
-                  </button>
-                  <a routerLink="/" class="btn btn-link">Cancel</a>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="equipmentBrand"
+                    class="col-sm-2 col-form-label pointer">Brand</label>
+              <div class="col-sm-10">
+                <input id="equipmentBrand"
+                      type="text"
+                      formControlName="brand"
+                      class="form-control"
+                      [ngClass]="{ 'is-invalid': hasError('brand') }" />
+                <div *ngIf="hasError('brand')" class="invalid-feedback">
+                  <div *ngIf="f.brand.errors && f.brand.errors.required">
+                    Brand is required
+                  </div>
+                  <div *ngIf="errors.hasErrors.brand">
+                    <div *ngFor="let child of errors.errors.brand.errors">
+                      {{child}}
+                    </div>
+                  </div>
                 </div>
-              </form>
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-primary">Save changes</button>
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        </div>
-        </div>
+              </div>
+            </div>
+            <div class="modal-footer form-group">
+              <button [disabled]="loading"
+                      class="btn btn-primary"
+                      type="button"
+                      (click)="onSubmit()">
+                <span *ngIf="loading"
+                      class="spinner-border spinner-border-sm mr-1"></span>
+                <span *ngIf="isCreateForm">Add</span>
+                <span *ngIf="!isCreateForm">Update</span>
+                equipment
+              </button>
+              <button [disabled]="loading"
+                      type="button"
+                      class="btn btn-secondary"
+                      data-dismiss="modal"
+                      (click)="onCancel()">Cancel</button>
+            </div>
+          </fieldset>
+        </form>
+      </div>
     </div>
+  </div>
 </div>

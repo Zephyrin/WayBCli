@@ -68,15 +68,15 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div *ngIf="submitted && errors.hasMessage"
-           class="alert alert-warning">
-        <div>{{errors.message}}</div>
-      </div>
-      <div *ngIf="submitted && errors.hasFatalError"
-           class="alert alert-danger">
-        <div [innerHTML]="errors.fatalError"></div>
-      </div>
       <div class="modal-body">
+        <div *ngIf="submitted && errors.hasMessage"
+              class="alert alert-warning">
+          <div>{{errors.message}}</div>
+        </div>
+        <div *ngIf="submitted && errors.hasFatalError"
+              class="alert alert-danger">
+          <div [innerHTML]="errors.fatalError"></div>
+        </div>
         <form [formGroup]="form"
               class="form-horizontal"
               (ngSubmit)="onSubmit()">

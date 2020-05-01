@@ -23,7 +23,7 @@ export class AppComponent {
   ) {
       this.authenticationService.currentUser.subscribe(
         x => this.currentUser = x);
-      this.startTimer();
+      //this.startTimer();
   }
 
   get isAdmin() {

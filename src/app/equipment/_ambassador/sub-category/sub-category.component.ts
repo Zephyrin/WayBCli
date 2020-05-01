@@ -119,6 +119,7 @@ export class SubCategoryComponent implements OnInit {
 
   onDelete() {
     this.loading = true;
+    this.manageDeleteError(undefined);
     this.service.delete(this.selected.id,
          this.selected).subscribe(next => {
       this.delete(this.selected);

@@ -177,6 +177,7 @@ export class ExtraFieldDefComponent implements OnInit {
 
   onDelete() {
     this.loading = true;
+    this.manageDeleteError(undefined);
     this.service.delete(this.category.id,
                         this.subCategory.id,
                         this.selected)

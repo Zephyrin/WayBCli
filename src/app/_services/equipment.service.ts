@@ -19,7 +19,7 @@ export class EquipmentService {
       `${environment.apiUrl}/equipment`);
   }
 
-  add(equipment: Equipment): Observable<Equipment> {
+  create(equipment: Equipment): Observable<Equipment> {
     return this.http.post<Equipment>(
       `${environment.apiUrl}/equipment`, equipment)
       .pipe(map(eq => {
@@ -32,6 +32,12 @@ export class EquipmentService {
       .pipe(
         catchError(this.handleError)
       );
+  }
+
+  update(equipment: Equipment): Observable<Equipment> {
+    return this.http.put<Equipment>(
+      `${environment.apiUrl}/equipment/${equipment.id}`, equipment)
+      ;
   }
 
   private handleError(error: any) {
