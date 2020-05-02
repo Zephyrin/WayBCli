@@ -19,7 +19,9 @@ export class Equipment {
       this.id = eq.id;
       this.name = eq.name;
       this.description = eq.description;
-      this.brand = new Brand(eq.brand);
+      if (eq.brand !== undefined && eq.brand !== null) {
+        this.brand = new Brand(eq.brand);
+      }
       this.characteristics = [];
       this.subCategory = eq.subCategory;
       this.validate = eq.validate;
@@ -33,8 +35,8 @@ export class Equipment {
     let min = Number.MAX_SAFE_INTEGER;
     let max = 0;
     if (this.characteristics === null
-        || this.characteristics === undefined
-        || this.characteristics.length === 0) {
+      || this.characteristics === undefined
+      || this.characteristics.length === 0) {
       return '0';
     }
     this.characteristics.forEach(caracteristic => {
@@ -63,8 +65,8 @@ export class Equipment {
     let minWeight = Number.MAX_SAFE_INTEGER;
     let maxWeight = 0;
     if (this.characteristics === null
-        || this.characteristics === undefined
-        || this.characteristics.length === 0) {
+      || this.characteristics === undefined
+      || this.characteristics.length === 0) {
       return 'bla';
     }
     this.characteristics.forEach(caracteristic => {

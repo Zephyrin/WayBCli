@@ -15,6 +15,8 @@ import { Router } from '@angular/router';
 import { FormErrors } from '@app/_errors';
 import { SubCategory, Characteristic } from '@app/_models';
 
+import {MatIconModule} from '@angular/material/icon';
+
 declare var $: any;
 
 @Component({
@@ -26,6 +28,10 @@ export class EquipmentComponent implements OnInit {
   @ViewChild('modal', {static: true}) modal;
   @ViewChild('categoryPopup', {static: true}) categoryPopup;
   @ViewChild('searchText', {static: false}) searchText: ElementRef;
+
+  @ViewChild('ownedBtn', {static: false}) ownedBtn: ElementRef;
+  @ViewChild('wishesBtn', {static: false}) wishesBtn: ElementRef;
+  @ViewChild('othersBtn', {static: false}) othersBtn: ElementRef;
 
   equipments: Equipment[];
   equipmentsFilter: Equipment[];
@@ -50,6 +56,7 @@ export class EquipmentComponent implements OnInit {
 
   filterSubCategories: SubCategory[] = [];
 
+
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
@@ -61,7 +68,6 @@ export class EquipmentComponent implements OnInit {
       }
       this.authenticationService.currentUser.subscribe(
         x => this.currentUser = x);
-      console.log(this.authenticationService.currentUserValue.haves);
     }
 
   get isAmbassador() {
@@ -88,26 +94,34 @@ export class EquipmentComponent implements OnInit {
 
   ngOnInit() {
     this.loading = true;
-
+    let done = false;
     this.deleteHasError = false;
     this.service.getAll()
       .pipe(first())
       .subscribe(equipments => {
         this.loading = false;
         this.equipments = equipments;
-        this.equipmentsFilter = this.equipments;
+        if (done) {
+          this.filters();
+        } else {
+          done = true;
+        }
     });
 
     this.categoryService.getAll()
       .pipe(first())
       .subscribe(categories => {
         this.categories = categories;
-        console.log(categories);
         this.categories.forEach(categorie => {
           categorie.subCategories.forEach(sub => {
             this.filterSubCategories.push(sub);
           });
         });
+        if (done) {
+          this.filters();
+        } else {
+          done = true;
+        }
       });
     this.form = this.formBuilder.group({
       id: [''],
@@ -154,13 +168,37 @@ export class EquipmentComponent implements OnInit {
     this.filters();
   }
 
-  filters() {
+  filters(fromBtnOwned = false, fromBtnWant = false, fromBtnOther = false) {
     const text = this.searchText.nativeElement.value.toLocaleLowerCase();
+    let owned = $(this.ownedBtn.nativeElement).prop('checked');
+    let want = $(this.wishesBtn.nativeElement).prop('checked');
+    let other = $(this.othersBtn.nativeElement).prop('checked');
+    if (fromBtnOwned) {
+      owned = !owned;
+    } else if (fromBtnWant) {
+      want = !want;
+    } else if (fromBtnOther) {
+      other = !other;
+    }
     this.equipmentsFilter = this.equipments.filter(
       (equipment) => this.filterSubCategories.some(
         sub => sub.id === equipment.subCategory.id
         && (equipment.name.toLocaleLowerCase().includes(text)
           || equipment.description.toLocaleLowerCase().includes(text))
+        && (
+           (owned && this.currentUser.haves.some(
+                      ue => ue.ownQuantity > 0
+                            && ue.equipment.id === equipment.id)
+          )
+        || (want && this.currentUser.haves.some(
+                      ue => ue.wantQuantity > 0
+                            && ue.equipment.id === equipment.id)
+          )
+        ||
+         (other && !this.currentUser.haves.some(
+                    ue => !(ue.wantQuantity <= 0 && ue.ownQuantity <= 0) && ue.equipment.id === equipment.id)
+          )
+        )
       )
     );
   }

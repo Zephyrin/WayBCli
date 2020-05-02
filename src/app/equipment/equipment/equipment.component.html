@@ -47,6 +47,27 @@
 
         </div>
       </li>
+      <li>
+        <div class="btn-group-toggle" data-toggle="buttons">
+          <label class="nav-link btn btn-light active" (click)="filters(true)">
+            <input type="checkbox" checked autocomplete="off" #ownedBtn> Owned
+          </label>
+        </div>
+      </li>
+      <li>
+        <div class="btn-group-toggle" data-toggle="buttons">
+          <label class="nav-link btn btn-light active" (click)="filters(false, true)">
+            <input type="checkbox" checked autocomplete="off" #wishesBtn >  Wishes
+          </label>
+        </div>
+      </li>
+      <li>
+        <div class="btn-group-toggle" data-toggle="buttons">
+          <label class="nav-link btn btn-light" (click)="filters(false, false, true)">
+            <input type="checkbox" autocomplete="off" #othersBtn > Others
+          </label>
+        </div>
+      </li>
     </ul>
     <form class="form-inline my-2 my-lg-0" [formGroup]="searchForm">
       <input class="form-control mr-sm-2" formControlName="search" id="searchText" #searchText type="search" placeholder="Search" aria-label="Search">
@@ -92,6 +113,7 @@
           <th scope="col" class="d-none d-sm-table-cell d-md-table-cell">Category</th>
           <th scope="col">Weight</th>
           <th scope="col">Price</th>
+          <th scope="col">Actions</th>
         </tr>
       </thead>
       <tr *ngFor="let equipment of equipmentsFilter"
@@ -105,6 +127,7 @@
         <td class="d-none d-sm-table-cell d-md-table-cell">{{equipment.subCategory.name}}</td>
         <td>{{equipment.compute('weight')}}g</td>
         <td>{{equipment.compute('price')}}</td>
+        <td><i + -</td>
       </tr>
     </table>
 </div>

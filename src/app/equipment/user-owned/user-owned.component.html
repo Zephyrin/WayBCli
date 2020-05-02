@@ -1,1 +1,45 @@
-<p>user-owned works!</p>
+<div class="card mt-4"
+     *ngIf="!footer">
+  <h4 class="card-header">{{currentUser.username}}</h4>
+  <div class="card-body">
+    <p class="">You own <span class="badge badge-info">{{countOwned}}</span>
+      equipment</p>
+    <p class="">You want <span class="badge badge-info">{{countWant}}</span>
+      equipment</p>
+    <p class="">All your equipment's weight is <span
+            class="badge badge-info">{{count('weight')}} g</span></p>
+    <p class="">For a total amount of <span
+            class="badge badge-info">{{count('price') | currency }}</span></p>
+  </div>
+</div>
+
+<div class="card text-center"
+     *ngIf="footer">
+  <div id="cardFooterBody"
+       #cardFooterBody
+       class="collapse"
+       attr.aria-labelledby="cardFooterBody">
+    <div class="card-body">
+      <p class="">You own <span class="badge badge-info">{{countOwned}}</span>
+        equipment</p>
+      <p class="">You want <span class="badge badge-info">{{countWant}}</span>
+        equipment</p>
+      <p class="">All your equipment's weight is <span
+              class="badge badge-info">{{count('weight')}} g</span></p>
+      <p class="">For a total amount of <span
+              class="badge badge-info">{{count('price') | currency }}</span></p>
+    </div>
+  </div>
+  <div class="card-footer"
+       role="button"
+       class="btn btn-light pointer"
+       data-toggle="collapse"
+       attr.data-target="#cardFooterBody"
+       aria-expanded="true"
+       (click)="toggleCard()"
+       attr.aria-controls="cardFooterBody">
+    <p>Owned: <span class="badge badge-info">{{countOwned}}</span>
+      Want: <span class="badge badge-info">{{countWant}}</span>
+      Weight: <span class="badge badge-info">{{count('weight')}}</span>
+  </div>
+</div>

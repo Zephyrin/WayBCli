@@ -100,8 +100,8 @@
       <div class="card mt-4" *ngIf="currentUser">
         <h4 class="card-header">Equipment</h4>
         <div class="card-body">
-          <a class="nav-link" routerLink="equipment">Equipment</a>
-          <a class="nav-link" routerLink="trip">Trip</a>
+          <a class="nav-link" routerLink="equipment">Equipments</a>
+          <a class="nav-link" routerLink="trip">Trips</a>
           <a class="nav-link" routerLink="profil">Profil</a>
         </div>
       </div>
@@ -114,10 +114,14 @@
         </div>
       </div>
     </div>
-    <main class="col-12 col-md-12 col-xl-8 py-lg-3 pl-lg-5 bd-content" role="main">
+    <main class="col-12 col-md-12 col-xl-8 py-lg-3  bd-content" role="main">
       <router-outlet></router-outlet>
     </main>
-    <div class="col-12 col-md-3 col-xl-2 bd-sidebar d-none d-lg-block">
+    <div class="col-12 col-md-3 col-xl-2 bd-sidebar d-none d-lg-block" *ngIf="currentUser">
+      <app-user-owned [footer]="false"></app-user-owned>
     </div>
   </div>
 </div>
+<footer class="footer .d-none .d-md-block .d-lg-none">
+  <app-user-owned [footer]="true"></app-user-owned>
+</footer>
