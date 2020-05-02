@@ -62,7 +62,7 @@ export class CategoryComponent implements OnInit {
     });
 
     this.form = this.formBuilder.group({
-      id: ['', Validators.required],
+      id: [''],
       name: ['', Validators.required],
       subCategories: ['']
     });
