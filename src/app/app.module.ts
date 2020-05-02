@@ -21,13 +21,15 @@ import { CategoryComponent } from './equipment/_ambassador/category/category.com
 import { SubCategoryComponent } from './equipment/_ambassador/sub-category/sub-category.component';
 import { CharacteristicComponent } from './equipment/equipment/characteristic/characteristic.component';;
 import { UserOwnedComponent } from './equipment/user-owned/user-owned.component'
+import {MatIconModule} from '@angular/material/icon';
 
 @NgModule({
     imports: [
         BrowserModule,
         ReactiveFormsModule,
         HttpClientModule,
-        appRoutingModule
+        appRoutingModule,
+        MatIconModule
     ],
     declarations: [
         AppComponent,
