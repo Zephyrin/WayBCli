@@ -15,6 +15,8 @@ import { Router } from '@angular/router';
 import { FormErrors } from '@app/_errors';
 import { SubCategory, Characteristic } from '@app/_models';
 
+import {MatIconRegistry} from '@angular/material/icon';
+
 declare var $: any;
 
 @Component({
