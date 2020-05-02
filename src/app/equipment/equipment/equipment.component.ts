@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef } from '@angular/core';
 import { ViewChild } from '@angular/core';
 
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -8,11 +8,12 @@ import { Equipment } from '@app/_models/equipment';
 
 import { CategoryService } from '@app/_services/category.service';
 import { Category } from '@app/_models/category';
+import { User, Role } from '@app/_models';
 
 import { AuthenticationService } from '@app/_services';
 import { Router } from '@angular/router';
 import { FormErrors } from '@app/_errors';
-import { SubCategory } from '@app/_models';
+import { SubCategory, Characteristic } from '@app/_models';
 
 declare var $: any;
 
@@ -23,9 +24,13 @@ declare var $: any;
 })
 export class EquipmentComponent implements OnInit {
   @ViewChild('modal', {static: true}) modal;
+  @ViewChild('categoryPopup', {static: true}) categoryPopup;
+  @ViewChild('searchText', {static: false}) searchText: ElementRef;
 
   equipments: Equipment[];
+  equipmentsFilter: Equipment[];
   form: FormGroup;
+  searchForm: FormGroup;
   isCreateForm: boolean;
   errors = new FormErrors();
   loading = false;
@@ -41,6 +46,10 @@ export class EquipmentComponent implements OnInit {
 
   selectedSubCategory: SubCategory = null;
 
+  currentUser: User;
+
+  filterSubCategories: SubCategory[] = [];
+
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
@@ -50,8 +59,25 @@ export class EquipmentComponent implements OnInit {
       if (!this.authenticationService.currentUserValue) {
         this.router.navigate(['/login']);
       }
+      this.authenticationService.currentUser.subscribe(
+        x => this.currentUser = x);
+      console.log(this.authenticationService.currentUserValue.haves);
     }
 
+  get isAmbassador() {
+    const isAmbassador = this.currentUser
+    && this.currentUser.roles
+    && (this.currentUser.roles.indexOf(Role.Ambassador) !== -1
+      || this.currentUser.roles.indexOf(Role.Admin) !== -1);
+    return isAmbassador;
+  }
+
+  canEditOrDelete() {
+    return this.selected
+      && this.selected.id !== undefined
+      && (this.selected.validate === false
+          || (this.selected.validate === true && this.isAmbassador));
+  }
   get f() { return this.form.controls; }
 
   hasError(name) {
@@ -62,24 +88,94 @@ export class EquipmentComponent implements OnInit {
 
   ngOnInit() {
     this.loading = true;
+
     this.deleteHasError = false;
     this.service.getAll()
       .pipe(first())
       .subscribe(equipments => {
         this.loading = false;
         this.equipments = equipments;
+        this.equipmentsFilter = this.equipments;
     });
 
+    this.categoryService.getAll()
+      .pipe(first())
+      .subscribe(categories => {
+        this.categories = categories;
+        console.log(categories);
+        this.categories.forEach(categorie => {
+          categorie.subCategories.forEach(sub => {
+            this.filterSubCategories.push(sub);
+          });
+        });
+      });
     this.form = this.formBuilder.group({
       id: [''],
       name: ['', Validators.required],
       description: [''],
       // brand: [null],
-      subCategory: [null, Validators.required]
+      subCategory: [null, Validators.required],
+      characteristics: [[]]
     });
     this.categoryForm = this.formBuilder.group({
       category: [null, Validators.required]
     });
+    this.searchForm = this.formBuilder.group({
+      search: ['']
+    });
+  }
+  prevent(event) {
+    event.stopPropagation();
+  }
+  applyFilterCategory(category) {
+    category.subCategories.forEach(sub => {
+      const dropName = '#dropSub_' + category.id + '_' + sub.id;
+      $(dropName).prop('checked', !$(dropName).prop('checked'));
+      this.applyFilterSubCategory(sub);
+    });
+  }
+
+  applyFilterSubCategory(subCategory) {
+    const index = this.filterSubCategories.indexOf(subCategory);
+    if (index >= 0) {
+      this.filterSubCategories.splice(index, 1);
+    } else {
+      this.filterSubCategories.push(subCategory);
+    }
+    if (this.filterSubCategories.length === 0) {
+      this.categories.forEach(cat => {
+        cat.subCategories.forEach(sub => {
+          const dropName = '#dropSub_' + cat.id + '_' + sub.id;
+          $(dropName).prop('checked', true);
+          this.filterSubCategories.push(sub);
+        });
+      });
+    }
+    this.filters();
+  }
+
+  filters() {
+    const text = this.searchText.nativeElement.value.toLocaleLowerCase();
+    this.equipmentsFilter = this.equipments.filter(
+      (equipment) => this.filterSubCategories.some(
+        sub => sub.id === equipment.subCategory.id
+        && (equipment.name.toLocaleLowerCase().includes(text)
+          || equipment.description.toLocaleLowerCase().includes(text))
+      )
+    );
+  }
+
+  clearFilters() {
+    this.filterSubCategories = []
+    this.categories.forEach(cat => {
+      cat.subCategories.forEach(sub => {
+        const dropName = '#dropSub_' + cat.id + '_' + sub.id;
+        $(dropName).prop('checked', true);
+        this.filterSubCategories.push(sub);
+      });
+    });
+    this.searchText.nativeElement.value = '';
+    this.filters();
   }
 
   setSelected(selected: Equipment) {
@@ -109,30 +205,28 @@ export class EquipmentComponent implements OnInit {
   }
 
   create() {
+    this.selectedSubCategory = null;
     this.update_category();
     this.selected = new Equipment();
+    this.selected.characteristics = [];
     this.form.reset(this.selected);
     this.isCreateForm = true;
   }
 
   update_category() {
-    this.loading = true;
-    this.categoryService.getAll()
-      .pipe(first())
-      .subscribe(categories => {
-        this.loading = false;
-        this.categories = categories;
-        // retrieve subcategory
-        if (this.selectedSubCategory !== undefined) {
-          this.categories.forEach(category => {
-            const id = this.selectedSubCategory.id;
-            if (category.subCategories.some(e => e.id === id)) {
-              this.selectedCategory = category;
-              this.categoryForm.controls.category.setValue(category);
-            }
-          });
+    // retrieve subcategory for the modal
+    if (this.selectedSubCategory !== undefined
+        && this.selectedSubCategory !== null) {
+      this.categories.forEach(category => {
+        const id = this.selectedSubCategory.id;
+        if (category.subCategories.some(e => e.id === id)) {
+          this.selectedCategory = category;
+          this.categoryForm.controls.category.setValue(category);
         }
       });
+    } else {
+      this.selectedCategory = null;
+    }
   }
 
   compareByID(itemOne, itemTwo) {

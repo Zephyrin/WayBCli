@@ -95,7 +95,7 @@
 <!-- main app container -->
 <div class="container-fluid">
   <div class="row flex-xl-nowrap">
-    <div class="col-12 col-md-3 col-xl-2 bd-sidebar d-none d-lg-block">
+    <div class="col-12 col-xl-2 bd-sidebar d-none d-md-none d-lg-block">
 
       <div class="card mt-4" *ngIf="currentUser">
         <h4 class="card-header">Equipment</h4>
@@ -114,8 +114,10 @@
         </div>
       </div>
     </div>
-    <main class="col-12 col-md-9 col-xl-8 py-md-3 pl-md-5 bd-content" role="main">
+    <main class="col-12 col-md-12 col-xl-8 py-lg-3 pl-lg-5 bd-content" role="main">
       <router-outlet></router-outlet>
     </main>
+    <div class="col-12 col-md-3 col-xl-2 bd-sidebar d-none d-lg-block">
+    </div>
   </div>
 </div>

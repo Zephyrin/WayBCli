@@ -19,6 +19,8 @@ import { EquipmentComponent } from './equipment/equipment/equipment.component';
 import { UserComponent } from './equipment/_admin/user/user.component';
 import { CategoryComponent } from './equipment/_ambassador/category/category.component';
 import { SubCategoryComponent } from './equipment/_ambassador/sub-category/sub-category.component';
+import { CharacteristicComponent } from './equipment/equipment/characteristic/characteristic.component';;
+import { UserOwnedComponent } from './equipment/user-owned/user-owned.component'
 
 @NgModule({
     imports: [
@@ -37,7 +39,9 @@ import { SubCategoryComponent } from './equipment/_ambassador/sub-category/sub-c
         UserComponent,
         CategoryComponent,
         SubCategoryComponent
-    ],
+,
+        CharacteristicComponent ,
+        UserOwnedComponent   ],
     providers: [
         { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
         { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },

@@ -6,4 +6,11 @@ export class Brand {
   description: string;
   uri: string;
   equipments: Equipment[];
+
+  constructor(brand: Brand = null) {
+    this.id = brand.id;
+    this.name = brand.name;
+    this.description = brand.description;
+    this.uri = brand.uri;
+  }
 }

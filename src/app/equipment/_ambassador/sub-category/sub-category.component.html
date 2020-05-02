@@ -88,15 +88,15 @@
                      class="form-control"
                      [ngClass]="{ 'is-invalid': submitted
                                   && (f.name.errors
-                                  || errors.hasErrors.name) }"/>
+                                  || errors.hasErrors['name']) }"/>
               <div *ngIf="submitted && f.name.errors"
                     class="invalid-feedback">
                 <div *ngIf="f.name.errors.required">
                   Name is required
                 </div>
               </div>
-              <div *ngIf="submitted && errors.hasErrors.name">
-                <div *ngFor="let child of errors.errors.name.errors">
+              <div *ngIf="submitted && errors.hasErrors['name']">
+                <div *ngFor="let child of errors.errors['name'].errors">
                   {{child}}
                 </div>
               </div>

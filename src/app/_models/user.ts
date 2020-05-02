@@ -1,4 +1,6 @@
-﻿export class User {
+﻿import { Have } from './have';
+
+export class User {
     id: number;
     gender: string;
     username: string;
@@ -7,4 +9,5 @@
     roles: string[];
     enabled: boolean;
     token?: string;
+    haves: Have[];
 }

@@ -95,15 +95,15 @@
                      class="form-control"
                      [ngClass]="{ 'is-invalid': submitted
                                 && (f.name.errors
-                                    || errors.hasErrors.name) }"/>
+                                    || errors.hasErrors['name']) }"/>
               <div *ngIf="submitted
-                          && (f.name.errors || errors.hasErrors.name)"
+                          && (f.name.errors || errors.hasErrors['name'])"
                    class="invalid-feedback">
                 <div *ngIf="f.name.errors && f.name.errors.required">
                   Name is required
                 </div>
-                <div *ngIf="errors.hasErrors.name">
-                  <div *ngFor="let child of errors.errors.name.errors">
+                <div *ngIf="errors.hasErrors['name']">
+                  <div *ngFor="let child of errors.errors['name'].errors">
                     {{child}}
                   </div>
                 </div>
@@ -116,7 +116,7 @@
         <button [disabled]="loading"
                 type="button"
                 class="btn btn-primary"
-                (click)="onSubmitCreate()">
+                (click)="onSubmit()">
           <span *ngIf="loading"
                 class="spinner-border spinner-border-sm mr-1"></span>
           <span *ngIf="isCreateForm">Add</span>

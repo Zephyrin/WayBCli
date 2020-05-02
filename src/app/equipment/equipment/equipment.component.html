@@ -1,3 +1,60 @@
+<nav class="navbar navbar-expand-md navbar-light bg-light" *ngIf="currentUser">
+
+  <button class="navbar-toggler" type="button" data-toggle="collapse"
+    data-target="#filterNavDropdown" aria-controls="filterNavDropdown"
+    aria-expanded="false" aria-label="Toggle filter">
+      <span class="navbar-toggler-icon"></span>
+  </button>
+  <div id="filterNavDropdown" class="navbar-collapse collapse">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item">
+        <button class="nav-link btn btn-light"
+                (click)="clearFilters()">
+          Clear filters
+        </button>
+      </li>
+      <li class="nav-item dropdown multi-level">
+          <button class="nav-link dropdown-toggle btn btn-light"
+            id="dropdownCategory"
+            data-toggle="dropdown"
+            aria-haspopup="true"
+            aria-expanded="false">
+            Category
+          </button>
+          <ul class="dropdown-menu"
+              role="menu"
+              (click)="prevent($event)"
+               aria-labelledby="dropdownCategory">
+            <li class="dropdown-submenu" *ngFor="let cat of categories">
+              <label id="dropCat_{{cat.id}}" class="pointer" (click)="applyFilterCategory(cat)">
+                  {{cat.name}}
+              </label>
+              <ul class="dropdown-menu"
+                   attr.aria-labelledby="dropCat_{{cat.id}}">
+                <li class="form-check form-inline" *ngFor="let sub of cat.subCategories">
+                  <input type="checkbox" checked (change)="applyFilterSubCategory(sub)" class="form-check-input" id="dropSub_{{cat.id}}_{{sub.id}}">
+                  <label class="form-check-label pointer" for="dropSub_{{cat.id}}_{{sub.id}}">
+                    {{sub.name}}
+                  </label>
+                </li>
+              </ul>
+            </li>
+          </ul>
+      </li>
+      <li class="separator" class="divider"></li>
+      <li class="nav-item">
+        <div>
+
+        </div>
+      </li>
+    </ul>
+    <form class="form-inline my-2 my-lg-0" [formGroup]="searchForm">
+      <input class="form-control mr-sm-2" formControlName="search" id="searchText" #searchText type="search" placeholder="Search" aria-label="Search">
+      <button for="searchText" class="btn btn-light my-2 my-sm-0" type="submit" (click)="filters()">Search</button>
+    </form>
+  </div>
+</nav>
+
 <div class="btn-toolbar"
      role="group"
      aria-label="Tools">
@@ -10,7 +67,7 @@
             (click)="create()">Add an equipment</button>
     <button type="button"
             class="btn btn-light"
-            *ngIf="selected && selected.id !== undefined"
+            *ngIf="canEditOrDelete()"
             data-toggle="modal"
             data-target="#addEquipmentModal"
             (click)="update()">
@@ -18,7 +75,7 @@
     </button>
     <button type="button"
             class="btn btn-light"
-            *ngIf="selected && selected.id !== undefined"
+            *ngIf="canEditOrDelete()"
             (click)="onDelete()">
             Delete {{selected.name}}
     </button>
@@ -28,20 +85,26 @@
     <table class="table">
       <thead>
         <tr>
-          <th scope="col">Id</th>
+          <th scope="col" class="d-none d-sm-table-cell d-md-table-cell">Id</th>
           <th scope="col">Name</th>
-          <th scope="col">Description</th>
-          <th scope="col">Brand</th>
+          <th scope="col" class="d-none d-sm-table-cell">Description</th>
+          <th scope="col" class="d-none d-sm-table-cell d-md-table-cell">Brand</th>
+          <th scope="col" class="d-none d-sm-table-cell d-md-table-cell">Category</th>
+          <th scope="col">Weight</th>
+          <th scope="col">Price</th>
         </tr>
       </thead>
-      <tr *ngFor="let equipment of equipments"
+      <tr *ngFor="let equipment of equipmentsFilter"
           (click)="setSelected(equipment)"
           [class.active]="equipment == selected"
           class="pointer">
-        <td>{{equipment.id}}</td>
+        <td class="d-none d-sm-table-cell d-md-table-cell">{{equipment.id}}</td>
         <td>{{equipment.name}}</td>
-        <td>{{equipment.description}}</td>
-        <td></td>
+        <td class="d-none d-sm-table-cell">{{equipment.description}}</td>
+        <td class="d-none d-sm-table-cell d-md-table-cell"></td>
+        <td class="d-none d-sm-table-cell d-md-table-cell">{{equipment.subCategory.name}}</td>
+        <td>{{equipment.compute('weight')}}g</td>
+        <td>{{equipment.compute('price')}}</td>
       </tr>
     </table>
 </div>
@@ -137,8 +200,8 @@
                   <div *ngIf="f.name.errors && f.name.errors.required">
                     Name is required
                   </div>
-                  <div *ngIf="errors.hasErrors.name">
-                    <div *ngFor="let child of errors.errors.name.errors">
+                  <div *ngIf="errors.hasErrors['name']">
+                    <div *ngFor="let child of errors.errors['name'].errors">
                       {{child}}
                     </div>
                   </div>
@@ -156,12 +219,12 @@
                       [ngClass]="{ 'is-invalid': hasError('description') }" />
                 <div *ngIf="hasError('description')"
                     class="invalid-feedback">
-                  <div *ngIf="f.description.error
+                  <div *ngIf="f.description.errors
                             && f.description.errors.required">
                     Description is required
                   </div>
-                  <div *ngIf="errors.hasErrors.description">
-                    <div *ngFor="let child of errors.errors.description.errors">
+                  <div *ngIf="errors.hasErrors['description']">
+                    <div *ngFor="let child of errors.errors['description'].errors">
                       {{child}}
                     </div>
                   </div>
@@ -190,6 +253,7 @@
                 </div>
               </div>
             </div> -->
+            <app-characteristic [parentData]="selected"></app-characteristic>
           </fieldset>
             <div class="modal-footer form-group">
               <button [disabled]="loading"
@@ -214,3 +278,4 @@
     </div>
   </div>
 </div>
+

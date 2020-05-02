@@ -1,42 +1,38 @@
 import { Injectable } from '@angular/core';
+
 import { HttpClient } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { catchError } from 'rxjs/operators';
 
 import { environment } from '@environments/environment';
-import { Equipment } from '@app/_models';
+import { Characteristic } from '@app/_models';
 
 @Injectable({
   providedIn: 'root'
 })
-export class EquipmentService {
+export class CharacteristicService {
 
   constructor(private http: HttpClient) { }
-  getAll() {
-    return this.http.get<Equipment[]>(`${environment.apiUrl}/equipment`)
-      .pipe(map(response => {
-        const details = response.map(data => new Equipment(data));
-        return details;
-    }));
+
+  create(eqId: number, characteristic: Characteristic): Observable<Characteristic> {
+    return this.http.post<Characteristic>(
+      `${environment.apiUrl}/equipment/${eqId}/characteristic`, characteristic)
+      .pipe(map(eq => {
+        return eq;
+      }));
   }
 
-  create(equipment: Equipment): Observable<Equipment> {
-    return this.http.post<Equipment>(
-      `${environment.apiUrl}/equipment`, equipment)
-      .pipe(map(eq => new Equipment(eq) ));
-  }
-
-  delete(equipment: Equipment): Observable<{}> {
-    return this.http.delete(`${environment.apiUrl}/equipment/${equipment.id}`)
+  delete(eqId: number, characteristic: Characteristic): Observable<{}> {
+    return this.http.delete(`${environment.apiUrl}/equipment/${eqId}/characteristic/${characteristic.id}`)
       .pipe(
         catchError(this.handleError)
       );
   }
 
-  update(equipment: Equipment): Observable<Equipment> {
-    return this.http.put<Equipment>(
-      `${environment.apiUrl}/equipment/${equipment.id}`, equipment)
+  update(eqId: number, characteristic: Characteristic): Observable<Characteristic> {
+    return this.http.put<Characteristic>(
+      `${environment.apiUrl}/equipment/${eqId}/characteristic/${characteristic.id}`, characteristic)
       ;
   }
 

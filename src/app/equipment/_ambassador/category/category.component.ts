@@ -83,7 +83,7 @@ export class CategoryComponent implements OnInit {
     this.errors.clearError(key);
   }
 
-  onSubmitCreate() {
+  onSubmit() {
     this.manageDeleteError(undefined);
     this.errors = new FormErrors();
     this.submitted = true;

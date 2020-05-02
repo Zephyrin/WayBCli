@@ -4,3 +4,5 @@ export * from './role.enum';
 export * from './equipment';
 export * from './category';
 export * from './sub-category';
+export * from './characteristic';
+export * from './have';
