@@ -52,6 +52,7 @@ export class EquipmentComponent implements OnInit {
   selectedCategory: Category = null;
 
   selectedSubCategory: SubCategory = null;
+  haveEquipment: Equipment = null;
 
   currentUser: User;
 
@@ -152,7 +153,7 @@ export class EquipmentComponent implements OnInit {
   }
 
   addToHave(equipment: Equipment) {
-    this.haveOwnedModal.open(equipment);
+    this.haveEquipment = equipment;
   }
 
   removeToHave(equipment) {
@@ -222,7 +223,7 @@ export class EquipmentComponent implements OnInit {
   }
 
   clearFilters() {
-    this.filterSubCategories = []
+    this.filterSubCategories = [];
     this.categories.forEach(cat => {
       cat.subCategories.forEach(sub => {
         const dropName = '#dropSub_' + cat.id + '_' + sub.id;

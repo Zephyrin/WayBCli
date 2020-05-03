@@ -14,4 +14,24 @@ export class Characteristic {
       this.gender = car.gender;
     }
   }
+
+  display(): string {
+    let ret = '';
+    if (this.size) {
+      ret += this.size + ' | ';
+    }
+    if (this.gender) {
+      ret += this.gender + ' | ';
+    }
+    if (this.price) {
+      ret += this.price + ' | ';
+    }
+    if (this.weight) {
+      ret += this.weight + 'g';
+    }
+    if (ret.length === 0) {
+      ret = 'Other charecteristic';
+    }
+    return ret;
+  }
 }

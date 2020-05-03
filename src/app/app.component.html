@@ -122,6 +122,6 @@
     </div>
   </div>
 </div>
-<footer class="footer .d-none .d-md-block .d-lg-none">
+<footer class="footer .d-none .d-md-block .d-lg-none" *ngIf="currentUser">
   <app-user-owned [footer]="true"></app-user-owned>
 </footer>

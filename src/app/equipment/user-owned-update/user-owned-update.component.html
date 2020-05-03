@@ -1,0 +1,85 @@
+<div class="modal"
+     tabindex="-1"
+     role="dialog"
+     id="haveModal"
+     #modal
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg"
+       role="document">
+    <div class="modal-header">
+      <h5 class="modal-title"
+          *ngIf="isCreateForm">Add {{equipment?.name||''}} to your list</h5>
+      <h5 class="modal-title"
+          *ngIf="!isCreateForm">Update {{equipment?.name||''}}</h5>
+      <button type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-content">
+      <div *ngIf="submitted && errors.hasMessage"
+           class="alert alert-warning">
+        <div>{{errors.message}}</div>
+      </div>
+      <div *ngIf="submitted && errors.hasFatalError"
+           class="alert alert-danger">
+        <div [innerHTML]="errors.fatalError"></div>
+      </div>
+      <form [formGroup]="havesForm"
+            (ngSubmit)="onSubmit()">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">Characteristic</th>
+              <th scope="col">Owned</th>
+              <th scope="col">Want</th>
+            </tr>
+          </thead>
+          <ng-container formArrayName="haves">
+            <tr *ngFor="let have of haves.controls; index as i">
+              <ng-container [formGroupName]="i">
+                <td>
+                  {{have.value.characteristic?.display() || 'should not appears'}}
+                </td>
+                <td><input type="number"
+                         min="0"
+                         class="form-control"
+                         formControlName="ownQuantity"
+                         [ngClass]="{ 'is-invalid': hasError('wantQuantity') }" />
+                </td>
+                <td><input formControlName="wantQuantity"
+                         type="number"
+                         min="0"
+                         class="form-control"
+                         [ngClass]="{ 'is-invalid': hasError('wantQuantity') }" />
+                </td>
+              </ng-container>
+            </tr>
+          </ng-container>
+        </table>
+        <!-- Form Buttons -->
+        <div class="modal-footer form-group">
+          <button [disabled]="loading"
+                  type="button"
+                  class="btn btn-primary"
+                  (click)="onSubmit()">
+            <span *ngIf="loading"
+                  class="spinner-border spinner-border-sm mr-1"></span>
+            <span *ngIf="isCreateForm">Add</span>
+            <span *ngIf="!isCreateForm">Update</span>
+          </button>
+          <button [disabled]="loading"
+                  type="button"
+                  class="btn btn-secondary"
+                  data-dismiss="modal"
+                  (click)="onCancel()">
+            Cancel
+          </button>
+        </div>
+        <!-- End Form Buttons -->
+      </form>
+    </div>
+  </div>
+</div>

@@ -7,4 +7,14 @@ export class Have {
   wantQuantity: number;
   equipment: Equipment;
   characteristic: Characteristic;
+
+  constructor(have: Have = null) {
+    if (have) {
+      this.id = have.id;
+      this.ownQuantity = have.ownQuantity;
+      this.wantQuantity = have.wantQuantity;
+      this.equipment = new Equipment(have.equipment);
+      this.characteristic = new Characteristic(have.characteristic);
+    }
+  }
 }
