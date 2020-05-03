@@ -29,13 +29,15 @@ export class UserOwnedComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.loading = true;
-    this.haveService.getAll(this.currentUser.id)
-      .pipe(first())
-      .subscribe(haves => {
-        this.loading = false;
-        this.currentUser.haves = haves;
-      });
+    if (this.currentUser.id !== undefined) {
+      this.loading = true;
+      this.haveService.getAll(this.currentUser.id)
+        .pipe(first())
+        .subscribe(haves => {
+          this.loading = false;
+          this.currentUser.haves = haves;
+        });
+    }
   }
 
   get countWant() {

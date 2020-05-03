@@ -174,13 +174,14 @@
         {{equipment.subCategory.name}}</td>
       <td>{{equipment.compute('weight')}}g</td>
       <td>{{equipment.compute('price')}}</td>
-      <td><mat-icon (click)="addToHave(equipment)">add</mat-icon></td>
-      <td><mat-icon (click)="removeToHave(equipment)">remove</mat-icon>
+      <td>
+        <mat-icon (click)="haveOwnedModal.open(equipment)" *ngIf="!equipment.has">add</mat-icon>
+        <mat-icon (click)="haveOwnedModal.open(equipment)" *ngIf="equipment.has">update</mat-icon>
       </td>
     </tr>
   </table>
 </div>
-<app-user-owned-update #haveOwnedModal [equipment]="haveEquipment"></app-user-owned-update>
+<app-user-owned-update #haveOwnedModal (done)="onDone($event)"></app-user-owned-update>
 <div class="modal"
      tabindex="-1"
      role="dialog"

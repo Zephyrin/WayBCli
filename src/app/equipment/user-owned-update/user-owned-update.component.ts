@@ -1,6 +1,6 @@
-import { Component, OnInit, Input, SimpleChange, OnChanges } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 
-import { ViewChild, SimpleChanges } from '@angular/core';
+import { ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControlName } from '@angular/forms';
 import { FormControl, FormArray } from '@angular/forms';
 import { HaveService } from '@app/_services/have.service';
@@ -17,9 +17,9 @@ declare var $: any;
   templateUrl: './user-owned-update.component.html',
   styleUrls: ['./user-owned-update.component.less']
 })
-export class UserOwnedUpdateComponent implements OnInit, OnChanges {
-  @Input() equipment: Equipment;
+export class UserOwnedUpdateComponent implements OnInit {
   @ViewChild('modal', { static: true }) modal;
+  @Output() done = new EventEmitter<boolean>();
 
   havesForm: FormGroup;
   isCreateForm: boolean;
@@ -32,6 +32,7 @@ export class UserOwnedUpdateComponent implements OnInit, OnChanges {
   deleteHasError = false;
 
   currentUser: User;
+  equipment: Equipment;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -44,11 +45,6 @@ export class UserOwnedUpdateComponent implements OnInit, OnChanges {
     this.authenticationService.currentUser.subscribe(
       x => this.currentUser = x);
   }
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes.equipment) {
-      this.open();
-    }
-  }
 
   ngOnInit() {
     this.loading = true;
@@ -56,39 +52,40 @@ export class UserOwnedUpdateComponent implements OnInit, OnChanges {
     this.havesForm = this.formBuilder.group({
       haves: this.formBuilder.array([])
     });
-    /*     this.haves.push(this.formBuilder.group({
-          characteristic: new FormControl(''),
-          ownQuantity: new FormControl(0),
-          wantQuantity: new FormControl(0)
-        })); */
     this.loading = false;
   }
 
   get haves() { return this.havesForm.get('haves') as FormArray; }
 
-  open() {
+  open(equipment: Equipment) {
+    this.equipment = equipment;
     this.selected = null;
     let hasEmptyCharacteristic = false;
     if (!this.havesForm) {
       return;
     }
     this.clearFormArray(this.haves);
+    // TODO order
     this.currentUser.haves.forEach(have => {
       if (have.equipment.id === this.equipment.id) {
-        if (have.characteristic === null || have.characteristic === undefined) {
+        if (have.characteristic === null
+          || have.characteristic === undefined) {
           hasEmptyCharacteristic = true;
         }
-        this.push(have, have.characteristic);
+        this.push(have.id,
+          have.wantQuantity,
+          have.ownQuantity,
+          have.characteristic);
       }
     });
     this.equipment.characteristics.forEach(characteristic => {
       if (!this.currentUser.haves.some(
         have => (have.characteristic?.id || -1) === characteristic.id)) {
-        this.push(new Have(), null);
+        this.push(0, 0, 0, characteristic);
       }
     });
     if (!hasEmptyCharacteristic) {
-      this.push(new Have(), null);
+      this.push(0, 0, 0, null);
     }
     $(this.modal.nativeElement).modal();
   }
@@ -99,12 +96,15 @@ export class UserOwnedUpdateComponent implements OnInit, OnChanges {
     }
   }
 
-  push(have: Have, characteristic: Characteristic) {
+  push(haveId: number,
+       wantQuantity: number,
+       ownQuantity: number,
+       characteristic: Characteristic) {
     this.haves.push(this.formBuilder.group({
-      id: new FormControl(have.id),
+      id: new FormControl(haveId),
       characteristic: new FormControl(new Characteristic(characteristic)),
-      ownQuantity: new FormControl(have.ownQuantity),
-      wantQuantity: new FormControl(have.wantQuantity)
+      ownQuantity: new FormControl(ownQuantity),
+      wantQuantity: new FormControl(wantQuantity)
     }));
   }
 
@@ -129,8 +129,10 @@ export class UserOwnedUpdateComponent implements OnInit, OnChanges {
     if (this.havesForm.invalid) {
       return;
     }
+    let nbHave = 0;
     this.loading = true;
     const values = this.havesForm.value;
+    let countRequest = 0;
     values.haves.forEach(tmp => {
       const have = new Have();
       have.equipment = this.equipment;
@@ -139,25 +141,81 @@ export class UserOwnedUpdateComponent implements OnInit, OnChanges {
       have.ownQuantity = tmp.ownQuantity;
       have.id = tmp.id;
       if (have.id === 0 && (have.ownQuantity > 0 || have.wantQuantity > 0)) {
-        this.service.create(this.currentUser.id, have);
+        countRequest++;
+        nbHave ++;
+        this.service.create(this.currentUser.id, have)
+          .subscribe(haveServer => {
+            countRequest--;
+            this.currentUser.haves.push(haveServer);
+            this.endTransaction(countRequest);
+          }, error => {
+            countRequest--;
+            this.addError(error, countRequest);
+          });
       } else if (have.id > 0) {
+        countRequest++;
         if (have.ownQuantity === 0 && have.wantQuantity === 0) {
-          this.service.delete(this.currentUser.id, have);
+          nbHave --;
+          this.service.delete(this.currentUser.id, have).subscribe(next => {
+            countRequest--;
+
+            this.delete(have);
+            this.endTransaction(countRequest);
+          }, error => {
+            countRequest--;
+            if (error.status === 404) {
+              this.delete(have);
+              this.endTransaction(countRequest);
+            } else {
+              this.addError(error, countRequest);
+            }
+          });
         } else {
-          this.service.update(this.currentUser.id, have);
+          nbHave ++;
+          this.service.update(this.currentUser.id, have).subscribe(val => {
+            countRequest--;
+            this.currentUser.haves.forEach(look => {
+              if (look.id === have.id) {
+                look.ownQuantity = have.ownQuantity;
+                look.wantQuantity = have.wantQuantity;
+              }
+            });
+            this.endTransaction(countRequest);
+          }, error => {
+            countRequest--;
+            this.addError(error, countRequest);
+          });
         }
       }
     });
+    this.equipment.has = nbHave > 0 ? true : false;
   }
 
-  endTransaction() {
-    this.loading = false;
-    this.submitted = false;
-    $(this.modal.nativeElement).modal('hide');
+  addError(error, countRequest: number) {
+    this.errors.formatError(error);
+    if (countRequest === 0) {
+      this.loading = false;
+    }
+  }
+
+  delete(have: Have) {
+    const index = this.currentUser.haves.indexOf(have);
+    this.currentUser.haves.splice(index, 1);
+  }
+
+  endTransaction(countRequest: number) {
+    if (countRequest < 1) {
+      this.loading = false;
+      this.submitted = false;
+      if (!this.errors.hasMessage) {
+        this.equipment = null;
+        this.done.emit(true);
+        $(this.modal.nativeElement).modal('hide');
+      }
+    }
   }
 
   endTransactionError(error) {
     this.errors.formatError(error);
-    this.loading = false;
   }
 }

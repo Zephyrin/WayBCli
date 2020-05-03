@@ -2,7 +2,7 @@ import { Component, OnInit, ElementRef } from '@angular/core';
 import { ViewChild } from '@angular/core';
 
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { first } from 'rxjs/operators';
+import { first, filter } from 'rxjs/operators';
 import { EquipmentService } from '@app/_services/equipment.service';
 import { Equipment } from '@app/_models/equipment';
 
@@ -32,7 +32,7 @@ export class EquipmentComponent implements OnInit {
   @ViewChild('wishesBtn', { static: false }) wishesBtn: ElementRef;
   @ViewChild('othersBtn', { static: false }) othersBtn: ElementRef;
 
-  @ViewChild('haveOwnedModal', { static: false }) haveOwnedModal: ElementRef<UserOwnedUpdateComponent>;
+  @ViewChild('haveOwnedModal', { static: false }) haveOwnedModal: UserOwnedUpdateComponent;
 
   equipments: Equipment[];
   equipmentsFilter: Equipment[];
@@ -104,6 +104,12 @@ export class EquipmentComponent implements OnInit {
       .subscribe(equipments => {
         this.loading = false;
         this.equipments = equipments;
+        this.equipments.forEach(equipment => {
+          if (this.currentUser.haves.some(
+            have => have.equipment.id === equipment.id)) {
+            equipment.has = true;
+          }
+        });
         if (done) {
           this.filters();
         } else {
@@ -215,11 +221,18 @@ export class EquipmentComponent implements OnInit {
             )
             ||
             (other && !this.currentUser.haves.some(
-              ue => !(ue.wantQuantity <= 0 && ue.ownQuantity <= 0) && ue.equipment.id === equipment.id)
+              ue => !(ue.wantQuantity <= 0 && ue.ownQuantity <= 0)
+                && ue.equipment.id === equipment.id)
             )
           )
       )
     );
+  }
+
+  onDone($event) {
+    if ($event) {
+      this.filters();
+    }
   }
 
   clearFilters() {

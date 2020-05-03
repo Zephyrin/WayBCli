@@ -12,6 +12,7 @@ export class Equipment {
   characteristics: Characteristic[];
   subCategory: SubCategory;
   validate: boolean;
+  has: boolean;
   // haves: Have;
   private currencyPipe = new CurrencyPipe('EN');
   constructor(eq: Equipment = null) {
