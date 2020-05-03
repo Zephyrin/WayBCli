@@ -14,8 +14,7 @@ import { AuthenticationService } from '@app/_services';
 import { Router } from '@angular/router';
 import { FormErrors } from '@app/_errors';
 import { SubCategory, Characteristic } from '@app/_models';
-
-import {MatIconRegistry} from '@angular/material/icon';
+import { UserOwnedUpdateComponent } from '../user-owned-update/user-owned-update.component';
 
 declare var $: any;
 
@@ -25,13 +24,15 @@ declare var $: any;
   styleUrls: ['./equipment.component.less']
 })
 export class EquipmentComponent implements OnInit {
-  @ViewChild('modal', {static: true}) modal;
-  @ViewChild('categoryPopup', {static: true}) categoryPopup;
-  @ViewChild('searchText', {static: false}) searchText: ElementRef;
+  @ViewChild('modal', { static: true }) modal;
+  @ViewChild('categoryPopup', { static: true }) categoryPopup;
+  @ViewChild('searchText', { static: false }) searchText: ElementRef;
 
-  @ViewChild('ownedBtn', {static: false}) ownedBtn: ElementRef;
-  @ViewChild('wishesBtn', {static: false}) wishesBtn: ElementRef;
-  @ViewChild('othersBtn', {static: false}) othersBtn: ElementRef;
+  @ViewChild('ownedBtn', { static: false }) ownedBtn: ElementRef;
+  @ViewChild('wishesBtn', { static: false }) wishesBtn: ElementRef;
+  @ViewChild('othersBtn', { static: false }) othersBtn: ElementRef;
+
+  @ViewChild('haveOwnedModal', { static: false }) haveOwnedModal: ElementRef<UserOwnedUpdateComponent>;
 
   equipments: Equipment[];
   equipmentsFilter: Equipment[];
@@ -56,6 +57,7 @@ export class EquipmentComponent implements OnInit {
 
   filterSubCategories: SubCategory[] = [];
 
+  haveForm: FormGroup;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -63,18 +65,18 @@ export class EquipmentComponent implements OnInit {
     private service: EquipmentService,
     private categoryService: CategoryService,
     private authenticationService: AuthenticationService) {
-      if (!this.authenticationService.currentUserValue) {
-        this.router.navigate(['/login']);
-      }
-      this.authenticationService.currentUser.subscribe(
-        x => this.currentUser = x);
+    if (!this.authenticationService.currentUserValue) {
+      this.router.navigate(['/login']);
     }
+    this.authenticationService.currentUser.subscribe(
+      x => this.currentUser = x);
+  }
 
   get isAmbassador() {
     const isAmbassador = this.currentUser
-    && this.currentUser.roles
-    && (this.currentUser.roles.indexOf(Role.Ambassador) !== -1
-      || this.currentUser.roles.indexOf(Role.Admin) !== -1);
+      && this.currentUser.roles
+      && (this.currentUser.roles.indexOf(Role.Ambassador) !== -1
+        || this.currentUser.roles.indexOf(Role.Admin) !== -1);
     return isAmbassador;
   }
 
@@ -82,14 +84,14 @@ export class EquipmentComponent implements OnInit {
     return this.selected
       && this.selected.id !== undefined
       && (this.selected.validate === false
-          || (this.selected.validate === true && this.isAmbassador));
+        || (this.selected.validate === true && this.isAmbassador));
   }
   get f() { return this.form.controls; }
 
   hasError(name) {
     return this.submitted
       && (this.form.controls[name].errors
-         || this.errors.hasErrors[name]);
+        || this.errors.hasErrors[name]);
   }
 
   ngOnInit() {
@@ -106,7 +108,7 @@ export class EquipmentComponent implements OnInit {
         } else {
           done = true;
         }
-    });
+      });
 
     this.categoryService.getAll()
       .pipe(first())
@@ -137,10 +139,26 @@ export class EquipmentComponent implements OnInit {
     this.searchForm = this.formBuilder.group({
       search: ['']
     });
+
+    this.haveForm = this.formBuilder.group({
+      wantQuantity: [0, Validators.required],
+      ownQuantity: [0, Validators.required],
+      characteristic: [null, Validators.required],
+      equipment: [null, Validators.required]
+    });
   }
   prevent(event) {
     event.stopPropagation();
   }
+
+  addToHave(equipment: Equipment) {
+    this.haveOwnedModal.open(equipment);
+  }
+
+  removeToHave(equipment) {
+
+  }
+
   applyFilterCategory(category) {
     category.subCategories.forEach(sub => {
       const dropName = '#dropSub_' + category.id + '_' + sub.id;
@@ -183,22 +201,22 @@ export class EquipmentComponent implements OnInit {
     this.equipmentsFilter = this.equipments.filter(
       (equipment) => this.filterSubCategories.some(
         sub => sub.id === equipment.subCategory.id
-        && (equipment.name.toLocaleLowerCase().includes(text)
-          || equipment.description.toLocaleLowerCase().includes(text))
-        && (
-           (owned && this.currentUser.haves.some(
-                      ue => ue.ownQuantity > 0
-                            && ue.equipment.id === equipment.id)
+          && (equipment.name.toLocaleLowerCase().includes(text)
+            || equipment.description.toLocaleLowerCase().includes(text))
+          && (
+            (owned && this.currentUser.haves.some(
+              ue => ue.ownQuantity > 0
+                && ue.equipment.id === equipment.id)
+            )
+            || (want && this.currentUser.haves.some(
+              ue => ue.wantQuantity > 0
+                && ue.equipment.id === equipment.id)
+            )
+            ||
+            (other && !this.currentUser.haves.some(
+              ue => !(ue.wantQuantity <= 0 && ue.ownQuantity <= 0) && ue.equipment.id === equipment.id)
+            )
           )
-        || (want && this.currentUser.haves.some(
-                      ue => ue.wantQuantity > 0
-                            && ue.equipment.id === equipment.id)
-          )
-        ||
-         (other && !this.currentUser.haves.some(
-                    ue => !(ue.wantQuantity <= 0 && ue.ownQuantity <= 0) && ue.equipment.id === equipment.id)
-          )
-        )
       )
     );
   }
@@ -254,7 +272,7 @@ export class EquipmentComponent implements OnInit {
   update_category() {
     // retrieve subcategory for the modal
     if (this.selectedSubCategory !== undefined
-        && this.selectedSubCategory !== null) {
+      && this.selectedSubCategory !== null) {
       this.categories.forEach(category => {
         const id = this.selectedSubCategory.id;
         if (category.subCategories.some(e => e.id === id)) {
@@ -294,10 +312,10 @@ export class EquipmentComponent implements OnInit {
           this.endTransaction();
           this.form.value.subCategory = subCategory;
           this.equipments.push(equipment);
-      }, (error: any) => {
-        this.form.value.subCategory = subCategory;
-        this.endTransactionError(error);
-      });
+        }, (error: any) => {
+          this.form.value.subCategory = subCategory;
+          this.endTransactionError(error);
+        });
     } else {
       this.service.update(this.form.value)
         .subscribe(returnValue => {
@@ -314,8 +332,8 @@ export class EquipmentComponent implements OnInit {
   onCancel() {
     this.errors = new FormErrors();
     if (this.selected === undefined
-        || this.selected.id === undefined
-        || this.selected.id === 0) {
+      || this.selected.id === undefined
+      || this.selected.id === 0) {
       this.selected = null;
     }
   }

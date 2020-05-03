@@ -1,11 +1,17 @@
-<nav class="navbar navbar-expand-md navbar-light bg-light" *ngIf="currentUser">
+<nav class="navbar navbar-expand-md navbar-light bg-light"
+     *ngIf="currentUser">
 
-  <button class="navbar-toggler" type="button" data-toggle="collapse"
-    data-target="#filterNavDropdown" aria-controls="filterNavDropdown"
-    aria-expanded="false" aria-label="Toggle filter">
-      <span class="navbar-toggler-icon"></span>
+  <button class="navbar-toggler"
+          type="button"
+          data-toggle="collapse"
+          data-target="#filterNavDropdown"
+          aria-controls="filterNavDropdown"
+          aria-expanded="false"
+          aria-label="Toggle filter">
+    <span class="navbar-toggler-icon"></span>
   </button>
-  <div id="filterNavDropdown" class="navbar-collapse collapse">
+  <div id="filterNavDropdown"
+       class="navbar-collapse collapse">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item">
         <button class="nav-link btn btn-light"
@@ -14,64 +20,98 @@
         </button>
       </li>
       <li class="nav-item dropdown multi-level">
-          <button class="nav-link dropdown-toggle btn btn-light"
-            id="dropdownCategory"
-            data-toggle="dropdown"
-            aria-haspopup="true"
-            aria-expanded="false">
-            Category
-          </button>
-          <ul class="dropdown-menu"
-              role="menu"
-              (click)="prevent($event)"
-               aria-labelledby="dropdownCategory">
-            <li class="dropdown-submenu" *ngFor="let cat of categories">
-              <label id="dropCat_{{cat.id}}" class="pointer" (click)="applyFilterCategory(cat)">
-                  {{cat.name}}
-              </label>
-              <ul class="dropdown-menu"
-                   attr.aria-labelledby="dropCat_{{cat.id}}">
-                <li class="form-check form-inline" *ngFor="let sub of cat.subCategories">
-                  <input type="checkbox" checked (change)="applyFilterSubCategory(sub)" class="form-check-input" id="dropSub_{{cat.id}}_{{sub.id}}">
-                  <label class="form-check-label pointer" for="dropSub_{{cat.id}}_{{sub.id}}">
-                    {{sub.name}}
-                  </label>
-                </li>
-              </ul>
-            </li>
-          </ul>
+        <button class="nav-link dropdown-toggle btn btn-light"
+                id="dropdownCategory"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false">
+          Category
+        </button>
+        <ul class="dropdown-menu"
+            role="menu"
+            (click)="prevent($event)"
+            aria-labelledby="dropdownCategory">
+          <li class="dropdown-submenu"
+              *ngFor="let cat of categories">
+            <label id="dropCat_{{cat.id}}"
+                   class="pointer"
+                   (click)="applyFilterCategory(cat)">
+              {{cat.name}}
+            </label>
+            <ul class="dropdown-menu"
+                attr.aria-labelledby="dropCat_{{cat.id}}">
+              <li class="form-check form-inline"
+                  *ngFor="let sub of cat.subCategories">
+                <input type="checkbox"
+                       checked
+                       (change)="applyFilterSubCategory(sub)"
+                       class="form-check-input"
+                       id="dropSub_{{cat.id}}_{{sub.id}}">
+                <label class="form-check-label pointer"
+                       for="dropSub_{{cat.id}}_{{sub.id}}">
+                  {{sub.name}}
+                </label>
+              </li>
+            </ul>
+          </li>
+        </ul>
       </li>
-      <li class="separator" class="divider"></li>
+      <li class="separator"
+          class="divider"></li>
       <li class="nav-item">
         <div>
 
         </div>
       </li>
       <li>
-        <div class="btn-group-toggle" data-toggle="buttons">
-          <label class="nav-link btn btn-light active" (click)="filters(true)">
-            <input type="checkbox" checked autocomplete="off" #ownedBtn> Owned
+        <div class="btn-group-toggle"
+             data-toggle="buttons">
+          <label class="nav-link btn btn-light active"
+                 (click)="filters(true)">
+            <input type="checkbox"
+                   checked
+                   autocomplete="off"
+                   #ownedBtn> Owned
           </label>
         </div>
       </li>
       <li>
-        <div class="btn-group-toggle" data-toggle="buttons">
-          <label class="nav-link btn btn-light active" (click)="filters(false, true)">
-            <input type="checkbox" checked autocomplete="off" #wishesBtn >  Wishes
+        <div class="btn-group-toggle"
+             data-toggle="buttons">
+          <label class="nav-link btn btn-light active"
+                 (click)="filters(false, true)">
+            <input type="checkbox"
+                   checked
+                   autocomplete="off"
+                   #wishesBtn> Wishes
           </label>
         </div>
       </li>
       <li>
-        <div class="btn-group-toggle" data-toggle="buttons">
-          <label class="nav-link btn btn-light" (click)="filters(false, false, true)">
-            <input type="checkbox" autocomplete="off" #othersBtn > Others
+        <div class="btn-group-toggle"
+             data-toggle="buttons">
+          <label class="nav-link btn btn-light"
+                 (click)="filters(false, false, true)">
+            <input type="checkbox"
+                   autocomplete="off"
+                   #othersBtn> Others
           </label>
         </div>
       </li>
     </ul>
-    <form class="form-inline my-2 my-lg-0" [formGroup]="searchForm">
-      <input class="form-control mr-sm-2" formControlName="search" id="searchText" #searchText type="search" placeholder="Search" aria-label="Search">
-      <button for="searchText" class="btn btn-light my-2 my-sm-0" type="submit" (click)="filters()">Search</button>
+    <form class="form-inline my-2 my-lg-0"
+          [formGroup]="searchForm">
+      <input class="form-control mr-sm-2"
+             formControlName="search"
+             id="searchText"
+             #searchText
+             type="search"
+             placeholder="Search"
+             aria-label="Search">
+      <button for="searchText"
+              class="btn btn-light my-2 my-sm-0"
+              type="submit"
+              (click)="filters()">Search</button>
     </form>
   </div>
 </nav>
@@ -79,59 +119,68 @@
 <div class="btn-toolbar"
      role="group"
      aria-label="Tools">
-    <div *ngIf="loading"
-         class="spinner-border spinner-border-sm"></div>
-    <button type="button"
-            class="btn btn-light"
-            data-toggle="modal"
-            data-target="#addEquipmentModal"
-            (click)="create()">Add an equipment</button>
-    <button type="button"
-            class="btn btn-light"
-            *ngIf="canEditOrDelete()"
-            data-toggle="modal"
-            data-target="#addEquipmentModal"
-            (click)="update()">
-            Edit {{selected.name}}
-    </button>
-    <button type="button"
-            class="btn btn-light"
-            *ngIf="canEditOrDelete()"
-            (click)="onDelete()">
-            Delete {{selected.name}}
-    </button>
+  <div *ngIf="loading"
+       class="spinner-border spinner-border-sm"></div>
+  <button type="button"
+          class="btn btn-light"
+          data-toggle="modal"
+          data-target="#addEquipmentModal"
+          (click)="create()">Add an equipment</button>
+  <button type="button"
+          class="btn btn-light"
+          *ngIf="canEditOrDelete()"
+          data-toggle="modal"
+          data-target="#addEquipmentModal"
+          (click)="update()">
+    Edit {{selected.name}}
+  </button>
+  <button type="button"
+          class="btn btn-light"
+          *ngIf="canEditOrDelete()"
+          (click)="onDelete()">
+    Delete {{selected.name}}
+  </button>
 </div>
 
-<div class="table-responsive-sm table-responsive-md table-responsive-lg table-responsive-xl">
-    <table class="table">
-      <thead>
-        <tr>
-          <th scope="col" class="d-none d-sm-table-cell d-md-table-cell">Id</th>
-          <th scope="col">Name</th>
-          <th scope="col" class="d-none d-sm-table-cell">Description</th>
-          <th scope="col" class="d-none d-sm-table-cell d-md-table-cell">Brand</th>
-          <th scope="col" class="d-none d-sm-table-cell d-md-table-cell">Category</th>
-          <th scope="col">Weight</th>
-          <th scope="col">Price</th>
-          <th scope="col">Actions</th>
-        </tr>
-      </thead>
-      <tr *ngFor="let equipment of equipmentsFilter"
-          (click)="setSelected(equipment)"
-          [class.active]="equipment == selected"
-          class="pointer">
-        <td class="d-none d-sm-table-cell d-md-table-cell">{{equipment.id}}</td>
-        <td>{{equipment.name}}</td>
-        <td class="d-none d-sm-table-cell">{{equipment.description}}</td>
-        <td class="d-none d-sm-table-cell d-md-table-cell"></td>
-        <td class="d-none d-sm-table-cell d-md-table-cell">{{equipment.subCategory.name}}</td>
-        <td>{{equipment.compute('weight')}}g</td>
-        <td>{{equipment.compute('price')}}</td>
-        <td><mat-icon>add</mat-icon><mat-icon>update</mat-icon></td>
+<div
+     class="table-responsive-sm table-responsive-md table-responsive-lg table-responsive-xl">
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col"
+            class="d-none d-sm-table-cell d-md-table-cell">Id</th>
+        <th scope="col">Name</th>
+        <th scope="col"
+            class="d-none d-sm-table-cell">Description</th>
+        <th scope="col"
+            class="d-none d-sm-table-cell d-md-table-cell">Brand</th>
+        <th scope="col"
+            class="d-none d-sm-table-cell d-md-table-cell">Category</th>
+        <th scope="col">Weight</th>
+        <th scope="col">Price</th>
+        <th scope="col"></th>
+        <th scope="col"></th>
       </tr>
-    </table>
+    </thead>
+    <tr *ngFor="let equipment of equipmentsFilter"
+        (click)="setSelected(equipment)"
+        [class.active]="equipment == selected"
+        class="pointer">
+      <td class="d-none d-sm-table-cell d-md-table-cell">{{equipment.id}}</td>
+      <td>{{equipment.name}}</td>
+      <td class="d-none d-sm-table-cell">{{equipment.description}}</td>
+      <td class="d-none d-sm-table-cell d-md-table-cell"></td>
+      <td class="d-none d-sm-table-cell d-md-table-cell">
+        {{equipment.subCategory.name}}</td>
+      <td>{{equipment.compute('weight')}}g</td>
+      <td>{{equipment.compute('price')}}</td>
+      <td><mat-icon (click)="addToHave(equipment)">add</mat-icon></td>
+      <td><mat-icon (click)="removeToHave(equipment)">remove</mat-icon>
+      </td>
+    </tr>
+  </table>
 </div>
-
+<app-user-owned-update #haveOwnedModal></app-user-owned-update>
 <div class="modal"
      tabindex="-1"
      role="dialog"
@@ -156,17 +205,17 @@
       </div>
       <div class="modal-body">
         <div *ngIf="submitted && errors.hasMessage"
-            class="alert alert-warning">
+             class="alert alert-warning">
           <div>{{errors.message}}</div>
         </div>
         <div *ngIf="submitted && errors.hasFatalError"
-              class="alert alert-danger">
+             class="alert alert-danger">
           <div [innerHTML]="errors.fatalError"></div>
         </div>
         <form [formGroup]="categoryForm">
           <div class="form-group row">
             <label for="category"
-                    class="col-sm-2 col-form-label">
+                   class="col-sm-2 col-form-label">
               Category
             </label>
             <div class="col-sm-10">
@@ -203,23 +252,24 @@
               </div>
             </div>
           </fieldset>
-          <fieldset [disabled]="selectedCategory === null || selectedSubCategory === null">
+          <fieldset
+                    [disabled]="selectedCategory === null || selectedSubCategory === null">
             <div *ngIf="submitted && f.message"
-                class="invalid-feedback">
+                 class="invalid-feedback">
               <div *ngIf="f.message">{{f.message}}</div>
             </div>
             <div class="form-group row">
               <label for="equipmentName"
-                    class="col-sm-2 col-form-label pointer">Name</label>
+                     class="col-sm-2 col-form-label pointer">Name</label>
               <div class="col-sm-10">
                 <input id="equipmentName"
-                      type="text"
-                      formControlName="name"
-                      class="form-control"
-                      (ngModelChange)="clearError('name')"
-                      [ngClass]="{ 'is-invalid': hasError('name') }" />
+                       type="text"
+                       formControlName="name"
+                       class="form-control"
+                       (ngModelChange)="clearError('name')"
+                       [ngClass]="{ 'is-invalid': hasError('name') }" />
                 <div *ngIf="hasError('name')"
-                    class="invalid-feedback">
+                     class="invalid-feedback">
                   <div *ngIf="f.name.errors && f.name.errors.required">
                     Name is required
                   </div>
@@ -233,21 +283,22 @@
             </div>
             <div class="form-group row">
               <label for="equipmentDescription"
-                    class="col-sm-2 col-form-label pointer">Description</label>
+                     class="col-sm-2 col-form-label pointer">Description</label>
               <div class="col-sm-10">
                 <input id="equipmentDescription"
-                      type="text"
-                      formControlName="description"
-                      class="form-control"
-                      [ngClass]="{ 'is-invalid': hasError('description') }" />
+                       type="text"
+                       formControlName="description"
+                       class="form-control"
+                       [ngClass]="{ 'is-invalid': hasError('description') }" />
                 <div *ngIf="hasError('description')"
-                    class="invalid-feedback">
+                     class="invalid-feedback">
                   <div *ngIf="f.description.errors
                             && f.description.errors.required">
                     Description is required
                   </div>
                   <div *ngIf="errors.hasErrors['description']">
-                    <div *ngFor="let child of errors.errors['description'].errors">
+                    <div
+                         *ngFor="let child of errors.errors['description'].errors">
                       {{child}}
                     </div>
                   </div>
@@ -278,27 +329,26 @@
             </div> -->
             <app-characteristic [parentData]="selected"></app-characteristic>
           </fieldset>
-            <div class="modal-footer form-group">
-              <button [disabled]="loading"
-                      class="btn btn-primary"
-                      type="button"
-                      [disabled]="selectedCategory === null || selectedSubCategory === null"
-                      (click)="onSubmit()">
-                <span *ngIf="loading"
-                      class="spinner-border spinner-border-sm mr-1"></span>
-                <span *ngIf="isCreateForm">Add</span>
-                <span *ngIf="!isCreateForm">Update</span>
-                equipment
-              </button>
-              <button [disabled]="loading"
-                      type="button"
-                      class="btn btn-secondary"
-                      data-dismiss="modal"
-                      (click)="onCancel()">Cancel</button>
-            </div>
+          <div class="modal-footer form-group">
+            <button [disabled]="loading"
+                    class="btn btn-primary"
+                    type="button"
+                    [disabled]="selectedCategory === null || selectedSubCategory === null"
+                    (click)="onSubmit()">
+              <span *ngIf="loading"
+                    class="spinner-border spinner-border-sm mr-1"></span>
+              <span *ngIf="isCreateForm">Add</span>
+              <span *ngIf="!isCreateForm">Update</span>
+              equipment
+            </button>
+            <button [disabled]="loading"
+                    type="button"
+                    class="btn btn-secondary"
+                    data-dismiss="modal"
+                    (click)="onCancel()">Cancel</button>
+          </div>
         </form>
       </div>
     </div>
   </div>
 </div>
-

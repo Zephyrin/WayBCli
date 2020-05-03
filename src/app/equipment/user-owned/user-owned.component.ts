@@ -1,8 +1,10 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ViewChild, ElementRef } from '@angular/core';
+import { first } from 'rxjs/operators';
 
 import { AuthenticationService } from '@app/_services';
 import { User, Have } from '@app/_models';
+import { HaveService } from '@app/_services/have.service';
 
 declare var $: any;
 
@@ -16,15 +18,24 @@ export class UserOwnedComponent implements OnInit {
 
   @Input() footer;
   currentUser: User;
+  loading = false;
 
   constructor(
-    private authenticationService: AuthenticationService
+    private authenticationService: AuthenticationService,
+    private haveService: HaveService
   ) {
     this.authenticationService.currentUser.subscribe(
       x => this.currentUser = x);
   }
 
   ngOnInit() {
+    this.loading = true;
+    this.haveService.getAll(this.currentUser.id)
+      .pipe(first())
+      .subscribe(haves => {
+        this.loading = false;
+        this.currentUser.haves = haves;
+      });
   }
 
   get countWant() {
@@ -55,8 +66,10 @@ export class UserOwnedComponent implements OnInit {
     let ret = 0;
     if (this.currentUser && this.currentUser.haves) {
       this.currentUser.haves.forEach(have => {
-        if (have.ownQuantity > 0 && have.characteristic[name] > 0) {
-          ret += have.characteristic[name];
+        if (have.characteristic !== undefined
+          && have.characteristic !== null
+          && have.ownQuantity > 0 && have.characteristic[name] > 0) {
+          ret += have.characteristic[name] * have.ownQuantity;
         }
       });
     }
