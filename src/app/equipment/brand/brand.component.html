@@ -1,49 +1,44 @@
-<div class="card mt-4">
-    <h4 class="card-header">Brands</h4>
-    <div class="card-body">
-        <h6>Brands view from secure api end point</h6>
-        <div *ngIf="loading" class="spinner-border spinner-border-sm"></div>
-        <ul *ngIf="brands">
-            <li *ngFor="let brand of brands">{{brand.name}} {{brand.description}} {{brand.uri}}<button (click)="onDelete(brand)">delete</button>
-                <div *ngIf="deleteHasError" class="invalid-feedback">
-                    <div>{{deleteError}}</div>
-                </div>
-            </li>
-            <li>
-              <form [formGroup]="brandForm" (ngSubmit)="onSubmit()">
-                <div *ngIf="submitted && f.message" class="invalid-feedback">
-                    <div *ngIf="f.message">{{f.message}}</div>
-                </div>
-                <div class="form-group">
-                <label for="name">Name</label>
-                <input type="text" formControlName="name" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.name.errors }" />
-                <div *ngIf="submitted && f.name.errors" class="invalid-feedback">
-                    <div *ngIf="f.name.errors.required">Name is required</div>
-                </div>
-                </div>
-                <div class="form-group">
-                    <label for="description">Description</label>
-                    <input type="text" formControlName="description" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.description.errors }" />
-                    <div *ngIf="submitted && f.description.errors" class="invalid-feedback">
-                        <div *ngIf="f.description.errors.required">Description is required</div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="uri">Web site</label>
-                    <input type="text" formControlName="uri" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.uri.errors }" />
-                    <div *ngIf="submitted && f.uri.errors" class="invalid-feedback">
-                        <div *ngIf="f.uri.errors.required">Web site is required</div>
-                    </div>
-                </div>
-                <div class="form-group">
-                  <button [disabled]="loading" class="btn btn-primary">
-                      <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
-                      Create
-                  </button>
-                  <a routerLink="/" class="btn btn-link">Cancel</a>
-                </div>
-              </form>
-            </li>
-        </ul>
-    </div>
+<div
+     class="table-responsive-sm table-responsive-md table-responsive-lg table-responsive-xl">
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Name</th>
+        <th scope="col">URL</th>
+        <th scope="col">Valide</th>
+      </tr>
+    </thead>
+    <tr *ngFor="let brand of brands"
+        (click)="setSelected(brand)"
+        (dblclick)="brandModel.open(brand)"
+        [class.active]="brand == selected"
+        class="pointer">
+      <td><b>{{brand.name}}</b>
+        <div>
+          <button type="button"
+                  class="btn btn-light"
+                  *ngIf="canEditOrDelete(brand)"
+                  data-toggle="modal"
+                  data-target="#addEquipmentModal"
+                  (click)="brandModel.open(brand)">
+            <mat-icon>update</mat-icon>
+          </button>
+          <button type="button"
+                  class="btn btn-light"
+                  *ngIf="canEditOrDelete(brand)"
+                  (click)="brandModel.open(brand)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      </td>
+      <td>
+          {{brand.uri}}
+      </td>
+      <td>
+      </td>
+    </tr>
+  </table>
 </div>
+
+<app-brand-update #brandModal
+                  [brands]="brands"></app-brand-update>

@@ -6,7 +6,6 @@ import { catchError, retry } from 'rxjs/operators';
 
 import { environment } from '@environments/environment';
 import { Brand } from '@app/_models';
-//import { $ } from 'protractor';
 
 @Injectable({
   providedIn: 'root'
@@ -19,11 +18,15 @@ export class BrandService {
     return this.http.get<Brand[]>(`${environment.apiUrl}/brand`);
   }
 
-  add(brand: Brand): Observable<Brand> {
+  create(brand: Brand): Observable<Brand> {
     return this.http.post<Brand>(`${environment.apiUrl}/brand`, brand)
-      .pipe(map(brand => {
-        return brand;
+      .pipe(map(retBrand => {
+        return retBrand;
       }));
+  }
+
+  update(brand: Brand): Observable<Brand> {
+    return this.http.put<Brand>(`${environment.apiUrl}/brand/${brand.id}`, brand);
   }
 
   delete(brand: Brand): Observable<{}> {
@@ -35,10 +38,9 @@ export class BrandService {
 
   private handleError(error: any) {
     if (error instanceof String
-      || typeof(error) === 'string'){
+      || typeof (error) === 'string') {
       console.error(error);
-    }
-    else if (error.error instanceof ErrorEvent) {
+    } else if (error.error instanceof ErrorEvent) {
       // A client-side or network error occurred. Handle it accordingly.
       console.error('An error occurred:', error.error.message);
     } else {
@@ -50,5 +52,5 @@ export class BrandService {
     }
     // return an observable with a user-facing error message
     return throwError(error);
-  };
+  }
 }

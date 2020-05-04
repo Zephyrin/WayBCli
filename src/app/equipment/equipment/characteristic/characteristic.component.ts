@@ -92,7 +92,7 @@ export class CharacteristicComponent implements OnInit {
   }
 
   filter(array: Characteristic[]): Characteristic[] {
-    let result: Characteristic[] = [];
+    const result: Characteristic[] = [];
     if (array !== undefined && array !== null) {
       array.forEach(value => {
         if (this.selected === undefined || value.id !== this.selected.id) {

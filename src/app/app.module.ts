@@ -21,41 +21,41 @@ import { CategoryComponent } from './equipment/_ambassador/category/category.com
 import { SubCategoryComponent } from './equipment/_ambassador/sub-category/sub-category.component';
 import { CharacteristicComponent } from './equipment/equipment/characteristic/characteristic.component';
 import { UserOwnedComponent } from './equipment/user-owned/user-owned.component';
-import {MatIconModule} from '@angular/material/icon';;
-import { UserOwnedUpdateComponent } from './equipment/user-owned-update/user-owned-update.component'
-
+import { MatIconModule } from '@angular/material/icon';
+import { UserOwnedUpdateComponent } from './equipment/user-owned-update/user-owned-update.component';
+import { BrandUpdateComponent } from './equipment/brand/brand-update/brand-update.component';
 @NgModule({
-    imports: [
-        BrowserModule,
-        ReactiveFormsModule,
-        HttpClientModule,
-        appRoutingModule,
-        MatIconModule
-    ],
-    declarations: [
-        AppComponent,
-        HomeComponent,
-        LoginComponent,
-        RegisterComponent,
-        BrandComponent,
-        EquipmentComponent,
-        UserComponent,
-        CategoryComponent,
-        SubCategoryComponent
-,
-        CharacteristicComponent ,
-        UserOwnedComponent ,
-        UserOwnedUpdateComponent  ],
-    providers: [
-        { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
-        { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+  imports: [
+    BrowserModule,
+    ReactiveFormsModule,
+    HttpClientModule,
+    appRoutingModule,
+    MatIconModule
+  ],
+  declarations: [
+    AppComponent,
+    HomeComponent,
+    LoginComponent,
+    RegisterComponent,
+    BrandComponent,
+    EquipmentComponent,
+    UserComponent,
+    CategoryComponent,
+    SubCategoryComponent,
+    CharacteristicComponent,
+    UserOwnedComponent,
+    UserOwnedUpdateComponent,
+    BrandUpdateComponent],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
 
-        // provider used to create fake backend
-        // fakeBackendProvider
-    ],
-    exports: [
-      MatIconModule
-    ],
-    bootstrap: [AppComponent]
+    // provider used to create fake backend
+    // fakeBackendProvider
+  ],
+  exports: [
+    MatIconModule
+  ],
+  bootstrap: [AppComponent]
 })
 export class AppModule { }

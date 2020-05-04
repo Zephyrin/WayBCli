@@ -7,7 +7,10 @@ import { EquipmentService } from '@app/_services/equipment.service';
 import { Equipment } from '@app/_models/equipment';
 
 import { CategoryService } from '@app/_services/category.service';
+import { BrandService } from '@app/_services/brand.service';
+
 import { Category } from '@app/_models/category';
+import { Brand } from '@app/_models/brand';
 import { User, Role } from '@app/_models';
 
 import { AuthenticationService } from '@app/_services';
@@ -15,6 +18,7 @@ import { Router } from '@angular/router';
 import { FormErrors } from '@app/_errors';
 import { SubCategory, Characteristic } from '@app/_models';
 import { UserOwnedUpdateComponent } from '../user-owned-update/user-owned-update.component';
+import { BrandUpdateComponent } from '@app/equipment/brand/brand-update/brand-update.component';
 
 declare var $: any;
 
@@ -33,6 +37,7 @@ export class EquipmentComponent implements OnInit {
   @ViewChild('othersBtn', { static: false }) othersBtn: ElementRef;
 
   @ViewChild('haveOwnedModal', { static: false }) haveOwnedModal: UserOwnedUpdateComponent;
+  @ViewChild('brandModal', { static: false }) brandModal: BrandUpdateComponent;
 
   equipments: Equipment[];
   equipmentsFilter: Equipment[];
@@ -49,6 +54,7 @@ export class EquipmentComponent implements OnInit {
 
   categoryForm: FormGroup;
   categories: Category[];
+  brands: Brand[];
   selectedCategory: Category = null;
 
   selectedSubCategory: SubCategory = null;
@@ -65,6 +71,7 @@ export class EquipmentComponent implements OnInit {
     private router: Router,
     private service: EquipmentService,
     private categoryService: CategoryService,
+    private brandService: BrandService,
     private authenticationService: AuthenticationService) {
     if (!this.authenticationService.currentUserValue) {
       this.router.navigate(['/login']);
@@ -81,11 +88,11 @@ export class EquipmentComponent implements OnInit {
     return isAmbassador;
   }
 
-  canEditOrDelete() {
-    return this.selected
-      && this.selected.id !== undefined
-      && (this.selected.validate === false
-        || (this.selected.validate === true && this.isAmbassador));
+  canEditOrDelete(equipment) {
+    return equipment
+      && equipment.id !== undefined
+      && (equipment.validate === false
+        || (equipment.validate === true && this.isAmbassador));
   }
   get f() { return this.form.controls; }
 
@@ -132,11 +139,16 @@ export class EquipmentComponent implements OnInit {
           done = true;
         }
       });
+    this.brandService.getAll()
+      .pipe(first())
+      .subscribe(brands => {
+        this.brands = brands;
+      });
     this.form = this.formBuilder.group({
       id: [''],
       name: ['', Validators.required],
       description: [''],
-      // brand: [null],
+      brand: [null],
       subCategory: [null, Validators.required],
       characteristics: [[]]
     });
@@ -235,6 +247,10 @@ export class EquipmentComponent implements OnInit {
     }
   }
 
+  brandAdded($event) {
+    this.form.patchValue({brand: $event});
+  }
+
   clearFilters() {
     this.filterSubCategories = [];
     this.categories.forEach(cat => {
@@ -252,11 +268,7 @@ export class EquipmentComponent implements OnInit {
   }
 
   setSelected(selected: Equipment) {
-    if (selected === this.selected) {
-      this.selected = undefined;
-    } else {
-      this.selected = selected;
-    }
+    this.selected = selected;
   }
 
   onCategoryChange() {
@@ -269,12 +281,18 @@ export class EquipmentComponent implements OnInit {
     this.selectedSubCategory = this.form.get('subCategory').value;
   }
 
-  update() {
+  update(equipment) {
+    this.selected = equipment;
     this.selectedSubCategory = this.selected.subCategory;
     this.update_category();
     this.form.reset(new Equipment());
-    this.form.patchValue(this.selected);
+    this.form.patchValue(equipment);
     this.isCreateForm = false;
+  }
+
+  updateDblClick(equipment) {
+    this.update(equipment);
+    $(this.modal.nativeElement).modal('show');
   }
 
   create() {
@@ -363,15 +381,15 @@ export class EquipmentComponent implements OnInit {
     this.selected = null;
   }
 
-  onDelete() {
+  onDelete(equipment) {
     this.loading = true;
     this.manageDeleteError(undefined);
-    this.service.delete(this.selected).subscribe(next => {
-      this.delete(this.selected);
+    this.service.delete(equipment).subscribe(next => {
+      this.delete(equipment);
       this.endTransaction();
     }, error => {
       if (error.status === 404) {
-        this.delete(this.selected);
+        this.delete(equipment);
         this.endTransaction();
       } else {
         $(this.modal.nativeElement).modal('show');

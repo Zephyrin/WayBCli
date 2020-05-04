@@ -121,23 +121,7 @@
           data-toggle="modal"
           data-target="#addEquipmentModal"
           (click)="create()">
-    <mat-icon>add</mat-icon>Add an equipment
-  </button>
-  <button type="button"
-          class="btn btn-light"
-          *ngIf="canEditOrDelete()"
-          data-toggle="modal"
-          data-target="#addEquipmentModal"
-          (click)="update()">
-    <mat-icon>update</mat-icon>
-    Update {{selected.name}}
-  </button>
-  <button type="button"
-          class="btn btn-light"
-          *ngIf="canEditOrDelete()"
-          (click)="onDelete()">
-    <mat-icon>delete</mat-icon>
-    Delete {{selected.name}}
+    <mat-icon>add</mat-icon>Equipment
   </button>
 </div>
 
@@ -147,39 +131,63 @@
     <thead>
       <tr>
         <th scope="col"
-            class="d-none d-sm-table-cell d-md-table-cell">Id</th>
-        <th scope="col">Name</th>
+            class="col-md-2 col-sm-9 col-xs-9">Name</th>
         <th scope="col"
-            class="d-none d-sm-table-cell">Description</th>
+            class="col-md-4 d-none d-sm-table-cell">Description</th>
         <th scope="col"
-            class="d-none d-sm-table-cell d-md-table-cell">Brand</th>
+            class="col-md-1 d-none d-sm-table-cell d-md-table-cell">Brand</th>
         <th scope="col"
-            class="d-none d-sm-table-cell d-md-table-cell">Category</th>
-        <th scope="col">Weight</th>
-        <th scope="col">Price</th>
-        <th scope="col"></th>
-        <th scope="col"></th>
+            class="col-md-2 d-none d-sm-table-cell d-md-table-cell">Category
+        </th>
+        <th scope="col"
+            class="col-1 col-sm-1 col-xs-1">Weight</th>
+        <th scope="col"
+            class="col-1 col-sm-1 col-xs-1">Price</th>
+        <th scope="col"
+            class="col-1 col-sm-1 col-xs-1">Own<br />Whishes</th>
       </tr>
     </thead>
     <tr *ngFor="let equipment of equipmentsFilter"
         (click)="setSelected(equipment)"
+        (dblclick)="updateDblClick(equipment)"
         [class.active]="equipment == selected"
         class="pointer">
-      <td class="d-none d-sm-table-cell d-md-table-cell">{{equipment.id}}</td>
-      <td>{{equipment.name}}</td>
-      <td class="d-none d-sm-table-cell">{{equipment.description}}</td>
-      <td class="d-none d-sm-table-cell d-md-table-cell"></td>
+      <td class=""><b>{{equipment.name}}</b>
+        <div>
+          <button type="button"
+                  class="btn btn-light"
+                  *ngIf="canEditOrDelete(equipment)"
+                  data-toggle="modal"
+                  data-target="#addEquipmentModal"
+                  (click)="update(equipment)">
+            <mat-icon>update</mat-icon>
+          </button>
+          <button type="button"
+                  class="btn btn-light"
+                  *ngIf="canEditOrDelete(equipment)"
+                  (click)="onDelete(equipment)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      </td>
+      <td class="d-none d-sm-table-cell">
+        <p>
+          {{equipment.description | slice:0:75}}{{equipment.description.length > 75 ? '...' : ''}}
+        </p>
+      </td>
+      <td class="d-none d-sm-table-cell d-md-table-cell">
+        {{equipment.brand?.name || ''}}</td>
       <td class="d-none d-sm-table-cell d-md-table-cell">
         {{equipment.subCategory.name}}</td>
-      <td>{{equipment.compute('weight')}}g</td>
-      <td>{{equipment.compute('price')}}</td>
-      <td>
+      <td class="">{{equipment.compute('weight')}}g</td>
+      <td class="">{{equipment.compute('price')}}</td>
+      <td class="">
         <button class="btn btn-light"
                 (click)="haveOwnedModal.open(equipment)">
           <mat-icon (click)="haveOwnedModal.open(equipment)"
                     *ngIf="!equipment.has">add</mat-icon>
           <mat-icon (click)="haveOwnedModal.open(equipment)"
-                    *ngIf="equipment.has">update</mat-icon>
+                    *ngIf="equipment.has">add_shopping_cart</mat-icon>
         </button>
       </td>
     </tr>
@@ -187,6 +195,10 @@
 </div>
 <app-user-owned-update #haveOwnedModal
                        (done)="onDone($event)"></app-user-owned-update>
+
+<app-brand-update #brandModal
+                  [brands]="brands"
+                  (added)="brandAdded($event)"></app-brand-update>
 <div class="modal"
      tabindex="-1"
      role="dialog"
@@ -227,7 +239,7 @@
             <div class="col-sm-10">
               <select id="category"
                       formControlName="category"
-                      class="form-control"
+                      class="form-control custom-select"
                       [compareWith]="compareByID"
                       (change)="onCategoryChange()">
                 <option [ngValue]="null">None</option>
@@ -239,6 +251,10 @@
         </form>
         <form [formGroup]="form"
               (ngSubmit)="onSubmit()">
+          <div *ngIf="submitted && f.message"
+               class="invalid-feedback">
+            <div *ngIf="f.message">{{f.message}}</div>
+          </div>
           <fieldset [disabled]="selectedCategory === null">
             <div class="form-group row">
               <label for="subCategory"
@@ -248,7 +264,7 @@
               <div class="col-sm-10">
                 <select id="subCategory"
                         formControlName="subCategory"
-                        class="form-control"
+                        class="form-control custom-select"
                         [compareWith]="compareByID"
                         (change)="onSubCategoryChange()">
                   <option [ngValue]="null">None</option>
@@ -260,10 +276,45 @@
           </fieldset>
           <fieldset
                     [disabled]="selectedCategory === null || selectedSubCategory === null">
-            <div *ngIf="submitted && f.message"
-                 class="invalid-feedback">
-              <div *ngIf="f.message">{{f.message}}</div>
+            <!-- Brand -->
+            <div class="form-group row">
+              <label for="brand"
+                     class="col-sm-2 col-form-label">
+                Brand
+              </label>
+              <div class="col-sm-10">
+                <div class="input-group"
+                     role="group"
+                     aria-label="Brand selector">
+                  <select id="brandCombo"
+                          formControlName="brand"
+                          class="form-control custom-select"
+                          [compareWith]="compareByID">
+                    <option [ngValue]="null">None</option>
+                    <option *ngFor="let brand of brands"
+                            [ngValue]="brand">{{brand.name}}</option>
+                  </select>
+                  <button (click)="brandModal.open()"
+                          type="button"
+                          class="btn btn-light"
+                          [disabled]="loading">
+                    <mat-icon>add</mat-icon>
+                  </button>
+                </div>
+              </div>
+              <div *ngIf="hasError('brand')"
+                   class="invalid-feedback">
+                <div *ngIf="f.brand.errors && f.brand.errors.required">
+                  Brand is required
+                </div>
+                <div *ngIf="errors.hasErrors['brand']">
+                  <div *ngFor="let child of errors.errors['brand'].errors">
+                    {{child}}
+                  </div>
+                </div>
+              </div>
             </div>
+            <!-- End Brand -->
             <div class="form-group row">
               <label for="equipmentName"
                      class="col-sm-2 col-form-label pointer">Name</label>
@@ -291,11 +342,12 @@
               <label for="equipmentDescription"
                      class="col-sm-2 col-form-label pointer">Description</label>
               <div class="col-sm-10">
-                <input id="equipmentDescription"
-                       type="text"
-                       formControlName="description"
-                       class="form-control"
-                       [ngClass]="{ 'is-invalid': hasError('description') }" />
+                <textarea id="equipmentDescription"
+                          type="text"
+                          formControlName="description"
+                          class="form-control"
+                          [ngClass]="{ 'is-invalid': hasError('description') }">
+                      </textarea>
                 <div *ngIf="hasError('description')"
                      class="invalid-feedback">
                   <div *ngIf="f.description.errors
@@ -338,9 +390,8 @@
           <div class="modal-footer form-group">
             <button [disabled]="loading"
                     class="btn btn-primary"
-                    type="button"
-                    [disabled]="selectedCategory === null || selectedSubCategory === null"
-                    (click)="onSubmit()">
+                    type="submit"
+                    [disabled]="selectedCategory === null || selectedSubCategory === null">
               <span *ngIf="loading"
                     class="spinner-border spinner-border-sm mr-1"></span>
               <span *ngIf="isCreateForm">Add</span>
