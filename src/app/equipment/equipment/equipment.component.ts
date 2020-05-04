@@ -244,6 +244,9 @@ export class EquipmentComponent implements OnInit {
         this.filterSubCategories.push(sub);
       });
     });
+    $(this.ownedBtn.nativeElement).prop('checked', true).parent().addClass('active');
+    $(this.wishesBtn.nativeElement).prop('checked', true).parent().addClass('active');
+    $(this.othersBtn.nativeElement).prop('checked', false).parent().removeClass('active');
     this.searchText.nativeElement.value = '';
     this.filters();
   }
@@ -369,10 +372,11 @@ export class EquipmentComponent implements OnInit {
     }, error => {
       if (error.status === 404) {
         this.delete(this.selected);
+        this.endTransaction();
       } else {
+        $(this.modal.nativeElement).modal('show');
         this.manageDeleteError(error.message);
       }
-      this.endTransaction();
     });
   }
 
@@ -385,6 +389,7 @@ export class EquipmentComponent implements OnInit {
     this.loading = false;
     this.submitted = false;
     $(this.modal.nativeElement).modal('hide');
+    this.filters();
   }
 
   endTransactionError(error) {

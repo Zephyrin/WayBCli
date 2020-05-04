@@ -30,6 +30,7 @@ export class Equipment {
         this.characteristics.push(new Characteristic(car));
       });
     }
+    this.has = false;
   }
 
   compute(name: string) {

@@ -7,17 +7,17 @@
           class="btn btn-light"
           data-toggle="modal"
           attr.data-target="#subModal{{parentData.id}}"
-          (click)="create()">Add a sub-category</button>
+          (click)="create()"><mat-icon>add</mat-icon>Add a sub-category</button>
   <button type="button"
           class="btn btn-light"
           data-toggle="modal"
           attr.data-target="#subModal{{parentData.id}}"
           *ngIf="selected && selected.id !== 0"
-          (click)="update()">Edit {{selected.name}}</button>
+          (click)="update()"><mat-icon>update</mat-icon>Update {{selected.name}}</button>
   <button type="button"
           class="btn btn-light"
           *ngIf="selected && selected.id !== 0"
-          (click)="onDelete()">Delete {{selected.name}}</button>
+          (click)="onDelete()"><mat-icon>delete</mat-icon>Delete {{selected.name}}</button>
 </div>
 <div class="table-responsive-sm">
   <table class="table"

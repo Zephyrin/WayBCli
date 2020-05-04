@@ -8,7 +8,7 @@
           data-toggle="modal"
           data-target="#categoryModal"
           (click)="create()"
-          [disabled]="loading">Add a category</button>
+          [disabled]="loading"><mat-icon>add</mat-icon>Add a category</button>
 </div>
 
 <div class="card"
@@ -27,10 +27,10 @@
             class="btn btn-light"
             data-toggle="modal"
             data-target="#categoryModal"
-            (click)="update(category)">Edit</button>
+            (click)="update(category)"><mat-icon>update</mat-icon>Update</button>
     <button type="button"
             class="btn btn-light"
-            (click)="onDelete(category)">Delete</button>
+            (click)="onDelete(category)"><mat-icon>delete</mat-icon>Delete</button>
     <span (click)="collapse(category)" class="pointer"></span>
   </div>
   <div id="categoryCardCollapse_{{category.id}}"

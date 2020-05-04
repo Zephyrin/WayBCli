@@ -34,6 +34,8 @@ export class UserOwnedUpdateComponent implements OnInit {
   currentUser: User;
   equipment: Equipment;
 
+  interval;
+
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
@@ -64,6 +66,7 @@ export class UserOwnedUpdateComponent implements OnInit {
     if (!this.havesForm) {
       return;
     }
+    this.errors = new FormErrors();
     this.clearFormArray(this.haves);
     // TODO order
     this.currentUser.haves.forEach(have => {
@@ -112,9 +115,9 @@ export class UserOwnedUpdateComponent implements OnInit {
     this.errors.clearError(key);
   }
 
-  hasError(name) {
-    return this.submitted
-      && this.errors.hasErrors[name];
+  hasError(name, haveForm) {
+    return this.submitted && haveForm
+      && haveForm.controls[name].errors;
   }
 
   onCancel() {
@@ -122,6 +125,62 @@ export class UserOwnedUpdateComponent implements OnInit {
     this.errors = new FormErrors();
     this.equipment = null;
   }
+
+  plus(id, i, val = 1) {
+    console.log(i);
+    if (id === 'want_') {
+      this.haves.controls[i].value.wantQuantity += val;
+      $('#' + id + i).val(this.haves.controls[i].value.wantQuantity);
+    } else {
+      this.haves.controls[i].value.ownQuantity += val;
+      $('#' + id + i).val(this.haves.controls[i].value.ownQuantity);
+    }
+  }
+
+  minus(id, i, val = 1) {
+    if (id === 'want_') {
+      this.haves.controls[i].value.wantQuantity -= val;
+      if (this.haves.controls[i].value.wantQuantity < 0) {
+        this.haves.controls[i].value.wantQuantity = 0;
+        this.doneTimer();
+      }
+      $('#' + id + i).val(this.haves.controls[i].value.wantQuantity);
+    } else {
+      this.haves.controls[i].value.ownQuantity -= val;
+      if (this.haves.controls[i].value.ownQuantity < 0) {
+        this.haves.controls[i].value.ownQuantity = 0;
+        this.doneTimer();
+      }
+      $('#' + id + i).val(this.haves.controls[i].value.ownQuantity);
+    }
+  }
+
+  sup0(id, i) {
+    return $('#' + id + i).val() > 0;
+  }
+
+
+
+  doneTimer() {
+    clearInterval(this.interval);
+  }
+
+  startTimer(id, i, op) {
+    let plus = 10;
+    let count = 0;
+    this.interval = setInterval(() => {
+      if (op === '+') {
+        this.plus(id, i, plus);
+      } else {
+        this.minus(id, i, plus);
+      }
+      count++;
+      if (count % 10 === 0) {
+        plus += 100;
+      }
+    }, 500);
+  }
+
 
   onSubmit() {
     this.submitted = true;
@@ -136,18 +195,22 @@ export class UserOwnedUpdateComponent implements OnInit {
     values.haves.forEach(tmp => {
       const have = new Have();
       have.equipment = this.equipment;
-      have.characteristic = tmp.characteristic;
+      if (tmp.characteristic.id === 0) {
+        delete have.characteristic;
+      } else {
+        have.characteristic = tmp.characteristic;
+      }
       have.wantQuantity = tmp.wantQuantity;
       have.ownQuantity = tmp.ownQuantity;
       have.id = tmp.id;
       if (have.id === 0 && (have.ownQuantity > 0 || have.wantQuantity > 0)) {
         countRequest++;
-        nbHave ++;
+        nbHave++;
         this.service.create(this.currentUser.id, have)
           .subscribe(haveServer => {
             countRequest--;
             this.currentUser.haves.push(haveServer);
-            this.endTransaction(countRequest);
+            this.endTransaction(countRequest, nbHave);
           }, error => {
             countRequest--;
             this.addError(error, countRequest);
@@ -155,23 +218,23 @@ export class UserOwnedUpdateComponent implements OnInit {
       } else if (have.id > 0) {
         countRequest++;
         if (have.ownQuantity === 0 && have.wantQuantity === 0) {
-          nbHave --;
+          nbHave--;
           this.service.delete(this.currentUser.id, have).subscribe(next => {
             countRequest--;
 
             this.delete(have);
-            this.endTransaction(countRequest);
+            this.endTransaction(countRequest, nbHave);
           }, error => {
             countRequest--;
             if (error.status === 404) {
               this.delete(have);
-              this.endTransaction(countRequest);
+              this.endTransaction(countRequest, nbHave);
             } else {
               this.addError(error, countRequest);
             }
           });
         } else {
-          nbHave ++;
+          nbHave++;
           this.service.update(this.currentUser.id, have).subscribe(val => {
             countRequest--;
             this.currentUser.haves.forEach(look => {
@@ -180,7 +243,7 @@ export class UserOwnedUpdateComponent implements OnInit {
                 look.wantQuantity = have.wantQuantity;
               }
             });
-            this.endTransaction(countRequest);
+            this.endTransaction(countRequest, nbHave);
           }, error => {
             countRequest--;
             this.addError(error, countRequest);
@@ -188,7 +251,6 @@ export class UserOwnedUpdateComponent implements OnInit {
         }
       }
     });
-    this.equipment.has = nbHave > 0 ? true : false;
   }
 
   addError(error, countRequest: number) {
@@ -203,11 +265,12 @@ export class UserOwnedUpdateComponent implements OnInit {
     this.currentUser.haves.splice(index, 1);
   }
 
-  endTransaction(countRequest: number) {
+  endTransaction(countRequest: number, nbHave: number) {
     if (countRequest < 1) {
       this.loading = false;
       this.submitted = false;
       if (!this.errors.hasMessage) {
+        this.equipment.has = nbHave > 0 ? true : false;
         this.equipment = null;
         this.done.emit(true);
         $(this.modal.nativeElement).modal('hide');

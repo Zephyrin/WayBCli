@@ -44,17 +44,81 @@
                 <td>
                   {{have.value.characteristic?.display() || 'should not appears'}}
                 </td>
-                <td><input type="number"
-                         min="0"
-                         class="form-control"
-                         formControlName="ownQuantity"
-                         [ngClass]="{ 'is-invalid': hasError('wantQuantity') }" />
+                <td>
+                  <div class="container">
+                    <div class="row"><input type="number"
+                             min="0"
+                             id="own_{{i}}"
+                             pattern="[0-9][0-9]*"
+                             class="form-control col-lg-8 col-xl-8"
+                             formControlName="ownQuantity"
+                             [ngClass]="{ 'is-invalid': hasError('ownQuantity', have) }" />
+                      <button class="btn btn-light btn-sm"
+                              type="button"
+                              (mousedown)="startTimer('own_', i, '+')"
+                              (touchstart)="startTimer('own_', i, '+')"
+                              (mouseup)="doneTimer()"
+                              (touchend)="doneTimer()"
+                              (click)="plus('own_', i)">
+                        <mat-icon>add</mat-icon>
+                      </button>
+                      <button class="btn btn-light btn-sm"
+                              type="button"
+                              (mouseup)="doneTimer()"
+                              (touchend)="doneTimer()"
+                              (mousedown)="startTimer('own_', i, '-')"
+                              (touchstart)="startTimer('own_', i, '-')"
+                              (click)="minus('own_', i)"
+                              *ngIf="sup0('own_', i)">
+                              <mat-icon>remove</mat-icon>
+                      </button>
+                    </div>
+                  </div>
+                  <div *ngIf="hasError('ownQuantity', have)"
+                       class="invalid-feedback">
+                    <div *ngIf="hasError('wantQuantity', have)">
+                      Shoud be a number without dot
+                    </div>
+                  </div>
                 </td>
-                <td><input formControlName="wantQuantity"
-                         type="number"
-                         min="0"
-                         class="form-control"
-                         [ngClass]="{ 'is-invalid': hasError('wantQuantity') }" />
+                <td>
+                  <div class="container">
+                    <div class="row">
+                      <input formControlName="wantQuantity"
+                             type="number"
+                             pattern="[0-9][0-9]*"
+                             min="0"
+                             id="want_{{i}}"
+                             class="form-control col-lg-8 col-xl-8"
+                             [ngClass]="{ 'is-invalid': hasError('wantQuantity', have) }" />
+                      <button class="btn btn-light btn-sm"
+                              type="button"
+                              (mouseup)="doneTimer()"
+                              (touchend)="doneTimer()"
+                              (touchstart)="startTimer('want_', i, '+')"
+                              (mousedown)="startTimer('want_', i, '+')"
+                              (click)="plus('want_', i)">
+                        <mat-icon>add</mat-icon>
+                      </button>
+                      <button class="btn btn-light btn-sm"
+                              type="button"
+                              (mouseup)="doneTimer()"
+                              (touchend)="doneTimer()"
+                              (touchstart)="startTimer('want_', i, '-')"
+                              (mousedown)="startTimer('want_', i, '-')"
+                              (click)="minus('want_', i)"
+                              *ngIf="sup0('want_', i)">
+                        <mat-icon>remove</mat-icon>
+                      </button>
+                    </div>
+                  </div>
+                  <div *ngIf="hasError('wantQuantity', have)"
+                       class="invalid-feedback">
+                    <div *ngIf="hasError('wantQuantity', have)">
+                      Shoud be a number without dot
+                    </div>
+                  </div>
+
                 </td>
               </ng-container>
             </tr>
@@ -63,9 +127,8 @@
         <!-- Form Buttons -->
         <div class="modal-footer form-group">
           <button [disabled]="loading"
-                  type="button"
-                  class="btn btn-primary"
-                  (click)="onSubmit()">
+                  type="submit"
+                  class="btn btn-primary">
             <span *ngIf="loading"
                   class="spinner-border spinner-border-sm mr-1"></span>
             <span *ngIf="isCreateForm">Add</span>

@@ -1,21 +1,12 @@
 <nav class="navbar navbar-expand-md navbar-light bg-light"
      *ngIf="currentUser">
-
-  <button class="navbar-toggler"
-          type="button"
-          data-toggle="collapse"
-          data-target="#filterNavDropdown"
-          aria-controls="filterNavDropdown"
-          aria-expanded="false"
-          aria-label="Toggle filter">
-    <span class="navbar-toggler-icon"></span>
-  </button>
   <div id="filterNavDropdown"
        class="navbar-collapse collapse">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item">
         <button class="nav-link btn btn-light"
                 (click)="clearFilters()">
+          <mat-icon>filter_none</mat-icon>
           Clear filters
         </button>
       </li>
@@ -25,6 +16,7 @@
                 data-toggle="dropdown"
                 aria-haspopup="true"
                 aria-expanded="false">
+          <mat-icon>category</mat-icon>
           Category
         </button>
         <ul class="dropdown-menu"
@@ -33,11 +25,12 @@
             aria-labelledby="dropdownCategory">
           <li class="dropdown-submenu"
               *ngFor="let cat of categories">
-            <label id="dropCat_{{cat.id}}"
-                   class="pointer"
-                   (click)="applyFilterCategory(cat)">
+            <label id="dropCat_{{cat.id}}">
               {{cat.name}}
             </label>
+            <mat-icon class="right d-block d-sm-none">expand_more</mat-icon>
+            <mat-icon class="right d-none d-sm-block">chevron_right
+            </mat-icon>
             <ul class="dropdown-menu"
                 attr.aria-labelledby="dropCat_{{cat.id}}">
               <li class="form-check form-inline"
@@ -45,7 +38,7 @@
                 <input type="checkbox"
                        checked
                        (change)="applyFilterSubCategory(sub)"
-                       class="form-check-input"
+                       class="form-check-input pointer"
                        id="dropSub_{{cat.id}}_{{sub.id}}">
                 <label class="form-check-label pointer"
                        for="dropSub_{{cat.id}}_{{sub.id}}">
@@ -111,7 +104,9 @@
       <button for="searchText"
               class="btn btn-light my-2 my-sm-0"
               type="submit"
-              (click)="filters()">Search</button>
+              (click)="filters()">
+        <mat-icon>search</mat-icon>Search
+      </button>
     </form>
   </div>
 </nav>
@@ -125,19 +120,23 @@
           class="btn btn-light"
           data-toggle="modal"
           data-target="#addEquipmentModal"
-          (click)="create()">Add an equipment</button>
+          (click)="create()">
+    <mat-icon>add</mat-icon>Add an equipment
+  </button>
   <button type="button"
           class="btn btn-light"
           *ngIf="canEditOrDelete()"
           data-toggle="modal"
           data-target="#addEquipmentModal"
           (click)="update()">
-    Edit {{selected.name}}
+    <mat-icon>update</mat-icon>
+    Update {{selected.name}}
   </button>
   <button type="button"
           class="btn btn-light"
           *ngIf="canEditOrDelete()"
           (click)="onDelete()">
+    <mat-icon>delete</mat-icon>
     Delete {{selected.name}}
   </button>
 </div>
@@ -175,13 +174,19 @@
       <td>{{equipment.compute('weight')}}g</td>
       <td>{{equipment.compute('price')}}</td>
       <td>
-        <mat-icon (click)="haveOwnedModal.open(equipment)" *ngIf="!equipment.has">add</mat-icon>
-        <mat-icon (click)="haveOwnedModal.open(equipment)" *ngIf="equipment.has">update</mat-icon>
+        <button class="btn btn-light"
+                (click)="haveOwnedModal.open(equipment)">
+          <mat-icon (click)="haveOwnedModal.open(equipment)"
+                    *ngIf="!equipment.has">add</mat-icon>
+          <mat-icon (click)="haveOwnedModal.open(equipment)"
+                    *ngIf="equipment.has">update</mat-icon>
+        </button>
       </td>
     </tr>
   </table>
 </div>
-<app-user-owned-update #haveOwnedModal (done)="onDone($event)"></app-user-owned-update>
+<app-user-owned-update #haveOwnedModal
+                       (done)="onDone($event)"></app-user-owned-update>
 <div class="modal"
      tabindex="-1"
      role="dialog"

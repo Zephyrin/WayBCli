@@ -1,29 +1,57 @@
-﻿import { Component } from '@angular/core';
+﻿import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
-
+import { fromEvent, Observable, Subscription } from 'rxjs';
 import { AuthenticationService } from './_services';
 import { User, Role } from './_models';
 import { CategoryService } from './_services/category.service';
-import { HttpResponse } from '@angular/common/http';
+
+declare var $: any;
 
 @Component({
-    selector: 'app',
-    templateUrl: 'app.component.html',
-    styleUrls: ['./app.component.less']
+  // tslint:disable-next-line: component-selector
+  selector: 'app',
+  templateUrl: 'app.component.html',
+  styleUrls: ['./app.component.less']
 })
-export class AppComponent {
+export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   currentUser: User;
   badgeCategory: number;
   interval;
 
+  resizeObservable$: Observable<Event>;
+  resizeSubscription$: Subscription;
+
   constructor(
-      private router: Router,
-      private authenticationService: AuthenticationService,
-      private categoryService: CategoryService
+    public router: Router,
+    private authenticationService: AuthenticationService,
+    private categoryService: CategoryService,
   ) {
-      this.authenticationService.currentUser.subscribe(
-        x => this.currentUser = x);
-      //this.startTimer();
+    this.authenticationService.currentUser.subscribe(
+      x => this.currentUser = x);
+    // this.startTimer();
+  }
+
+  ngOnDestroy() {
+    this.resizeSubscription$.unsubscribe();
+  }
+
+
+  ngOnInit() {
+    this.resizeObservable$ = fromEvent(window, 'resize');
+    this.resizeSubscription$ = this.resizeObservable$.subscribe(evt => {
+      this.positionFooter();
+    });
+  }
+
+  ngAfterViewInit(): void {
+    this.positionFooter();
+  }
+
+  onResize(event) {
+    this.positionFooter();
+  }
+  positionFooter() {
+    $('main').css('padding-bottom', $('footer').height());
   }
 
   get isAdmin() {
@@ -34,9 +62,9 @@ export class AppComponent {
 
   get isAmbassador() {
     const isAmbassador = this.currentUser
-    && this.currentUser.roles
-    && (this.currentUser.roles.indexOf(Role.Ambassador) !== -1
-      || this.currentUser.roles.indexOf(Role.Admin) !== -1);
+      && this.currentUser.roles
+      && (this.currentUser.roles.indexOf(Role.Ambassador) !== -1
+        || this.currentUser.roles.indexOf(Role.Admin) !== -1);
     return isAmbassador;
   }
 
@@ -45,10 +73,10 @@ export class AppComponent {
       if (this.isAmbassador) {
         this.categoryService.count()
           .subscribe(
-          response => {
-            this.badgeCategory = Number(response.headers.get('X-Total-Count'));
-          }
-        );
+            response => {
+              this.badgeCategory = Number(response.headers.get('X-Total-Count'));
+            }
+          );
       }
     }, 1000);
   }
@@ -58,11 +86,11 @@ export class AppComponent {
   }
 
   logout() {
-      this.authenticationService.logout();
-      this.router.navigate(['/login']);
+    this.authenticationService.logout();
+    this.router.navigate(['/login']);
   }
 
   login() {
-      this.router.navigate(['/login']);
+    this.router.navigate(['/login']);
   }
 }
