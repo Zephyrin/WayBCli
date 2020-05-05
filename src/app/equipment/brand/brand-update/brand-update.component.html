@@ -75,7 +75,7 @@
             Address
           </label>
           <div class="col-sm-10">
-            <input type="text"
+            <input type="url"
                    id="brand_uri"
                    formControlName="uri"
                    (ngModelChange)="clearError('uri')"
@@ -83,8 +83,8 @@
                    [ngClass]="{ 'is-invalid': isSubmittedAndHasError('uri')}" />
             <div *ngIf="submitted && f.uri.errors"
                  class="invalid-feedback">
-              <div *ngIf="f.uri.errors.required">
-                Address is required
+              <div *ngIf="f.uri.errors.pattern">
+                Invalid address
               </div>
             </div>
             <div *ngIf="submitted && errors.hasErrors['uri']">

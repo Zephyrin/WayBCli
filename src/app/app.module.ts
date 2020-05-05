@@ -25,6 +25,7 @@ import { UserOwnedComponent } from './equipment/user-owned/user-owned.component'
 import { UserOwnedUpdateComponent } from './equipment/user-owned-update/user-owned-update.component';
 import { BrandUpdateComponent } from './equipment/brand/brand-update/brand-update.component';
 import { DeleteComponent } from './_helpers/delete/delete.component';
+import { SwitchComponent } from './_helpers/switch/switch.component';
 
 @NgModule({
   imports: [
@@ -48,8 +49,9 @@ import { DeleteComponent } from './_helpers/delete/delete.component';
     UserOwnedComponent,
     UserOwnedUpdateComponent,
     BrandUpdateComponent,
-    DeleteComponent
-    ],
+    DeleteComponent,
+    SwitchComponent
+  ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },

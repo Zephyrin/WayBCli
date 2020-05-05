@@ -1,0 +1,14 @@
+<div (click)="switch()"
+     class="switch"
+     [ngClass]="{ 'checked': value }">
+  <input type="checkbox"
+         class="switch-input"
+         [checked]="value"
+         [value]="value"
+         [id]="id">
+  <span class="switch-label"
+        #switchLabel
+        data-on="On"
+        data-off="Off"></span>
+  <span class="switch-handle"></span>
+</div>

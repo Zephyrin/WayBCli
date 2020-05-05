@@ -49,10 +49,11 @@ export class BrandUpdateComponent implements OnInit {
   ngOnInit() {
     this.loading = true;
     this.isCreateForm = true;
+    const urlRegex = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/;
     this.form = this.formBuilder.group({
       id: [''],
       name: ['', Validators.required],
-      uri: ['']
+      uri: ['', Validators.pattern(urlRegex)]
     });
 
     this.loading = false;
@@ -60,6 +61,7 @@ export class BrandUpdateComponent implements OnInit {
 
   open(brand: Brand = null) {
     this.loading = false;
+    this.submitted = false;
     if (brand === null) {
       this.create();
     } else {
@@ -74,10 +76,12 @@ export class BrandUpdateComponent implements OnInit {
   }
 
   setSelected(selected: Brand) {
-    if (selected === this.selected) {
-      this.selected = undefined;
-    } else {
-      this.selected = selected;
+    if (!this.loading) {
+      if (selected === this.selected) {
+        this.selected = undefined;
+      } else {
+        this.selected = selected;
+      }
     }
   }
 

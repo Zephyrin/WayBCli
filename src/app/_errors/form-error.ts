@@ -24,6 +24,7 @@ export class FormErrors {
   hasMessage: boolean;
   fatalError: string;
   hasFatalError: boolean;
+  error: any;
 
   constructor() {
     this.errors = [];
