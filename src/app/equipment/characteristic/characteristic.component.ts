@@ -14,6 +14,8 @@ export class CharacteristicComponent implements OnInit {
   @Input() parentData: Equipment;
   @Input() set updateData(simple: SimpleChange) {
     this.$updateData = simple;
+    // To update the view in a correct manner:
+    // Fix error ExpressionChangedAfterItHasBeenCheckedError
     setTimeout(() => {
       if (simple !== undefined && simple !== null) {
         if (simple.previousValue === null) {
@@ -57,8 +59,6 @@ export class CharacteristicComponent implements OnInit {
       this.selected = undefined;
     } else {
       this.selected = selected;
-      //this.form.reset(new Characteristic());
-      //this.form.patchValue(this.selected);
     }
   }
 

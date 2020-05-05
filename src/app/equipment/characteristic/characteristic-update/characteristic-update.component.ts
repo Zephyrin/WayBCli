@@ -123,14 +123,12 @@ export class CharacteristicUpdateComponent implements OnInit {
         || this.parentData.id === 0) {
         this.simpleChange.currentValue = this.form.value;
         this.endTransaction();
-        //this.parentData.characteristics.push(this.form.value);
       } else {
         this.service.create(this.parentData.id
           , this.form.value)
           .subscribe(characteristic => {
             this.simpleChange.currentValue = characteristic;
             this.endTransaction();
-            //this.parentData.characteristics.push(characteristic);
           }, (error: any) => {
             this.endTransactionError(error);
           });
