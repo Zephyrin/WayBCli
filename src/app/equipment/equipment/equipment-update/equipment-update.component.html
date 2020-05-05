@@ -1,0 +1,221 @@
+<app-delete [titleName]="selected?.name || ''"
+            [contentName]="selected?.name || ''"
+            [btnName]="selected?.name || ''"
+            [errors]="errors"
+            (done)="delete($event)"
+            #deleteModal></app-delete>
+
+<div class="modal"
+     tabindex="-1"
+     role="dialog"
+     id="addEquipmentModal"
+     aria-labelledby="addEquipmentLabelModal"
+     aria-hidden="true"
+     #modal>
+  <div class="modal-dialog modal-dialog-centered modal-lg"
+       role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div *ngIf="loading"
+             class="spinner-border spinner-border-sm"></div>
+        <h5 class="modal-title"
+            id="addEquipmentLabelModal">Add an equipment</h5>
+        <button type="button"
+                class="close"
+                data-dismiss="modal"
+                aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div *ngIf="submitted && errors.hasMessage"
+             class="alert alert-warning">
+          <div>{{errors.message}}</div>
+        </div>
+        <div *ngIf="submitted && errors.hasFatalError"
+             class="alert alert-danger">
+          <div [innerHTML]="errors.fatalError"></div>
+        </div>
+        <form [formGroup]="categoryForm">
+          <div class="form-group row">
+            <label for="category"
+                   class="col-sm-2 col-form-label">
+              Category
+            </label>
+            <div class="col-sm-10">
+              <select id="category"
+                      formControlName="category"
+                      class="form-control custom-select"
+                      [compareWith]="compareByID"
+                      (change)="onCategoryChange()">
+                <option [ngValue]="null">None</option>
+                <option *ngFor="let category of categories"
+                        [ngValue]="category">{{category.name}}</option>
+              </select>
+            </div>
+          </div>
+        </form>
+        <form [formGroup]="form"
+              (ngSubmit)="onSubmit()">
+          <div *ngIf="submitted && f.message"
+               class="invalid-feedback">
+            <div *ngIf="f.message">{{f.message}}</div>
+          </div>
+          <fieldset [disabled]="selectedCategory === null">
+            <div class="form-group row">
+              <label for="subCategory"
+                     class="col-sm-2 col-form-label">
+                Sub-Category
+              </label>
+              <div class="col-sm-10">
+                <select id="subCategory"
+                        formControlName="subCategory"
+                        class="form-control custom-select"
+                        [compareWith]="compareByID"
+                        (change)="onSubCategoryChange()">
+                  <option [ngValue]="null">None</option>
+                  <option *ngFor="let subCategory of selectedCategory?.subCategories"
+                          [ngValue]="subCategory">{{subCategory.name}}</option>
+                </select>
+              </div>
+            </div>
+          </fieldset>
+          <fieldset
+                    [disabled]="selectedCategory === null || selectedSubCategory === null">
+            <!-- Brand -->
+            <div class="form-group row">
+              <label for="brand"
+                     class="col-sm-2 col-form-label">
+                Brand
+              </label>
+              <div class="col-sm-10">
+                <div class="input-group"
+                     role="group"
+                     aria-label="Brand selector">
+                  <select id="brandCombo"
+                          formControlName="brand"
+                          class="form-control custom-select"
+                          [compareWith]="compareByID">
+                    <option [ngValue]="null">None</option>
+                    <option *ngFor="let brand of brands"
+                            [ngValue]="brand">{{brand.name}}</option>
+                  </select>
+                  <button (click)="brandModal.open()"
+                          type="button"
+                          class="btn btn-light"
+                          [disabled]="loading">
+                    <mat-icon>add</mat-icon>
+                  </button>
+                </div>
+              </div>
+              <div *ngIf="hasError('brand')"
+                   class="invalid-feedback">
+                <div *ngIf="f.brand.errors && f.brand.errors.required">
+                  Brand is required
+                </div>
+                <div *ngIf="errors.hasErrors['brand']">
+                  <div *ngFor="let child of errors.errors['brand'].errors">
+                    {{child}}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- End Brand -->
+            <div class="form-group row">
+              <label for="equipmentName"
+                     class="col-sm-2 col-form-label pointer">Name</label>
+              <div class="col-sm-10">
+                <input id="equipmentName"
+                       type="text"
+                       formControlName="name"
+                       class="form-control"
+                       (ngModelChange)="clearError('name')"
+                       [ngClass]="{ 'is-invalid': hasError('name') }" />
+                <div *ngIf="hasError('name')"
+                     class="invalid-feedback">
+                  <div *ngIf="f.name.errors && f.name.errors.required">
+                    Name is required
+                  </div>
+                  <div *ngIf="errors.hasErrors['name']">
+                    <div *ngFor="let child of errors.errors['name'].errors">
+                      {{child}}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="equipmentDescription"
+                     class="col-sm-2 col-form-label pointer">Description</label>
+              <div class="col-sm-10">
+                <textarea id="equipmentDescription"
+                          type="text"
+                          formControlName="description"
+                          class="form-control"
+                          [ngClass]="{ 'is-invalid': hasError('description') }">
+                      </textarea>
+                <div *ngIf="hasError('description')"
+                     class="invalid-feedback">
+                  <div *ngIf="f.description.errors
+                            && f.description.errors.required">
+                    Description is required
+                  </div>
+                  <div *ngIf="errors.hasErrors['description']">
+                    <div
+                         *ngFor="let child of errors.errors['description'].errors">
+                      {{child}}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Comment brand, not link yet.
+            <div class="form-group row">
+              <label for="equipmentBrand"
+                    class="col-sm-2 col-form-label pointer">Brand</label>
+              <div class="col-sm-10">
+                <input id="equipmentBrand"
+                      type="text"
+                      formControlName="brand"
+                      class="form-control"
+                      [ngClass]="{ 'is-invalid': hasError('brand') }" />
+                <div *ngIf="hasError('brand')" class="invalid-feedback">
+                  <div *ngIf="f.brand.errors && f.brand.errors.required">
+                    Brand is required
+                  </div>
+                  <div *ngIf="errors.hasErrors.brand">
+                    <div *ngFor="let child of errors.errors.brand.errors">
+                      {{child}}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div> -->
+            <app-characteristic [parentData]="selected"></app-characteristic>
+          </fieldset>
+          <div class="modal-footer form-group">
+            <button [disabled]="loading"
+                    class="btn btn-primary"
+                    type="submit"
+                    [disabled]="selectedCategory === null || selectedSubCategory === null">
+              <span *ngIf="loading"
+                    class="spinner-border spinner-border-sm mr-1"></span>
+              <span *ngIf="isCreateForm">Add</span>
+              <span *ngIf="!isCreateForm">Update</span>
+              equipment
+            </button>
+            <button [disabled]="loading"
+                    type="button"
+                    class="btn btn-secondary"
+                    data-dismiss="modal"
+                    (click)="onCancel()">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-brand-update #brandModal
+                  [brands]="brands"
+                  (added)="brandAdded($event)"></app-brand-update>

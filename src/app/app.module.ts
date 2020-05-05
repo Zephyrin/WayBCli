@@ -19,13 +19,15 @@ import { EquipmentComponent } from './equipment/equipment/equipment.component';
 import { UserComponent } from './equipment/_admin/user/user.component';
 import { CategoryComponent } from './equipment/_ambassador/category/category.component';
 import { SubCategoryComponent } from './equipment/_ambassador/sub-category/sub-category.component';
-import { CharacteristicComponent } from './equipment/equipment/characteristic/characteristic.component';
+import { CharacteristicComponent } from './equipment/characteristic/characteristic.component';
 import { UserOwnedComponent } from './equipment/user-owned/user-owned.component';
 
 import { UserOwnedUpdateComponent } from './equipment/user-owned-update/user-owned-update.component';
 import { BrandUpdateComponent } from './equipment/brand/brand-update/brand-update.component';
 import { DeleteComponent } from './_helpers/delete/delete.component';
 import { SwitchComponent } from './_helpers/switch/switch.component';
+import { EquipmentFilterComponent } from './equipment/equipment/equipment-filter/equipment-filter.component';;
+import { EquipmentUpdateComponent } from './equipment/equipment/equipment-update/equipment-update.component'
 
 @NgModule({
   imports: [
@@ -50,8 +52,10 @@ import { SwitchComponent } from './_helpers/switch/switch.component';
     UserOwnedUpdateComponent,
     BrandUpdateComponent,
     DeleteComponent,
-    SwitchComponent
-  ],
+    SwitchComponent,
+    EquipmentFilterComponent
+,
+    EquipmentUpdateComponent  ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },

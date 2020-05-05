@@ -1,116 +1,7 @@
-<nav class="navbar navbar-expand-md navbar-light bg-light"
-     *ngIf="currentUser">
-  <div id="filterNavDropdown"
-       class="navbar-collapse collapse">
-    <ul class="navbar-nav mr-auto">
-      <li class="nav-item">
-        <button class="nav-link btn btn-light"
-                (click)="clearFilters()">
-          <mat-icon>filter_none</mat-icon>
-          Clear filters
-        </button>
-      </li>
-      <li class="nav-item dropdown multi-level">
-        <button class="nav-link dropdown-toggle btn btn-light"
-                id="dropdownCategory"
-                data-toggle="dropdown"
-                aria-haspopup="true"
-                aria-expanded="false">
-          <mat-icon>category</mat-icon>
-          Category
-        </button>
-        <ul class="dropdown-menu"
-            role="menu"
-            (click)="prevent($event)"
-            aria-labelledby="dropdownCategory">
-          <li class="dropdown-submenu"
-              *ngFor="let cat of categories">
-            <label id="dropCat_{{cat.id}}">
-              {{cat.name}}
-            </label>
-            <mat-icon class="right d-block d-sm-none">expand_more</mat-icon>
-            <mat-icon class="right d-none d-sm-block">chevron_right
-            </mat-icon>
-            <ul class="dropdown-menu"
-                attr.aria-labelledby="dropCat_{{cat.id}}">
-              <li class="form-check form-inline"
-                  *ngFor="let sub of cat.subCategories">
-                <input type="checkbox"
-                       checked
-                       (change)="applyFilterSubCategory(sub)"
-                       class="form-check-input pointer"
-                       id="dropSub_{{cat.id}}_{{sub.id}}">
-                <label class="form-check-label pointer"
-                       for="dropSub_{{cat.id}}_{{sub.id}}">
-                  {{sub.name}}
-                </label>
-              </li>
-            </ul>
-          </li>
-        </ul>
-      </li>
-      <li class="separator"
-          class="divider"></li>
-      <li class="nav-item">
-        <div>
-
-        </div>
-      </li>
-      <li>
-        <div class="btn-group-toggle"
-             data-toggle="buttons">
-          <label class="nav-link btn btn-light active"
-                 (click)="filters(true)">
-            <input type="checkbox"
-                   checked
-                   autocomplete="off"
-                   #ownedBtn> Owned
-          </label>
-        </div>
-      </li>
-      <li>
-        <div class="btn-group-toggle"
-             data-toggle="buttons">
-          <label class="nav-link btn btn-light active"
-                 (click)="filters(false, true)">
-            <input type="checkbox"
-                   checked
-                   autocomplete="off"
-                   #wishesBtn> Wishes
-          </label>
-        </div>
-      </li>
-      <li>
-        <div class="btn-group-toggle"
-             data-toggle="buttons">
-          <label class="nav-link btn btn-light"
-                 (click)="filters(false, false, true)">
-            <input type="checkbox"
-                   autocomplete="off"
-                   #othersBtn> Others
-          </label>
-        </div>
-      </li>
-    </ul>
-    <form class="form-inline my-2 my-lg-0"
-          [formGroup]="searchForm">
-      <input class="form-control mr-sm-2"
-             formControlName="search"
-             id="searchText"
-             #searchText
-             type="search"
-             placeholder="Search"
-             aria-label="Search">
-      <button for="searchText"
-              class="btn btn-light my-2 my-sm-0"
-              type="submit"
-              (click)="filters()">
-        <mat-icon>search</mat-icon>Search
-      </button>
-    </form>
-  </div>
-</nav>
-
+<app-equipment-filter [equipments]="equipments"
+                      [categories]="categories"
+                      (filterDone)="filterDone($event)"
+                      #equipmentFilter></app-equipment-filter>
 <div class="btn-toolbar"
      role="group"
      aria-label="Tools">
@@ -118,9 +9,8 @@
        class="spinner-border spinner-border-sm"></div>
   <button type="button"
           class="btn btn-light"
-          data-toggle="modal"
-          data-target="#addEquipmentModal"
-          (click)="create()">
+          role="button"
+          (click)="equipmentUpdate.create()">
     <mat-icon>add</mat-icon>Equipment
   </button>
 </div>
@@ -159,13 +49,13 @@
                   *ngIf="canEditOrDelete(equipment)"
                   data-toggle="modal"
                   data-target="#addEquipmentModal"
-                  (click)="update(equipment)">
+                  (click)="equipmentUpdate.update(equipment)">
             <mat-icon>update</mat-icon>
           </button>
           <button type="button"
                   class="btn btn-light"
                   *ngIf="canEditOrDelete(equipment)"
-                  (click)="onDelete(equipment)">
+                  (click)="equipmentUpdate.onDelete(equipment)">
             <mat-icon>delete</mat-icon>
           </button>
         </div>
@@ -194,218 +84,9 @@
   </table>
 </div>
 <app-user-owned-update #haveOwnedModal
-                       (done)="onDone($event)"></app-user-owned-update>
+                       (done)="onDoneHave($event)"></app-user-owned-update>
 
-<app-brand-update #brandModal
-                  [brands]="brands"
-                  (added)="brandAdded($event)"></app-brand-update>
-<div class="modal"
-     tabindex="-1"
-     role="dialog"
-     id="addEquipmentModal"
-     aria-labelledby="addEquipmentLabelModal"
-     aria-hidden="true"
-     #modal>
-  <div class="modal-dialog modal-dialog-centered modal-lg"
-       role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <div *ngIf="loading"
-             class="spinner-border spinner-border-sm"></div>
-        <h5 class="modal-title"
-            id="addEquipmentLabelModal">Add an equipment</h5>
-        <button type="button"
-                class="close"
-                data-dismiss="modal"
-                aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <div *ngIf="submitted && errors.hasMessage"
-             class="alert alert-warning">
-          <div>{{errors.message}}</div>
-        </div>
-        <div *ngIf="submitted && errors.hasFatalError"
-             class="alert alert-danger">
-          <div [innerHTML]="errors.fatalError"></div>
-        </div>
-        <form [formGroup]="categoryForm">
-          <div class="form-group row">
-            <label for="category"
-                   class="col-sm-2 col-form-label">
-              Category
-            </label>
-            <div class="col-sm-10">
-              <select id="category"
-                      formControlName="category"
-                      class="form-control custom-select"
-                      [compareWith]="compareByID"
-                      (change)="onCategoryChange()">
-                <option [ngValue]="null">None</option>
-                <option *ngFor="let category of categories"
-                        [ngValue]="category">{{category.name}}</option>
-              </select>
-            </div>
-          </div>
-        </form>
-        <form [formGroup]="form"
-              (ngSubmit)="onSubmit()">
-          <div *ngIf="submitted && f.message"
-               class="invalid-feedback">
-            <div *ngIf="f.message">{{f.message}}</div>
-          </div>
-          <fieldset [disabled]="selectedCategory === null">
-            <div class="form-group row">
-              <label for="subCategory"
-                     class="col-sm-2 col-form-label">
-                Sub-Category
-              </label>
-              <div class="col-sm-10">
-                <select id="subCategory"
-                        formControlName="subCategory"
-                        class="form-control custom-select"
-                        [compareWith]="compareByID"
-                        (change)="onSubCategoryChange()">
-                  <option [ngValue]="null">None</option>
-                  <option *ngFor="let subCategory of selectedCategory?.subCategories"
-                          [ngValue]="subCategory">{{subCategory.name}}</option>
-                </select>
-              </div>
-            </div>
-          </fieldset>
-          <fieldset
-                    [disabled]="selectedCategory === null || selectedSubCategory === null">
-            <!-- Brand -->
-            <div class="form-group row">
-              <label for="brand"
-                     class="col-sm-2 col-form-label">
-                Brand
-              </label>
-              <div class="col-sm-10">
-                <div class="input-group"
-                     role="group"
-                     aria-label="Brand selector">
-                  <select id="brandCombo"
-                          formControlName="brand"
-                          class="form-control custom-select"
-                          [compareWith]="compareByID">
-                    <option [ngValue]="null">None</option>
-                    <option *ngFor="let brand of brands"
-                            [ngValue]="brand">{{brand.name}}</option>
-                  </select>
-                  <button (click)="brandModal.open()"
-                          type="button"
-                          class="btn btn-light"
-                          [disabled]="loading">
-                    <mat-icon>add</mat-icon>
-                  </button>
-                </div>
-              </div>
-              <div *ngIf="hasError('brand')"
-                   class="invalid-feedback">
-                <div *ngIf="f.brand.errors && f.brand.errors.required">
-                  Brand is required
-                </div>
-                <div *ngIf="errors.hasErrors['brand']">
-                  <div *ngFor="let child of errors.errors['brand'].errors">
-                    {{child}}
-                  </div>
-                </div>
-              </div>
-            </div>
-            <!-- End Brand -->
-            <div class="form-group row">
-              <label for="equipmentName"
-                     class="col-sm-2 col-form-label pointer">Name</label>
-              <div class="col-sm-10">
-                <input id="equipmentName"
-                       type="text"
-                       formControlName="name"
-                       class="form-control"
-                       (ngModelChange)="clearError('name')"
-                       [ngClass]="{ 'is-invalid': hasError('name') }" />
-                <div *ngIf="hasError('name')"
-                     class="invalid-feedback">
-                  <div *ngIf="f.name.errors && f.name.errors.required">
-                    Name is required
-                  </div>
-                  <div *ngIf="errors.hasErrors['name']">
-                    <div *ngFor="let child of errors.errors['name'].errors">
-                      {{child}}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="form-group row">
-              <label for="equipmentDescription"
-                     class="col-sm-2 col-form-label pointer">Description</label>
-              <div class="col-sm-10">
-                <textarea id="equipmentDescription"
-                          type="text"
-                          formControlName="description"
-                          class="form-control"
-                          [ngClass]="{ 'is-invalid': hasError('description') }">
-                      </textarea>
-                <div *ngIf="hasError('description')"
-                     class="invalid-feedback">
-                  <div *ngIf="f.description.errors
-                            && f.description.errors.required">
-                    Description is required
-                  </div>
-                  <div *ngIf="errors.hasErrors['description']">
-                    <div
-                         *ngFor="let child of errors.errors['description'].errors">
-                      {{child}}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <!-- Comment brand, not link yet.
-            <div class="form-group row">
-              <label for="equipmentBrand"
-                    class="col-sm-2 col-form-label pointer">Brand</label>
-              <div class="col-sm-10">
-                <input id="equipmentBrand"
-                      type="text"
-                      formControlName="brand"
-                      class="form-control"
-                      [ngClass]="{ 'is-invalid': hasError('brand') }" />
-                <div *ngIf="hasError('brand')" class="invalid-feedback">
-                  <div *ngIf="f.brand.errors && f.brand.errors.required">
-                    Brand is required
-                  </div>
-                  <div *ngIf="errors.hasErrors.brand">
-                    <div *ngFor="let child of errors.errors.brand.errors">
-                      {{child}}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div> -->
-            <app-characteristic [parentData]="selected"></app-characteristic>
-          </fieldset>
-          <div class="modal-footer form-group">
-            <button [disabled]="loading"
-                    class="btn btn-primary"
-                    type="submit"
-                    [disabled]="selectedCategory === null || selectedSubCategory === null">
-              <span *ngIf="loading"
-                    class="spinner-border spinner-border-sm mr-1"></span>
-              <span *ngIf="isCreateForm">Add</span>
-              <span *ngIf="!isCreateForm">Update</span>
-              equipment
-            </button>
-            <button [disabled]="loading"
-                    type="button"
-                    class="btn btn-secondary"
-                    data-dismiss="modal"
-                    (click)="onCancel()">Cancel</button>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
-</div>
+<app-equipment-update #equipmentUpdate
+                      [equipments]="equipments"
+                      [categories]="categories"
+                      (updateDone)="equipmentAdded($event)"></app-equipment-update>

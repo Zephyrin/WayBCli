@@ -1,6 +1,11 @@
 export class SubCategory {
-  constructor(
-    public id: number = 0
-  , public name: string = '') {
-   }
+  id = 0;
+  name = '';
+
+  constructor(sub: SubCategory = null) {
+    if (sub !== null && sub !== undefined) {
+      this.id = sub.id;
+      this.name = sub.name;
+    }
+  }
 }

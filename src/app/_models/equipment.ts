@@ -24,7 +24,7 @@ export class Equipment {
         this.brand = new Brand(eq.brand);
       }
       this.characteristics = [];
-      this.subCategory = eq.subCategory;
+      this.subCategory = new SubCategory(eq.subCategory);
       this.validate = eq.validate;
       eq.characteristics.forEach(car => {
         this.characteristics.push(new Characteristic(car));

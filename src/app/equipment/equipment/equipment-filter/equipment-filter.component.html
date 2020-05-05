@@ -1,0 +1,104 @@
+<nav class="navbar navbar-expand-md navbar-light bg-light"
+     *ngIf="currentUser">
+  <div class="navbar-collapse collapse">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item">
+        <button class="nav-link btn btn-light"
+                (click)="clearFilters()">
+          <mat-icon>filter_none</mat-icon>
+          Clear filters
+        </button>
+      </li>
+      <li class="nav-item dropdown multi-level">
+        <button class="nav-link dropdown-toggle btn btn-light"
+                id="dpEquipmentFilterCategory"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false">
+          <mat-icon>category</mat-icon>
+          Category
+        </button>
+        <ul class="dropdown-menu"
+            role="menu"
+            (click)="prevent($event)"
+            aria-labelledby="dpEquipmentFilterCategory">
+          <li class="dropdown-submenu"
+              *ngFor="let cat of categories">
+            <label id="dropCat_{{cat.id}}">
+              {{cat.name}}
+            </label>
+            <mat-icon class="right d-block d-sm-none">expand_more</mat-icon>
+            <mat-icon class="right d-none d-sm-block">chevron_right
+            </mat-icon>
+            <ul class="dropdown-menu"
+                attr.aria-labelledby="dropCat_{{cat.id}}">
+              <li class="form-check form-inline"
+                  *ngFor="let sub of cat.subCategories">
+                <input type="checkbox"
+                       checked
+                       (change)="applyFilterSubCategory(sub)"
+                       class="form-check-input pointer"
+                       id="dropSub_{{cat.id}}_{{sub.id}}">
+                <label class="form-check-label pointer"
+                       for="dropSub_{{cat.id}}_{{sub.id}}">
+                  {{sub.name}}
+                </label>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <div class="btn-group-toggle"
+             data-toggle="buttons">
+          <label class="nav-link btn btn-light active"
+                 (click)="filters(true)">
+            <input type="checkbox"
+                   checked
+                   autocomplete="off"
+                   #ownedBtn>Owned
+          </label>
+        </div>
+      </li>
+      <li>
+        <div class="btn-group-toggle"
+             data-toggle="buttons">
+          <label class="nav-link btn btn-light active"
+                 (click)="filters(false, true)">
+            <input type="checkbox"
+                   checked
+                   autocomplete="off"
+                   #wishesBtn>Wishes
+          </label>
+        </div>
+      </li>
+      <li>
+        <div class="btn-group-toggle"
+             data-toggle="buttons">
+          <label class="nav-link btn btn-light"
+                 (click)="filters(false, false, true)">
+            <input type="checkbox"
+                   autocomplete="off"
+                   #othersBtn>Others
+          </label>
+        </div>
+      </li>
+    </ul>
+    <form class="form-inline my-2 my-lg-0"
+          [formGroup]="searchForm">
+      <input class="form-control mr-sm-2"
+             formControlName="search"
+             id="searchText"
+             #searchText
+             type="search"
+             placeholder="Search"
+             aria-label="Search">
+      <button for="searchText"
+              class="btn btn-light my-2 my-sm-0"
+              type="submit"
+              (click)="filters()">
+        <mat-icon>search</mat-icon>Search
+      </button>
+    </form>
+  </div>
+</nav>
