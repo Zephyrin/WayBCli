@@ -1,3 +1,10 @@
+<app-delete [titleName]="selected?.name || ''"
+            [contentName]="selected?.name || ''"
+            [btnName]="selected?.name || ''"
+            [errors]="errors"
+            (done)="delete($event)"
+            #deleteModal></app-delete>
+
 <div class="modal"
      tabindex="-1"
      role="dialog"

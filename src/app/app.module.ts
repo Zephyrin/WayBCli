@@ -2,7 +2,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-
+import { MatIconModule } from '@angular/material/icon';
 // used to create fake backend
 // import { fakeBackendProvider } from './_helpers';
 
@@ -13,7 +13,7 @@ import { JwtInterceptor, ErrorInterceptor } from './_helpers';
 import { HomeComponent } from './home';
 import { LoginComponent } from './auth/login';
 import { RegisterComponent } from './auth/register/register.component';
-import { BrandComponent } from './equipment/brand/brand.component';
+import { BrandValidatorComponent } from './equipment/brand/brand-validator/brand-validator.component';
 import { LogService } from './_services/log.service';
 import { EquipmentComponent } from './equipment/equipment/equipment.component';
 import { UserComponent } from './equipment/_admin/user/user.component';
@@ -21,9 +21,11 @@ import { CategoryComponent } from './equipment/_ambassador/category/category.com
 import { SubCategoryComponent } from './equipment/_ambassador/sub-category/sub-category.component';
 import { CharacteristicComponent } from './equipment/equipment/characteristic/characteristic.component';
 import { UserOwnedComponent } from './equipment/user-owned/user-owned.component';
-import { MatIconModule } from '@angular/material/icon';
+
 import { UserOwnedUpdateComponent } from './equipment/user-owned-update/user-owned-update.component';
 import { BrandUpdateComponent } from './equipment/brand/brand-update/brand-update.component';
+import { DeleteComponent } from './_helpers/delete/delete.component';
+
 @NgModule({
   imports: [
     BrowserModule,
@@ -37,7 +39,7 @@ import { BrandUpdateComponent } from './equipment/brand/brand-update/brand-updat
     HomeComponent,
     LoginComponent,
     RegisterComponent,
-    BrandComponent,
+    BrandValidatorComponent,
     EquipmentComponent,
     UserComponent,
     CategoryComponent,
@@ -45,7 +47,9 @@ import { BrandUpdateComponent } from './equipment/brand/brand-update/brand-updat
     CharacteristicComponent,
     UserOwnedComponent,
     UserOwnedUpdateComponent,
-    BrandUpdateComponent],
+    BrandUpdateComponent,
+    DeleteComponent
+    ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },

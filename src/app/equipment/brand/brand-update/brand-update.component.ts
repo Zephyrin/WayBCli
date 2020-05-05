@@ -18,6 +18,7 @@ declare var $: any;
 })
 export class BrandUpdateComponent implements OnInit {
   @ViewChild('modal', { static: true }) modal;
+  @ViewChild('deleteModal', { static: true }) deleteModal;
   @Input() brands: Brand[];
   @Output() added = new EventEmitter<Brand>();
 
@@ -58,6 +59,7 @@ export class BrandUpdateComponent implements OnInit {
   }
 
   open(brand: Brand = null) {
+    this.loading = false;
     if (brand === null) {
       this.create();
     } else {
@@ -70,6 +72,7 @@ export class BrandUpdateComponent implements OnInit {
     return this.submitted && this.form
       && (this.form.controls[name].errors || this.errors.hasErrors[name]);
   }
+
   setSelected(selected: Brand) {
     if (selected === this.selected) {
       this.selected = undefined;
@@ -131,23 +134,30 @@ export class BrandUpdateComponent implements OnInit {
     }
   }
 
-  onDelete() {
-    this.loading = true;
-    this.manageDeleteError(undefined);
-    this.service.delete(this.selected).subscribe(next => {
-      this.delete(this.selected);
-      this.endTransaction();
-    }, error => {
-      if (error.status === 404) {
-        this.delete(this.selected);
-      } else {
-        this.manageDeleteError(error.message);
-      }
-      this.endTransaction();
-    });
+  onDelete(deleteValue: Brand) {
+    this.selected = deleteValue;
+    this.deleteModal.open();
   }
 
-  delete(deleteValue: Brand) {
+  delete($event: boolean) {
+    if ($event) {
+      this.loading = true;
+      this.manageDeleteError(undefined);
+      this.service.delete(this.selected).subscribe(next => {
+        this._delete(this.selected);
+        this.endTransaction();
+      }, error => {
+        if (error.status === 404) {
+          this._delete(this.selected);
+          this.endTransaction();
+        } else {
+          this.manageDeleteError(error.message);
+        }
+      });
+    }
+  }
+
+  _delete(deleteValue: Brand) {
     this.manageDeleteError(undefined);
     const index = this.brands.indexOf(deleteValue);
     this.brands.splice(index, 1);
@@ -162,12 +172,12 @@ export class BrandUpdateComponent implements OnInit {
 
   endTransaction() {
     this.loading = false;
-    this.submitted = false;
+    this.deleteModal.close();
     $(this.modal.nativeElement).modal('hide');
   }
 
   endTransactionError(error) {
-    this.errors.formatError(error);
     this.loading = false;
+    this.errors.formatError(error);
   }
 }

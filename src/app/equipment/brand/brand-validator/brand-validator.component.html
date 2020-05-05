@@ -1,7 +1,9 @@
-<mat-icon>delete</mat-icon>
-
 <div
      class="table-responsive-sm table-responsive-md table-responsive-lg table-responsive-xl">
+  <button class="btn btn-light"
+          (click)="brandModal.open()">
+    <mat-icon>add</mat-icon>
+  </button>
   <table class="table">
     <thead>
       <tr>
@@ -12,7 +14,7 @@
     </thead>
     <tr *ngFor="let brand of brands"
         (click)="setSelected(brand)"
-        (dblclick)="brandModel.open(brand)"
+        (dblclick)="brandModal.open(brand)"
         [class.active]="brand == selected"
         class="pointer">
       <td><b>{{brand.name}}</b>
@@ -22,21 +24,22 @@
                   *ngIf="canEditOrDelete(brand)"
                   data-toggle="modal"
                   data-target="#addEquipmentModal"
-                  (click)="brandModel.open(brand)">
+                  (click)="brandModal.open(brand)">
             <mat-icon>update</mat-icon>
           </button>
           <button type="button"
                   class="btn btn-light"
                   *ngIf="canEditOrDelete(brand)"
-                  (click)="brandModel.open(brand)">
+                  (click)="brandModal.onDelete(brand)">
             <mat-icon>delete</mat-icon>
           </button>
         </div>
       </td>
       <td>
-          {{brand.uri}}
+        {{brand.uri}}
       </td>
       <td>
+        {{brand.validate}}
       </td>
     </tr>
   </table>

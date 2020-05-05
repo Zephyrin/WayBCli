@@ -5,18 +5,17 @@ import { first } from 'rxjs/operators';
 
 import { Brand } from '@app/_models';
 import { BrandService } from '@app/_services/brand.service';
-import { BrandUpdateComponent } from '@app/equipment/brand/brand-update/brand-update.component';
 
 import { AuthenticationService } from '@app/_services';
 import { Router } from '@angular/router';
+import { BrandUpdateComponent } from '@app/equipment/brand/brand-update/brand-update.component';
 
 @Component({
-  selector: 'app-brand',
-  templateUrl: './brand.component.html',
-  styleUrls: ['./brand.component.less']
+  selector: 'app-brand-validator',
+  templateUrl: './brand-validator.component.html',
+  styleUrls: ['./brand-validator.component.less']
 })
-
-export class BrandComponent implements OnInit {
+export class BrandValidatorComponent implements OnInit {
   @ViewChild('brandModal', { static: false }) brandModal: BrandUpdateComponent;
   loading = false;
   brands: Brand[];
@@ -46,4 +45,5 @@ export class BrandComponent implements OnInit {
   canEditOrDelete(brand: Brand) {
     return true;
   }
+
 }
