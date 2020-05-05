@@ -59,6 +59,7 @@ export class BrandValidatorComponent implements OnInit {
 
   updateValidate(brand: Brand) {
     this.errors = new FormErrors();
+    this.setSelected(brand);
     this.loading = true;
     brand.validate = !brand.validate;
     this.service.update(brand)

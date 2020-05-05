@@ -2,18 +2,6 @@
                       [categories]="categories"
                       (filterDone)="filterDone($event)"
                       #equipmentFilter></app-equipment-filter>
-<div class="btn-toolbar"
-     role="group"
-     aria-label="Tools">
-  <div *ngIf="loading"
-       class="spinner-border spinner-border-sm"></div>
-  <button type="button"
-          class="btn btn-light"
-          role="button"
-          (click)="equipmentUpdate.create()">
-    <mat-icon>add</mat-icon>Equipment
-  </button>
-</div>
 
 <div
      class="table-responsive-sm table-responsive-md table-responsive-lg table-responsive-xl">
@@ -21,7 +9,16 @@
     <thead>
       <tr>
         <th scope="col"
-            class="col-md-2 col-sm-9 col-xs-9">Name</th>
+            class="col-md-2 col-sm-9 col-xs-9">
+            <div *ngIf="loading"
+                 class="spinner-border spinner-border-sm"></div>
+            <button type="button"
+                    class="btn btn-light"
+                    role="button"
+                    (click)="equipmentUpdate.create()">
+              <mat-icon>add</mat-icon>Name
+            </button>
+        </th>
         <th scope="col"
             class="col-md-4 d-none d-sm-table-cell">Description</th>
         <th scope="col"
@@ -42,8 +39,10 @@
         (dblclick)="updateDblClick(equipment)"
         [class.active]="equipment == selected"
         class="pointer">
-      <td class=""><b>{{equipment.name}}</b>
-        <div>
+      <td class=""><b>{{equipment.name}}</b><br/>
+        <div class="btn-group"
+            role="group"
+            aria-label="Tools">
           <button type="button"
                   class="btn btn-light"
                   *ngIf="canEditOrDelete(equipment)"
@@ -89,4 +88,5 @@
 <app-equipment-update #equipmentUpdate
                       [equipments]="equipments"
                       [categories]="categories"
-                      (updateDone)="equipmentAdded($event)"></app-equipment-update>
+                      (updateDone)="equipmentAdded($event)">
+</app-equipment-update>

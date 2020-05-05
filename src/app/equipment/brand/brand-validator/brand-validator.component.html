@@ -1,9 +1,5 @@
 <div
      class="table-responsive-sm table-responsive-md table-responsive-lg table-responsive-xl">
-  <button class="btn btn-light"
-          (click)="brandModal.open()">
-    <mat-icon>add</mat-icon>Brand
-  </button>
   <div *ngIf="errors.hasFatalError"
        class="alert alert-danger">
     <div [innerHTML]="errors.fatalError"></div>
@@ -21,7 +17,12 @@
     <table class="table">
       <thead>
         <tr>
-          <th scope="col">Name</th>
+          <th scope="col">
+            <button class="btn btn-light"
+                    (click)="brandModal.open()">
+              <mat-icon>add</mat-icon>Name
+            </button>
+          </th>
           <th scope="col">URL</th>
           <th scope="col">Valide</th>
         </tr>
@@ -31,8 +32,10 @@
           (dblclick)="brandModal.open(brand)"
           [class.active]="brand == selected"
           class="pointer">
-        <td><b>{{brand.name}}</b>
-          <div>
+        <td><b>{{brand.name}}</b><br/>
+          <div class="btn-group"
+               role="group"
+               aria-label="Tools">
             <button type="button"
                     class="btn btn-light"
                     *ngIf="canEditOrDelete(brand)"
@@ -50,7 +53,9 @@
           </div>
         </td>
         <td>
-          <a [attr.href]="returnUrl(brand.uri)" target="_blank" rel="noopener noreferrer">{{brand.uri}}</a>
+          <a [attr.href]="returnUrl(brand.uri)"
+             target="_blank"
+             rel="noopener noreferrer">{{brand.uri}}</a>
         </td>
         <td>
           <div class="col">
