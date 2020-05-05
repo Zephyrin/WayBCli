@@ -127,7 +127,6 @@ export class UserOwnedUpdateComponent implements OnInit {
   }
 
   plus(id, i, val = 1) {
-    console.log(i);
     if (id === 'want_') {
       this.haves.controls[i].value.wantQuantity += val;
       $('#' + id + i).val(this.haves.controls[i].value.wantQuantity);

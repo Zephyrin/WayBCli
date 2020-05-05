@@ -47,7 +47,8 @@ export class FormErrors {
         + 'If it will still show this error consider to sent an email to:<br/>'
         + 'damortien@gmail.com';
     } else if (error.status === 404) {
-      this.message = error.statusText + ' ' + error.url;
+      this.message = 'The resource is not on the server<br/>'
+        + error.statusText + ' ' + error.url;
       this.hasMessage = this.message !== undefined;
     } else {
       this.hasFatalError = false;

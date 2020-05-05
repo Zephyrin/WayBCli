@@ -35,8 +35,8 @@ export class EquipmentComponent implements OnInit {
   @ViewChild('haveOwnedModal', { static: false }) haveOwnedModal: UserOwnedUpdateComponent;
   @ViewChild('brandModal', { static: false }) brandModal: BrandUpdateComponent;
 
-  @ViewChild('equipmentFilter', { static: false}) equipmentFilter: EquipmentFilterComponent;
-  @ViewChild('equipmentUpdate', { static: false}) equipmentUpdate: EquipmentUpdateComponent;
+  @ViewChild('equipmentFilter', { static: false }) equipmentFilter: EquipmentFilterComponent;
+  @ViewChild('equipmentUpdate', { static: false }) equipmentUpdate: EquipmentUpdateComponent;
 
   equipments: Equipment[];
   equipmentsFilter: Equipment[];
@@ -134,6 +134,13 @@ export class EquipmentComponent implements OnInit {
       if ($doneStatus.previousValue === null) {
         // Push here into the array to be taken into account in the view.
         this.equipments.push(new Equipment($doneStatus.currentValue));
+      } else if ($doneStatus.currentValue === null) {
+        const $scope = this.currentUser.haves;
+        for (let i = $scope.length - 1; i >= 0; i--) {
+          if ($scope[i].equipment.id === $doneStatus.previousValue.id) {
+            $scope.splice(i, 1);
+          }
+        }
       }
       this.equipmentFilter.filters();
     }
