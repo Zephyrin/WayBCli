@@ -23,6 +23,7 @@
         <button type="button"
                 class="close"
                 data-dismiss="modal"
+                data-target="#addEquipmentModal"
                 aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -191,7 +192,12 @@
                 </div>
               </div>
             </div> -->
-            <app-characteristic [parentData]="selected"></app-characteristic>
+            <app-characteristic [parentData]="selected"
+                                [updateData]="simpleChangeCharacteristic"
+                                (create)="characteristicModal.create()"
+                                (update)="characteristicModal.update($event)"
+                                (delete)="characteristicModal.delete($event)">
+            </app-characteristic>
           </fieldset>
           <div class="modal-footer form-group">
             <button [disabled]="loading"
@@ -208,6 +214,7 @@
                     type="button"
                     class="btn btn-secondary"
                     data-dismiss="modal"
+                    data-target="#addEquipmentModal"
                     (click)="onCancel()">Cancel</button>
           </div>
         </form>
@@ -219,3 +226,7 @@
 <app-brand-update #brandModal
                   [brands]="brands"
                   (added)="brandAdded($event)"></app-brand-update>
+<app-characteristic-update #characteristicModal
+                           [parentData]="selected"
+                           (updateDone)="updateDoneCharacteristic($event)">
+</app-characteristic-update>

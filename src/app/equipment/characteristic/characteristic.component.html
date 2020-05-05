@@ -1,219 +1,46 @@
-<div class="table-responsive-sm table-responsive-md table-responsive-lg table-responsive-xl">
+<div
+     class="table-responsive-sm table-responsive-md table-responsive-lg table-responsive-xl">
   <table class="table">
     <thead>
       <tr>
-        <th scope="col">Id</th>
-        <th scope="col">Size</th>
+        <th scope="col"><button type="button"
+                  class="btn btn-light"
+                  (click)="onCreate()">
+            <mat-icon>add</mat-icon>
+          </button>Size</th>
         <th scope="col">Gender</th>
         <th scope="col">Weight</th>
         <th scope="col">Price</th>
+        <th scope="col"></th>
       </tr>
     </thead>
     <tr *ngFor="let characteristic of parentData?.characteristics"
         (click)="setSelected(characteristic)"
+        (dblclick)="onUpdate(characteristic)"
         [class.active]="characteristic == selected"
         class="pointer">
-      <td>{{characteristic.id}}</td>
       <td>{{characteristic.size}}</td>
       <td>{{characteristic.gender}}</td>
       <td>{{characteristic.weight}}</td>
       <td>{{characteristic.price}}</td>
+      <td>
+        <div class="btn-toulbar"
+             role="group"
+             aria-label="Tools">
+          <button type="button"
+                  class="btn btn-light"
+                  (click)="onUpdate(characteristic)">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button type="button"
+                  class="btn btn-light"
+                  (click)="onDelete(characteristic)"><mat-icon>delete</mat-icon></button>
+        </div>
+      </td>
     </tr>
   </table>
-  <div class="btn-toulbar"
-       role="group"
-       aria-label="Tools">
-    <button type="button"
-            class="btn btn-light"
-            data-toggle="collapse"
-            aria-expanded="false"
-            attr.aria-controls="extraModal_{{parentData?.id||'0'}}"
-            attr.data-target="#extraModal_{{parentData?.id||'0'}}"
-            (click)="create()"
-            *ngIf="isCreateFormUndefined">Add a characteristic</button>
-    <button type="button"
-            class="btn btn-light"
-            data-toggle="collapse"
-            aria-expanded="false"
-            attr.aria-controls="extraModal_{{parentData?.id||'0'}}"
-            attr.data-target="#extraModal_{{parentData?.id||'0'}}"
-            *ngIf="selected && isCreateFormUndefined"
-            (click)="update()">Edit {{selected.size}} | {{selected.gender}} | {{selected.price | currency}} | {{selected.weight}}</button>
-    <button type="button"
-            class="btn btn-light"
-            *ngIf="selected"
-            (click)="onDelete()">Delete {{selected.size}} | {{selected.gender}} | {{selected.price | currency}} | {{selected.weight}}</button>
-  </div>
-</div>
-<div class="collapse"
-   id="extraModal_{{parentData?.id||'0'}}"
-   #modal>
-  <div class="card">
-    <div class="card-header row">
-      <span class="navbar-brand">
-        <span *ngIf="isCreateForm">Add</span>
-        <span *ngIf="!isCreateForm">Update</span>
-        a characteristic
-      </span>
-      <span class="navbar-nav mr-auto"></span>
-    </div>
-    <div class="card-body">
-      <form [formGroup]="form"
-          (ngSubmit)="onSubmitModal()">
-        <div *ngIf="submitted && errors.hasMessage"
-              class="alert alert-warning">
-          <div>{{errors.message}}</div>
-        </div>
-        <div *ngIf="submitted && errors.hasFatalError"
-              class="alert alert-danger">
-          <div [innerHTML]="errors.fatalError"></div>
-        </div>
-        <div *ngIf="submitted && f.message"
-              class="invalid-feedback">
-          <div *ngIf="f.message">{{f.message}}</div>
-        </div>
-        <div class="form-group row">
-          <label for="characteristic_size_{{parentData?.id||'0'}}"
-                  class="col-sm-2 col-form-label pointer">
-            Size
-          </label>
-          <div class="col-sm-10">
-            <input type="text"
-                  id="characteristic_size_{{parentData?.id||'0'}}"
-                  formControlName="size"
-                  (ngModelChange)="clearError('size')"
-                  class="form-control"
-                  [ngClass]="{ 'is-invalid': submitted
-                            && (f.size.errors
-                            || errors.hasErrors['size']) }"/>
-            <div *ngIf="submitted && f.size.errors"
-                  class="invalid-feedback">
-              <div *ngIf="f.size.errors.required">
-                  Size is required
-              </div>
-            </div>
-            <div *ngIf="submitted && errors.hasErrors['size']">
-              <div *ngFor="let child of errors.errors['size'].errors">
-                {{child}}
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="form-group row">
-          <label for="characteristic_gender_{{parentData?.id||'0'}}"
-                class="col-sm-2 col-form-label pointer">
-            Gender
-          </label>
-          <div class="col-sm-10">
-            <select formControlName="gender"
-                    id="characteristic_gender_{{parentData?.id||'0'}}"
-                    (ngModelChange)="clearError('gender')"
-                    class="form-control"
-                    #selectGender
-                    [ngClass]="{ 'is-invalid': submitted
-                                && (f.gender.errors
-                                || errors.hasErrors['gender']) }">
-              <option value="" disabled selected>Select the gender</option>
-              <option *ngFor="let value of genderKeys"
-                      [ngValue]="value.key">{{value.display}}</option>
-            </select>
-            <div *ngIf="submitted && f.gender.errors"
-                  class="invalid-feedback">
-              <div *ngIf="f.gender.errors.required">
-                  Gender is required
-              </div>
-            </div>
-            <div *ngIf="submitted && errors.hasErrors['gender']">
-              <div *ngFor="let child of errors.errors['gender'].errors">
-                {{child}}
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="form-group row">
-          <label for="characteristic_price_{{parentData?.id||'0'}}"
-                  class="col-sm-2 col-form-label form-check-label pointer">
-            Price
-          </label>
-          <div class="col-sm-10">
-            <div class="form-check">
-              <input type="number"
-                    min="0"
-                      formControlName="price"
-                      (ngModelChange)="clearError('price')"
-                      class="form-check-input pointer"
-                      id="characteristic_price_{{parentData?.id||'0'}}"
-                      [ngClass]="{ 'is-invalid': submitted
-                                && (f.price.errors
-                                || errors.hasErrors['price']) }"/>
-              <div *ngIf="submitted && f.price.errors"
-                    class="invalid-feedback">
-                <div *ngIf="f.price.errors.required">
-                  Price is required
-                </div>
-              </div>
-              <div *ngIf="submitted && errors.hasErrors['price']">
-                <div *ngFor="let child of errors.errors['price'].errors">
-                  {{child}}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="form-group row">
-          <label for="characteristic_weight_{{parentData?.id||'0'}}"
-                  class="col-sm-2 col-form-label form-check-label pointer">
-            Weight
-          </label>
-          <div class="col-sm-10">
-            <div class="form-check">
-              <input type="number"
-                    formControlName="weight"
-                    min="0"
-                    id="characteristic_weight_{{parentData?.id||'0'}}"
-                    (ngModelChange)="clearError('weight')"
-                    class="form-check-input pointer"
-                    [ngClass]="{ 'is-invalid': submitted
-                                && (f.weight.errors
-                                || errors.hasErrors['weight']) }"/>
-              <div *ngIf="submitted && f.weight.errors"
-                    class="invalid-feedback">
-                <div *ngIf="f.weight.errors.required">
-                  Weight is required
-                </div>
-              </div>
-              <div *ngIf="submitted && errors.hasErrors['weight']">
-                <div *ngFor="let child of errors.errors['weight'].errors">
-                  {{child}}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </form>
-    </div>
-    <div class="card-footer">
-      <button [disabled]="loading"
-              type="button"
-              class="btn btn-primary"
-              (click)="onSubmitModal()">
-        <span *ngIf="loading"
-              class="spinner-border spinner-border-sm mr-1"></span>
-        <span *ngIf="isCreateForm">Add</span>
-        <span *ngIf="!isCreateForm">Update</span>
-          a characteristic
-      </button>
-      <button [disabled]="loading"
-              type="button"
-              aria-expanded="false"
-              attr.aria-controls="extraModal_{{parentData?.id||'0'}}"
-              class="btn btn-secondary"
-              data-toggle="collapse"
-              attr.data-target="#extraModal_{{parentData?.id||'0'}}"
-              (click)="onCancel()">
-        Cancel
-      </button>
-    </div>
-  </div>
-</div>
 
+
+
+
+</div>

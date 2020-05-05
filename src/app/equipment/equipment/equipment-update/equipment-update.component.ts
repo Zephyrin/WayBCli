@@ -60,6 +60,8 @@ export class EquipmentUpdateComponent implements OnInit {
   selectedSubCategory: SubCategory = null;
   simpleChange: SimpleChange;
 
+  simpleChangeCharacteristic: SimpleChange;
+
   get f() { return this.form.controls; }
 
   private equipmentsP: Equipment[];
@@ -110,6 +112,10 @@ export class EquipmentUpdateComponent implements OnInit {
 
   brandAdded($event) {
     this.form.patchValue({ brand: $event });
+  }
+
+  updateDoneCharacteristic($event) {
+    this.simpleChangeCharacteristic = $event;
   }
 
   onCategoryChange() {

@@ -1,16 +1,9 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, SimpleChange, ChangeDetectorRef } from '@angular/core';
 
-import { ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { CharacteristicService } from '@app/_services/characteristic.service';
 import { Characteristic, Equipment } from '@app/_models/';
 
 import { AuthenticationService } from '@app/_services';
 import { Router } from '@angular/router';
-import { FormErrors } from '@app/_errors';
-import { EnumGender } from '@app/_enums';
-
-declare var $: any;
 
 @Component({
   selector: 'app-characteristic',
@@ -18,55 +11,45 @@ declare var $: any;
   styleUrls: ['./characteristic.component.less']
 })
 export class CharacteristicComponent implements OnInit {
-  @Input() parentData;
+  @Input() parentData: Equipment;
+  @Input() set updateData(simple: SimpleChange) {
+    this.$updateData = simple;
+    setTimeout(() => {
+      if (simple !== undefined && simple !== null) {
+        if (simple.previousValue === null) {
+          this.parentData.characteristics.push(simple.currentValue);
+        } else if (simple.currentValue === null) {
+          const index = this.parentData.characteristics.indexOf(simple.previousValue);
+          if (index > 0) {
+            this.parentData.characteristics.splice(index, 1);
+          }
+        } else {
+          Object.assign(simple.previousValue, simple.currentValue);
+        }
+        this.cd.detectChanges();
+      }
+    });
+  }
+  get updateData() { return this.$updateData; }
 
-  @ViewChild('modal', {static: true}) modal;
-  @ViewChild('selectGender', {static: true}) selectGender;
+  @Output() create = new EventEmitter<boolean>();
+  @Output() update = new EventEmitter<Characteristic>();
+  @Output() delete = new EventEmitter<Characteristic>();
 
-  form: FormGroup;
-  isCreateForm: boolean;
-  errors = new FormErrors();
-  loading = false;
-  submitted = false;
   selected: Characteristic = undefined;
 
-  deleteError: string = undefined;
-  deleteHasError = false;
-
-  genderKeys: any[] = [];
-
+  private $updateData: SimpleChange;
   constructor(
-    private formBuilder: FormBuilder,
     private router: Router,
-    private service: CharacteristicService,
-    private authenticationService: AuthenticationService) {
-      if (!this.authenticationService.currentUserValue) {
-        this.router.navigate(['/login']);
-      }
+    private authenticationService: AuthenticationService,
+    private cd: ChangeDetectorRef) {
+    if (!this.authenticationService.currentUserValue) {
+      this.router.navigate(['/login']);
+    }
   }
 
-  get f() { return this.form.controls; }
-
-  get isCreateFormUndefined() { return this.isCreateForm === undefined; }
-
   ngOnInit() {
-    this.loading = true;
-    Object.keys(EnumGender).filter(Number).forEach(key => {
-      this.genderKeys.push({
-        key: EnumGender[key].toUpperCase(),
-        display: EnumGender[key]
-      });
-    });
-    this.isCreateForm = undefined;
-    this.form = this.formBuilder.group({
-      id: [''],
-      size: ['', Validators.required],
-      gender: [EnumGender.Unisex, Validators.required],
-      price: [0, Validators.required],
-      weight: [0, Validators.required],
-    });
 
-    this.loading = false;
   }
 
   setSelected(selected: Characteristic) {
@@ -74,21 +57,9 @@ export class CharacteristicComponent implements OnInit {
       this.selected = undefined;
     } else {
       this.selected = selected;
-      this.form.reset(new Characteristic());
-      this.form.patchValue(this.selected);
+      //this.form.reset(new Characteristic());
+      //this.form.patchValue(this.selected);
     }
-  }
-
-  update() {
-    this.form.reset(new Characteristic());
-    this.form.patchValue(this.selected);
-    this.isCreateForm = false;
-  }
-
-  create() {
-    this.form.reset(new Characteristic());
-    this.selected = undefined;
-    this.isCreateForm = true;
   }
 
   filter(array: Characteristic[]): Characteristic[] {
@@ -103,103 +74,15 @@ export class CharacteristicComponent implements OnInit {
     return result;
   }
 
-  compareByID(itemOne, itemTwo) {
-    if (itemOne === null && itemTwo === null) {
-      return true;
-    }
-    return itemOne && itemTwo && itemOne.id === itemTwo.id;
+  onCreate() {
+    this.create.emit(true);
   }
 
-  clearError(key) {
-    this.errors.clearError(key);
+  onUpdate(characteristic: Characteristic) {
+    this.update.emit(characteristic);
   }
 
-  onCancel() {
-    this.errors = new FormErrors();
-    this.isCreateForm = undefined;
-  }
-
-  onSubmitModal() {
-    this.manageDeleteError(undefined);
-    this.submitted = true;
-    this.errors = new FormErrors();
-    if (this.form.invalid) {
-      return;
-    }
-    this.loading = true;
-    if (this.isCreateForm) {
-      if (this.parentData === undefined
-          || this.parentData.id === undefined
-          || this.parentData.id === 0) {
-        this.endTransaction();
-        this.parentData.characteristics.push(this.form.value);
-      } else {
-        this.service.create(this.parentData.id
-                            , this.form.value)
-          .subscribe(characteristic => {
-            this.endTransaction();
-            this.parentData.characteristics.push(characteristic);
-        }, (error: any) => {
-          this.endTransactionError(error);
-        });
-      }
-    } else {
-      if (this.parentData === undefined || this.parentData.id === 0) {
-        this.endTransaction();
-        Object.assign(this.selected, this.form.value);
-      } else {
-        this.service.update(this.parentData.id, this.form.value)
-        .subscribe(returnValue => {
-          this.endTransaction();
-          Object.assign(this.selected, this.form.value);
-        }, (error: any) => {
-          this.endTransactionError(error);
-        });
-      }
-    }
-  }
-
-  onDelete() {
-    this.loading = true;
-    this.service.delete(this.parentData.id
-                        , this.selected)
-                        .subscribe(
-                          next => {
-      this.delete(this.selected);
-      this.endTransaction();
-      this.selected = null;
-    }, error => {
-      if (error.status === 404) {
-        this.delete(this.selected);
-      } else {
-        this.manageDeleteError(error.message);
-      }
-      this.endTransaction();
-      this.selected = null;
-    });
-  }
-
-  delete(deleteValue: Characteristic) {
-    this.manageDeleteError(undefined);
-    const index = this.parentData.characteristics.indexOf(deleteValue);
-    this.parentData.characteristics.splice(index, 1);
-    this.loading = false;
-  }
-
-  manageDeleteError(message: string) {
-    this.deleteError = message;
-    this.deleteHasError = message !== undefined;
-  }
-
-  endTransaction() {
-    this.loading = false;
-    this.submitted = false;
-    this.isCreateForm = undefined;
-    $(this.modal.nativeElement).collapse('hide');
-  }
-
-  endTransactionError(error) {
-    this.errors.formatError(error);
-    this.loading = false;
+  onDelete(characteristic: Characteristic) {
+    this.delete.emit(characteristic);
   }
 }

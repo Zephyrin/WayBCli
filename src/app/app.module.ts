@@ -28,7 +28,8 @@ import { DeleteComponent } from './_helpers/delete/delete.component';
 import { SwitchComponent } from './_helpers/switch/switch.component';
 import { EquipmentFilterComponent } from './equipment/equipment/equipment-filter/equipment-filter.component';;
 import { EquipmentUpdateComponent } from './equipment/equipment/equipment-update/equipment-update.component'
-
+;
+import { CharacteristicUpdateComponent } from './equipment/characteristic/characteristic-update/characteristic-update.component'
 @NgModule({
   imports: [
     BrowserModule,
@@ -55,7 +56,8 @@ import { EquipmentUpdateComponent } from './equipment/equipment/equipment-update
     SwitchComponent,
     EquipmentFilterComponent
 ,
-    EquipmentUpdateComponent  ],
+    EquipmentUpdateComponent ,
+    CharacteristicUpdateComponent ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
