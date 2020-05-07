@@ -48,13 +48,15 @@
            role="btn"
            data-toggle="dropdown"
            aria-haspopup="true"
-           aria-expanded="false">
-          Equipment
-        </a>
+           aria-expanded="false">Equipment</a>
         <div class="dropdown-menu"
              aria-labelledby="dropdownInfo">
           <a class="dropdown-item"
              routerLink="equipment">Equipment</a>
+          <a class="dropdown-item"
+             routerLink="category">Category</a>
+          <a class="dropdown-item"
+             routerLink="category">Category</a>
           <a class="dropdown-item"
              routerLink="trip">Trip</a>
           <a class="dropdown-item"
@@ -74,9 +76,9 @@
         </a>
         <div class="dropdown-menu"
              aria-labelledby="dropdownInfo">
-          <a class="dropdown-item nav-link"
-             routerLink="category">
-            Category <span class="badge badge-info">{{badgeCategory}}</span>
+          <a class="nav-link"
+             routerLink="categoriesValidator">
+            Categories' validator
           </a>
           <a class="dropdown-item nav-link"
              routerLink="brandsValidator">
@@ -155,6 +157,10 @@
           <a class="nav-link"
              routerLink="equipment">Equipments</a>
           <a class="nav-link"
+             routerLink="category">
+            Category
+          </a>
+          <a class="nav-link"
              routerLink="trip">Trips</a>
           <a class="nav-link"
              routerLink="profil">Profil</a>
@@ -165,8 +171,8 @@
         <h4 class="card-header">Ambassador</h4>
         <div class="card-body">
           <a class="nav-link"
-             routerLink="category">
-            Category <span class="badge badge-info">{{badgeCategory}}</span>
+             routerLink="categoriesValidator">
+            Categories' validator
           </a>
           <a class="nav-link"
              routerLink="brandsValidator">

@@ -17,7 +17,7 @@ declare var $: any;
   templateUrl: './category.component.html',
   styleUrls: ['./category.component.less']
 })
-export class CategoryComponent implements OnInit {
+export class CategoryComponentDeprecated implements OnInit {
   @ViewChild('modal', {static: true}) modal;
 
   categories: Category[];

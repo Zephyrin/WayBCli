@@ -53,15 +53,19 @@ export class FormErrors {
     } else {
       this.hasFatalError = false;
       this.fatalError = undefined;
-      error.error.errors.forEach(element => {
-        Object.keys(element.children).forEach(key => {
-          if (this.errors[key] === undefined) {
-            this.errors[key] = new Errors(element.children[key].errors);
-          } else {
-            this.errors[key].add(element.children[key].errors);
-          }
-        });
-      });
+      if (error.error) {
+        if (error.error.errors) {
+          error.error.errors.forEach(element => {
+            Object.keys(element.children).forEach(key => {
+              if (this.errors[key] === undefined) {
+                this.errors[key] = new Errors(element.children[key].errors);
+              } else {
+                this.errors[key].add(element.children[key].errors);
+              }
+            });
+          });
+        }
+      }
       Object.keys(this.errors).forEach(key => {
         this.hasErrors[key] = this.errors[key].has;
       });

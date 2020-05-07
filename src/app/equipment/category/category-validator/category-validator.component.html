@@ -1,0 +1,94 @@
+<div
+     class="table-responsive-sm table-responsive-md table-responsive-lg table-responsive-xl">
+  <div *ngIf="errors.hasFatalError"
+       class="alert alert-danger">
+    <div [innerHTML]="errors.fatalError"></div>
+  </div>
+  <div *ngIf="errors.hasMessage"
+       class="alert alert-warning">
+    <div>{{errors.message}}</div>
+  </div>
+  <div *ngIf="errors.hasErrors['validate']">
+    <div *ngFor="let child of errors.errors['name'].errors">
+      {{child}}
+    </div>
+  </div>
+  <fieldset [disabled]="loading">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col"
+              class="col-9">
+            <button class="btn btn-light"
+                    (click)="categoryModal.open()">
+              <mat-icon>add</mat-icon>Category name
+            </button>
+          </th>
+          <th scope="col"
+              class="col-2">Sub-categories count</th>
+          <th scope="col"
+              class="col-1 action">
+            Action
+          </th>
+        </tr>
+      </thead>
+      <ng-container *ngFor="let category of categories">
+        <tr (click)="setSelected(category)"
+            (dblclick)="dblClick(category)"
+            [class.active]="category === selected"
+            class="pointer">
+          <td class="col-19">
+            <b>{{category.name}}</b>
+          </td>
+          <td class="col-2">{{category.subCategories.length}}</td>
+          <td class="col-1 action">
+            <div class="btn-group"
+                 role="group"
+                 *ngIf="canEditOrDelete(category)"
+                 aria-label="Tools">
+              <button type="button"
+                      class="btn btn-light"
+                      (click)="categoryModal.open(category)">
+                <mat-icon>update</mat-icon>
+              </button>
+              <button type="button"
+                      class="btn btn-light"
+                      (click)="categoryModal.onDelete(category)">
+                <mat-icon>delete</mat-icon>
+              </button>
+              <app-switch [value]="category.validate"
+                          [disabled]="loading"
+                          (isChecked)="updateValidate(category)"></app-switch>
+            </div>
+          </td>
+        </tr>
+        <tr *ngIf="selected === category">
+          <td colspan="3">
+            <app-sub-category-validator [subCategories]="category.subCategories"
+                                        [parent]="category"
+                                        [loadingParent]="loading"
+                                        [subCategoryModal]="subCategoryModal">
+            </app-sub-category-validator>
+          </td>
+        </tr>
+      </ng-container>
+    </table>
+  </fieldset>
+  <div *ngIf="errors.hasFatalError"
+       class="alert alert-danger">
+    <div [innerHTML]="errors.fatalError"></div>
+  </div>
+  <div *ngIf="errors.hasMessage"
+       class="alert alert-warning">
+    <div>{{errors.message}}</div>
+  </div>
+  <div *ngIf="errors.hasErrors['validate']">
+    <div *ngFor="let child of errors.errors['name'].errors">
+      {{child}}
+    </div>
+  </div>
+</div>
+
+<app-category-update #categoryModal
+                     (updateDone)="onUpdateDone($event)"></app-category-update>
+<app-sub-category-update #subCategoryModal></app-sub-category-update>

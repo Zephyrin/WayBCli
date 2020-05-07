@@ -6,8 +6,9 @@ import { AuthGuard } from './_helpers';
 import { RegisterComponent } from './auth/register/register.component';
 import { EquipmentComponent } from './equipment/equipment/equipment.component';
 import { UserComponent } from './equipment/_admin/user/user.component';
-import { CategoryComponent } from './equipment/_ambassador/category/category.component';
+import { CategoryComponent } from './equipment/category/category.component';
 import { BrandValidatorComponent } from './equipment/brand/brand-validator/brand-validator.component';
+import { CategoryValidatorComponent } from './equipment/category/category-validator/category-validator.component';
 
 const routes: Routes = [
     { path: '', component: HomeComponent, canActivate: [AuthGuard] },
@@ -17,6 +18,7 @@ const routes: Routes = [
     { path: 'users', component: UserComponent},
     { path: 'category', component: CategoryComponent},
     { path: 'brandsValidator', component: BrandValidatorComponent },
+    { path: 'categoriesValidator', component: CategoryValidatorComponent},
 
     // otherwise redirect to home
     { path: '**', redirectTo: '' }

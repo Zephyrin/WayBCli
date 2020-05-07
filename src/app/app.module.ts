@@ -17,8 +17,8 @@ import { BrandValidatorComponent } from './equipment/brand/brand-validator/brand
 import { LogService } from './_services/log.service';
 import { EquipmentComponent } from './equipment/equipment/equipment.component';
 import { UserComponent } from './equipment/_admin/user/user.component';
-import { CategoryComponent } from './equipment/_ambassador/category/category.component';
-import { SubCategoryComponent } from './equipment/_ambassador/sub-category/sub-category.component';
+import { CategoryComponent } from './equipment/category/category.component';
+import { SubCategoryComponent } from './equipment/sub-category/sub-category.component';
 import { CharacteristicComponent } from './equipment/characteristic/characteristic.component';
 import { UserOwnedComponent } from './equipment/user-owned/user-owned.component';
 
@@ -26,10 +26,14 @@ import { UserOwnedUpdateComponent } from './equipment/user-owned-update/user-own
 import { BrandUpdateComponent } from './equipment/brand/brand-update/brand-update.component';
 import { DeleteComponent } from './_helpers/delete/delete.component';
 import { SwitchComponent } from './_helpers/switch/switch.component';
-import { EquipmentFilterComponent } from './equipment/equipment/equipment-filter/equipment-filter.component';;
-import { EquipmentUpdateComponent } from './equipment/equipment/equipment-update/equipment-update.component'
-;
-import { CharacteristicUpdateComponent } from './equipment/characteristic/characteristic-update/characteristic-update.component'
+import { EquipmentFilterComponent } from './equipment/equipment/equipment-filter/equipment-filter.component';
+import { EquipmentUpdateComponent } from './equipment/equipment/equipment-update/equipment-update.component';
+import { CharacteristicUpdateComponent } from './equipment/characteristic/characteristic-update/characteristic-update.component';
+import { CategoryUpdateComponent } from './equipment/category/category-update/category-update.component';
+import { SubCategoryUpdateComponent } from './equipment/sub-category/sub-category-update/sub-category-update.component';
+import { CategoryValidatorComponent } from './equipment/category/category-validator/category-validator.component';
+import { SubCategoryValidatorComponent } from './equipment/sub-category/sub-category-validator/sub-category-validator.component';
+
 @NgModule({
   imports: [
     BrowserModule,
@@ -54,10 +58,13 @@ import { CharacteristicUpdateComponent } from './equipment/characteristic/charac
     BrandUpdateComponent,
     DeleteComponent,
     SwitchComponent,
-    EquipmentFilterComponent
-,
-    EquipmentUpdateComponent ,
-    CharacteristicUpdateComponent ],
+    EquipmentFilterComponent,
+    EquipmentUpdateComponent,
+    CharacteristicUpdateComponent,
+    CategoryUpdateComponent,
+    SubCategoryUpdateComponent,
+    CategoryValidatorComponent,
+    SubCategoryValidatorComponent],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },

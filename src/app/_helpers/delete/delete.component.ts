@@ -17,9 +17,9 @@ export class DeleteComponent implements OnInit {
   @Input() titleName;
   @Input() contentName;
   @Input() btnName;
+  @Input() loading: boolean;
   @Input() errors: FormErrors;
   @Output() done = new EventEmitter<boolean>();
-  loading: boolean;
   constructor(
     private router: Router,
     private authenticationService: AuthenticationService) {
@@ -28,11 +28,9 @@ export class DeleteComponent implements OnInit {
     } }
 
   ngOnInit(): void {
-    this.loading = false;
   }
 
   onDelete() {
-    this.loading = true;
     this.done.emit(true);
   }
 
@@ -42,12 +40,10 @@ export class DeleteComponent implements OnInit {
   }
 
   close() {
-    this.loading = false;
     $(this.modal.nativeElement).modal('hide');
   }
 
   open() {
-    this.loading = false;
     $(this.modal.nativeElement).modal('show');
   }
 }

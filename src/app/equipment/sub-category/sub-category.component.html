@@ -1,0 +1,75 @@
+<div
+     class="table-responsive-sm table-responsive-md table-responsive-lg table-responsive-xl">
+  <div *ngIf="errors.hasFatalError"
+       class="alert alert-danger">
+    <div [innerHTML]="errors.fatalError"></div>
+  </div>
+  <div *ngIf="errors.hasMessage"
+       class="alert alert-warning">
+    <div>{{errors.message}}</div>
+  </div>
+  <div *ngIf="errors.hasErrors['validate']">
+    <div *ngFor="let child of errors.errors['name'].errors">
+      {{child}}
+    </div>
+  </div>
+  <fieldset [disabled]="loading || loadingParent">
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th scope="col"
+              class="col-11">
+            <button class="btn btn-light"
+                    (click)="subCategoryModal.open()">
+              <mat-icon>add</mat-icon>Sub-category name
+            </button>
+          </th>
+          <th class="col-1 action">Action</th>
+        </tr>
+      </thead>
+      <tr *ngFor="let subCategory of subCategories"
+          (click)="setSelected(subCategory)"
+          [class.active]="subCategory === selected"
+          (dblclick)="dblClick(subCategory)"
+          class="pointer">
+        <td class="col-11">
+          <b>{{subCategory.name}}</b>
+        </td>
+        <td class="col-1 action">
+          <div class="btn-group"
+               role="group"
+               *ngIf="canEditOrDelete(subCategory)"
+               aria-label="Tools">
+            <button type="button"
+                    class="btn btn-light"
+                    (click)="subCategoryModal.open(subCategory)">
+              <mat-icon>update</mat-icon>
+            </button>
+            <button type="button"
+                    class="btn btn-light"
+                    (click)="subCategoryModal.onDelete(subCategory)">
+              <mat-icon>delete</mat-icon>
+            </button>
+            <app-switch [value]="subCategory.askValidate"
+                        [disabled]="loading"
+                        (isChecked)="updateAskValidate(subCategory)">
+            </app-switch>
+          </div>
+        </td>
+      </tr>
+    </table>
+  </fieldset>
+  <div *ngIf="errors.hasFatalError"
+       class="alert alert-danger">
+    <div [innerHTML]="errors.fatalError"></div>
+  </div>
+  <div *ngIf="errors.hasMessage"
+       class="alert alert-warning">
+    <div>{{errors.message}}</div>
+  </div>
+  <div *ngIf="errors.hasErrors['validate']">
+    <div *ngFor="let child of errors.errors['name'].errors">
+      {{child}}
+    </div>
+  </div>
+</div>

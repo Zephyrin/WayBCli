@@ -16,7 +16,7 @@ declare var $: any;
   templateUrl: './sub-category.component.html',
   styleUrls: ['./sub-category.component.less']
 })
-export class SubCategoryComponent implements OnInit {
+export class SubCategoryDeprecatedComponent implements OnInit {
   @Input() parentData;
   @Input('subCategories') subCategories;
 
