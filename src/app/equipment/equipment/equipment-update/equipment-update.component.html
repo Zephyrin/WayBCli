@@ -170,33 +170,11 @@
                 </div>
               </div>
             </div>
-            <!-- Comment brand, not link yet.
-            <div class="form-group row">
-              <label for="equipmentBrand"
-                    class="col-sm-2 col-form-label pointer">Brand</label>
-              <div class="col-sm-10">
-                <input id="equipmentBrand"
-                      type="text"
-                      formControlName="brand"
-                      class="form-control"
-                      [ngClass]="{ 'is-invalid': hasError('brand') }" />
-                <div *ngIf="hasError('brand')" class="invalid-feedback">
-                  <div *ngIf="f.brand.errors && f.brand.errors.required">
-                    Brand is required
-                  </div>
-                  <div *ngIf="errors.hasErrors.brand">
-                    <div *ngFor="let child of errors.errors.brand.errors">
-                      {{child}}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div> -->
             <app-characteristic [parentData]="selected"
-                                [updateData]="simpleChangeCharacteristic"
-                                (create)="characteristicModal.create()"
-                                (update)="characteristicModal.update($event)"
-                                (delete)="characteristicModal.delete($event)">
+                                (create)="characteristicModal.create(selected)"
+                                (update)="characteristicModal.update(selected, $event)"
+                                (delete)="characteristicModal.delete(selected, $event)">
+                                <!-- [updateData]="simpleChangeCharacteristic" -->
             </app-characteristic>
           </fieldset>
           <div class="modal-footer form-group">
@@ -226,7 +204,3 @@
 <app-brand-update #brandModal
                   [brands]="brands"
                   (added)="brandAdded($event)"></app-brand-update>
-<app-characteristic-update #characteristicModal
-                           [parentData]="selected"
-                           (updateDone)="updateDoneCharacteristic($event)">
-</app-characteristic-update>

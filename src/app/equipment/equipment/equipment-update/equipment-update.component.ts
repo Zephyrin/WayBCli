@@ -17,6 +17,7 @@ import { User, Role } from '@app/_models';
 import { AuthenticationService } from '@app/_services';
 import { Router } from '@angular/router';
 import { FormErrors } from '@app/_errors';
+import { CharacteristicUpdateComponent } from '@app/equipment/characteristic/characteristic-update/characteristic-update.component';
 
 declare var $: any;
 
@@ -29,6 +30,7 @@ export class EquipmentUpdateComponent implements OnInit {
   @ViewChild('modal', { static: true }) modal;
   @ViewChild('deleteModal', { static: true }) deleteModal;
   @Output() updateDone = new EventEmitter<SimpleChange>();
+  @Input() characteristicModal: CharacteristicUpdateComponent;
   @Input()
   set equipments(equipments: Equipment[]) {
     this.equipmentsP = equipments;
@@ -39,7 +41,11 @@ export class EquipmentUpdateComponent implements OnInit {
     this.categoriesP = categories;
   }
   get categories() { return this.categoriesP; }
-
+ /*  @Input()
+  set parentData(equipment: Equipment) {
+    this.selected = equipment;
+  }
+  get parentData() { return this.selected; }*/
   currentUser: User;
 
   form: FormGroup;

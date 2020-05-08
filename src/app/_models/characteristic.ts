@@ -4,6 +4,8 @@ export class Characteristic {
   price: number;
   weight: number;
   gender: string;
+  validate: boolean;
+  askValidate: boolean;
 
   constructor(car: Characteristic = null) {
     if (car) {
@@ -12,6 +14,8 @@ export class Characteristic {
       this.price = car.price;
       this.weight = car.weight;
       this.gender = car.gender;
+      this.validate = car.validate;
+      this.askValidate = car.askValidate;
     }
   }
 

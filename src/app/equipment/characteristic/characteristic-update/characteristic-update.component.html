@@ -37,13 +37,13 @@
             <div *ngIf="f.message">{{f.message}}</div>
           </div>
           <div class="form-group row">
-            <label for="characteristic_size_{{parentData?.id||'0'}}"
+            <label for="characteristic_size"
                    class="col-sm-2 col-form-label pointer">
               Size
             </label>
             <div class="col-sm-10">
               <input type="text"
-                     id="characteristic_size_{{parentData?.id||'0'}}"
+                     id="characteristic_size"
                      formControlName="size"
                      (ngModelChange)="clearError('size')"
                      class="form-control"
@@ -64,13 +64,13 @@
             </div>
           </div>
           <div class="form-group row">
-            <label for="characteristic_gender_{{parentData?.id||'0'}}"
+            <label for="characteristic_gender"
                    class="col-sm-2 col-form-label pointer">
               Gender
             </label>
             <div class="col-sm-10">
               <select formControlName="gender"
-                      id="characteristic_gender_{{parentData?.id||'0'}}"
+                      id="characteristic_gender"
                       (ngModelChange)="clearError('gender')"
                       class="form-control"
                       #selectGender
@@ -97,61 +97,57 @@
             </div>
           </div>
           <div class="form-group row">
-            <label for="characteristic_price_{{parentData?.id||'0'}}"
-                   class="col-sm-2 col-form-label form-check-label pointer">
+            <label for="characteristic_price"
+                   class="col-sm-2 col-form-label pointer">
               Price
             </label>
             <div class="col-sm-10">
-              <div class="form-check">
-                <input type="number"
-                       min="0"
-                       formControlName="price"
-                       (ngModelChange)="clearError('price')"
-                       class="form-check-input pointer"
-                       id="characteristic_price_{{parentData?.id||'0'}}"
-                       [ngClass]="{ 'is-invalid': submitted
+              <input type="number"
+                     min="0"
+                     formControlName="price"
+                     (ngModelChange)="clearError('price')"
+                     class="form-control"
+                     id="characteristic_price"
+                     [ngClass]="{ 'is-invalid': submitted
                                 && (f.price.errors
                                 || errors.hasErrors['price']) }" />
-                <div *ngIf="submitted && f.price.errors"
-                     class="invalid-feedback">
-                  <div *ngIf="f.price.errors.required">
-                    Price is required
-                  </div>
+              <div *ngIf="submitted && f.price.errors"
+                   class="invalid-feedback">
+                <div *ngIf="f.price.errors.required">
+                  Price is required
                 </div>
-                <div *ngIf="submitted && errors.hasErrors['price']">
-                  <div *ngFor="let child of errors.errors['price'].errors">
-                    {{child}}
-                  </div>
+              </div>
+              <div *ngIf="submitted && errors.hasErrors['price']">
+                <div *ngFor="let child of errors.errors['price'].errors">
+                  {{child}}
                 </div>
               </div>
             </div>
           </div>
           <div class="form-group row">
-            <label for="characteristic_weight_{{parentData?.id||'0'}}"
-                   class="col-sm-2 col-form-label form-check-label pointer">
+            <label for="characteristic_weight"
+                   class="col-sm-2 col-form-label pointer">
               Weight
             </label>
             <div class="col-sm-10">
-              <div class="form-check">
-                <input type="number"
-                       formControlName="weight"
-                       min="0"
-                       id="characteristic_weight_{{parentData?.id||'0'}}"
-                       (ngModelChange)="clearError('weight')"
-                       class="form-check-input pointer"
-                       [ngClass]="{ 'is-invalid': submitted
+              <input type="number"
+                     formControlName="weight"
+                     min="0"
+                     id="characteristic_weight"
+                     (ngModelChange)="clearError('weight')"
+                     class="form-control"
+                     [ngClass]="{ 'is-invalid': submitted
                                 && (f.weight.errors
                                 || errors.hasErrors['weight']) }" />
-                <div *ngIf="submitted && f.weight.errors"
-                     class="invalid-feedback">
-                  <div *ngIf="f.weight.errors.required">
-                    Weight is required
-                  </div>
+              <div *ngIf="submitted && f.weight.errors"
+                   class="invalid-feedback">
+                <div *ngIf="f.weight.errors.required">
+                  Weight is required
                 </div>
-                <div *ngIf="submitted && errors.hasErrors['weight']">
-                  <div *ngFor="let child of errors.errors['weight'].errors">
-                    {{child}}
-                  </div>
+              </div>
+              <div *ngIf="submitted && errors.hasErrors['weight']">
+                <div *ngFor="let child of errors.errors['weight'].errors">
+                  {{child}}
                 </div>
               </div>
             </div>
@@ -182,9 +178,9 @@
   </div>
 </div>
 
-<app-delete [titleName]="selected?.name || ''"
-            [contentName]="selected?.name || ''"
-            [btnName]="selected?.name || ''"
+<app-delete [titleName]=""
+            [contentName]="selected?.display() || ''"
+            [btnName]=""
             [errors]="errors"
             (done)="deleteResp($event)"
             #deleteModal></app-delete>

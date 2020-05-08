@@ -18,9 +18,6 @@ declare var $: any;
   styleUrls: ['./characteristic-update.component.less']
 })
 export class CharacteristicUpdateComponent implements OnInit {
-  @Input() parentData: Equipment;
-
-  @Output() updateDone = new EventEmitter<SimpleChange>();
 
   @ViewChild('modal', { static: true }) modal;
   @ViewChild('selectGender', { static: true }) selectGender;
@@ -31,6 +28,8 @@ export class CharacteristicUpdateComponent implements OnInit {
   errors = new FormErrors();
   loading = false;
   submitted = false;
+
+  equipment: Equipment;
 
   deleteError: string = undefined;
   deleteHasError = false;
@@ -83,8 +82,9 @@ export class CharacteristicUpdateComponent implements OnInit {
     return itemOne && itemTwo && itemOne.id === itemTwo.id;
   }
 
-  update(data: Characteristic) {
+  update(equipment: Equipment, data: Characteristic) {
     this.loading = false;
+    this.equipment = equipment;
     this.simpleChange = new SimpleChange(data, null, true);
     this.form.reset(new Characteristic());
     this.form.patchValue(this.simpleChange.previousValue);
@@ -92,8 +92,9 @@ export class CharacteristicUpdateComponent implements OnInit {
     $(this.modal.nativeElement).modal();
   }
 
-  create() {
+  create(equipment: Equipment) {
     this.loading = false;
+    this.equipment = equipment;
     this.form.reset(new Characteristic());
     this.simpleChange = new SimpleChange(null, null, true);
     this.isCreateForm = true;
@@ -110,7 +111,7 @@ export class CharacteristicUpdateComponent implements OnInit {
   }
 
   onSubmitModal() {
-    this.manageDeleteError(undefined);
+    this.endTransactionError(undefined);
     this.submitted = true;
     this.errors = new FormErrors();
     if (this.form.invalid) {
@@ -118,13 +119,13 @@ export class CharacteristicUpdateComponent implements OnInit {
     }
     this.loading = true;
     if (this.isCreateForm) {
-      if (this.parentData === undefined
-        || this.parentData.id === undefined
-        || this.parentData.id === 0) {
+      if (this.equipment === undefined
+        || this.equipment.id === undefined
+        || this.equipment.id === 0) {
         this.simpleChange.currentValue = this.form.value;
         this.endTransaction();
       } else {
-        this.service.create(this.parentData.id
+        this.service.create(this.equipment.id
           , this.form.value)
           .subscribe(characteristic => {
             this.simpleChange.currentValue = characteristic;
@@ -134,11 +135,11 @@ export class CharacteristicUpdateComponent implements OnInit {
           });
       }
     } else {
-      if (this.parentData === undefined || this.parentData.id === 0) {
+      if (this.equipment === undefined || this.equipment.id === 0) {
         this.simpleChange.currentValue = new Characteristic(this.form.value);
         this.endTransaction();
       } else {
-        this.service.update(this.parentData.id, this.form.value)
+        this.service.update(this.equipment.id, this.form.value)
           .subscribe(returnValue => {
             this.simpleChange.currentValue = new Characteristic(this.form.value);
             this.endTransaction();
@@ -149,8 +150,10 @@ export class CharacteristicUpdateComponent implements OnInit {
     }
   }
 
-  delete(characteristic: Characteristic) {
-    this.selected = characteristic;
+  delete(equipment: Equipment, characteristic: Characteristic) {
+    this.equipment = equipment;
+    this.endTransactionError(undefined);
+    this.selected = new Characteristic(characteristic);
     this.deleteModal.open();
   }
 
@@ -158,7 +161,8 @@ export class CharacteristicUpdateComponent implements OnInit {
     if ($event) {
       this.loading = true;
       this.simpleChange = new SimpleChange(this.selected, null, true);
-      this.service.delete(this.parentData.id
+      this.endTransactionError(undefined);
+      this.service.delete(this.equipment.id
         , this.simpleChange.previousValue)
         .subscribe(
           next => {
@@ -169,35 +173,49 @@ export class CharacteristicUpdateComponent implements OnInit {
               this._delete(this.simpleChange.previousValue);
               this.endTransaction();
             } else {
-              this.manageDeleteError(error.message);
+              this.endTransactionError(error);
             }
           });
     }
   }
 
   _delete(deleteValue: Characteristic) {
-    this.manageDeleteError(undefined);
+    this.endTransactionError(undefined);
     /* const index = this.parentData.characteristics.indexOf(deleteValue);
     this.parentData.characteristics.splice(index, 1); */
     this.loading = false;
-  }
-
-  manageDeleteError(message: string) {
-    this.deleteError = message;
-    this.deleteHasError = message !== undefined;
   }
 
   endTransaction() {
     this.loading = false;
     this.submitted = false;
     this.isCreateForm = undefined;
-    this.updateDone.emit(this.simpleChange);
+    //this.updateDone.emit(this.simpleChange);
+    setTimeout(() => {
+      if (this.simpleChange !== undefined && this.simpleChange !== null) {
+        if (this.simpleChange.previousValue === null) {
+          this.equipment.characteristics.push(this.simpleChange.currentValue);
+        } else if (this.simpleChange.currentValue === null) {
+          const index = this.equipment.characteristics
+            .findIndex(x => x.id === this.simpleChange.previousValue.id);
+          if (index > 0) {
+            this.equipment.characteristics.splice(index, 1);
+          }
+        } else {
+          Object.assign(this.simpleChange.previousValue, this.simpleChange.currentValue);
+        }
+      }
+    });
     this.deleteModal.close();
     $(this.modal.nativeElement).modal('hide');
   }
 
   endTransactionError(error) {
-    this.errors.formatError(error);
+    if (error) {
+      this.errors.formatError(error);
+    } else {
+      this.errors = new FormErrors();
+    }
     this.loading = false;
   }
 }

@@ -33,6 +33,7 @@ import { CategoryUpdateComponent } from './equipment/category/category-update/ca
 import { SubCategoryUpdateComponent } from './equipment/sub-category/sub-category-update/sub-category-update.component';
 import { CategoryValidatorComponent } from './equipment/category/category-validator/category-validator.component';
 import { SubCategoryValidatorComponent } from './equipment/sub-category/sub-category-validator/sub-category-validator.component';
+import { BrandComponent } from './equipment/brand/brand/brand.component';
 
 @NgModule({
   imports: [
@@ -64,7 +65,8 @@ import { SubCategoryValidatorComponent } from './equipment/sub-category/sub-cate
     CategoryUpdateComponent,
     SubCategoryUpdateComponent,
     CategoryValidatorComponent,
-    SubCategoryValidatorComponent],
+    SubCategoryValidatorComponent,
+    BrandComponent],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },

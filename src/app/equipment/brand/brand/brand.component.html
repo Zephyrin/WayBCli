@@ -24,7 +24,7 @@
             </button>
           </th>
           <th scope="col">URL</th>
-          <th scope="col">Valide</th>
+          <th scope="col">Action</th>
         </tr>
       </thead>
       <tr *ngFor="let brand of brands"
@@ -32,7 +32,7 @@
           (dblclick)="dblClick(brand)"
           [class.active]="brand == selected"
           class="pointer">
-        <td><b>{{brand.name}}</b><br />
+        <td><b>{{brand.name}}</b>
         </td>
         <td>
           <a [attr.href]="returnUrl(brand.uri)"
@@ -41,27 +41,29 @@
         </td>
         <td>
           <div class="col">
-            <div class="btn-group"
-                 role="group"
-                 *ngIf="canEditOrDelete(brand)"
-                 aria-label="Tools">
-              <button type="button"
-                      class="btn btn-light"
-                      data-toggle="modal"
-                      data-target="#addEquipmentModal"
-                      (click)="brandModal.open(brand)">
-                <mat-icon>update</mat-icon>
-              </button>
-              <button type="button"
-                      class="btn btn-light"
-                      (click)="brandModal.onDelete(brand)">
-                <mat-icon>delete</mat-icon>
-              </button>
-              <app-switch [value]="brand.validate"
-                          [disabled]="loading"
-                          (isChecked)="updateValidate(brand)"></app-switch>
-              <span *ngIf="loading && selected === brand"
-                    class="spinner-border spinner-border-sm mr-1"></span>
+            <div>
+              <div class="btn-group"
+                   role="group"
+                   aria-label="Tools"
+                   *ngIf="canEditOrDelete(brand)">
+                <button type="button"
+                        class="btn btn-light"
+                        data-toggle="modal"
+                        data-target="#addEquipmentModal"
+                        (click)="brandModal.open(brand)">
+                  <mat-icon>update</mat-icon>
+                </button>
+                <button type="button"
+                        class="btn btn-light"
+                        (click)="brandModal.onDelete(brand)">
+                  <mat-icon>delete</mat-icon>
+                </button>
+                <app-switch [value]="brand.askValidate"
+                            [disabled]="loading"
+                            (isChecked)="updateAskValidate(brand)"></app-switch>
+                <span *ngIf="loading && selected === brand"
+                      class="spinner-border spinner-border-sm mr-1"></span>
+              </div>
             </div>
           </div>
         </td>

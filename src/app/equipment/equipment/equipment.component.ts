@@ -53,6 +53,8 @@ export class EquipmentComponent implements OnInit {
 
   haveForm: FormGroup;
 
+  errors = new FormErrors();
+
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
@@ -122,10 +124,15 @@ export class EquipmentComponent implements OnInit {
   }
 
   setSelected(selected: Equipment) {
-    this.selected = selected;
+    if (this.selected === selected) {
+      this.selected = undefined;
+    } else {
+      this.selected = selected;
+    }
   }
 
   updateDblClick(equipment) {
+    this.selected = equipment;
     this.equipmentUpdate.update(equipment);
   }
 
@@ -144,5 +151,20 @@ export class EquipmentComponent implements OnInit {
       }
       this.equipmentFilter.filters();
     }
+  }
+
+  updateAskValidate(equipment: Equipment) {
+    this.errors = new FormErrors();
+    this.setSelected(equipment);
+    this.loading = true;
+    equipment.askValidate = !equipment.askValidate;
+    this.service.update(equipment)
+      .subscribe(returnValue => {
+        this.loading = false;
+      }, (error: any) => {
+        this.errors.formatError(error);
+        equipment.askValidate = !equipment.askValidate;
+        this.loading = false;
+      });
   }
 }

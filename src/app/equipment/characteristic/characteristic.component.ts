@@ -4,6 +4,8 @@ import { Characteristic, Equipment } from '@app/_models/';
 
 import { AuthenticationService } from '@app/_services';
 import { Router } from '@angular/router';
+import { FormErrors } from '@app/_errors';
+import { CharacteristicService } from '@app/_services/characteristic.service';
 
 @Component({
   selector: 'app-characteristic',
@@ -39,10 +41,12 @@ export class CharacteristicComponent implements OnInit {
   @Output() delete = new EventEmitter<Characteristic>();
 
   selected: Characteristic = undefined;
-
+  errors = new FormErrors();
+  loading = false;
   private $updateData: SimpleChange;
   constructor(
     private router: Router,
+    private service: CharacteristicService,
     private authenticationService: AuthenticationService,
     private cd: ChangeDetectorRef) {
     if (!this.authenticationService.currentUserValue) {
@@ -84,5 +88,20 @@ export class CharacteristicComponent implements OnInit {
 
   onDelete(characteristic: Characteristic) {
     this.delete.emit(characteristic);
+  }
+
+  updateAskValidate(characteristic: Characteristic) {
+    this.errors = new FormErrors();
+    this.setSelected(characteristic);
+    this.loading = true;
+    characteristic.askValidate = !characteristic.askValidate;
+    this.service.update(this.parentData.id, characteristic)
+      .subscribe(returnValue => {
+        this.loading = false;
+      }, (error: any) => {
+        this.errors.formatError(error);
+        characteristic.askValidate = !characteristic.askValidate;
+        this.loading = false;
+      });
   }
 }

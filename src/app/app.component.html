@@ -12,13 +12,13 @@
   <span class="form-inline">
 
     <a class="navbar-toggler topright d-block d-sm-none"
-            type="button"
-            data-toggle="collapse"
-            data-target="#filterEquipmentNavDropdown"
-            aria-controls="filterEquipmentNavDropdown"
-            aria-expanded="false"
-            aria-label="Toggle filter"
-            *ngIf="router.url === '/equipment'">
+       type="button"
+       data-toggle="collapse"
+       data-target="#filterEquipmentNavDropdown"
+       aria-controls="filterEquipmentNavDropdown"
+       aria-expanded="false"
+       aria-label="Toggle filter"
+       *ngIf="router.url === '/equipments'">
       <mat-icon>search</mat-icon>
     </a>
     <a class="navbar-toggler"
@@ -52,14 +52,19 @@
         <div class="dropdown-menu"
              aria-labelledby="dropdownInfo">
           <a class="dropdown-item"
-             routerLink="equipment">Equipment</a>
+             routerLinkActive="active-link"
+             routerLink="equipments">Equipments</a>
           <a class="dropdown-item"
-             routerLink="category">Category</a>
+             routerLinkActive="active-link"
+             routerLink="brands">Brands</a>
           <a class="dropdown-item"
-             routerLink="category">Category</a>
+             routerLinkActive="active-link"
+             routerLink="categories">Categories</a>
           <a class="dropdown-item"
-             routerLink="trip">Trip</a>
+             routerLinkActive="active-link"
+             routerLink="trips">Trips</a>
           <a class="dropdown-item"
+             routerLinkActive="active-link"
              routerLink="profil">Profil</a>
         </div>
       </div>
@@ -71,23 +76,19 @@
            role="btn"
            data-toggle="dropdown"
            aria-haspopup="true"
-           aria-expanded="false">
-          Ambassador
-        </a>
+           aria-expanded="false">Ambassador</a>
         <div class="dropdown-menu"
+             routerLinkActive="active-link"
              aria-labelledby="dropdownInfo">
           <a class="nav-link"
-             routerLink="categoriesValidator">
-            Categories' validator
-          </a>
+             routerLinkActive="active-link"
+             routerLink="categoriesValidator">Categories' validator</a>
           <a class="dropdown-item nav-link"
-             routerLink="brandsValidator">
-            Brands' validator
-          </a>
+             routerLinkActive="active-link"
+             routerLink="brandsValidator">Brands' validator</a>
           <a class="dropdown-item nav-link"
-             routerLink="equipmentsValidator">
-            Equipments' validator
-          </a>
+             routerLinkActive="active-link"
+             routerLink="equipmentsValidator">Equipments' validator</a>
         </div>
       </div>
       <li class="separator"
@@ -96,6 +97,7 @@
       <li class="nav-item"
           *ngIf="isAdmin">
         <a class="nav-link"
+           routerLinkActive="active-link"
            routerLink="users">User</a>
       </li>
       <li class="nav-item">
@@ -110,6 +112,7 @@
     <ul class="navbar-nav">
       <li class="nav-item">
         <a class="nav-link"
+           routerLinkActive="active-link"
            (click)="logout()">Logout</a>
       </li>
     </ul>
@@ -135,10 +138,12 @@
     <ul class="navbar-nav float-right">
       <li class="nav-item">
         <a class="nav-link"
+           routerLinkActive="active-link"
            (click)="login()">Login</a>
       </li>
       <li class="nav-item">
         <a class="nav-link"
+           routerLinkActive="active-link"
            routerLink="/register">Register</a>
       </li>
     </ul>
@@ -155,14 +160,21 @@
         <h4 class="card-header">Equipment</h4>
         <div class="card-body">
           <a class="nav-link"
-             routerLink="equipment">Equipments</a>
+             routerLinkActive="active-link"
+             routerLink="equipments">Equipments</a>
           <a class="nav-link"
-             routerLink="category">
-            Category
+             routerLinkActive="active-link"
+             routerLink="brands">Brands</a>
+          <a class="nav-link"
+             routerLinkActive="active-link"
+             routerLink="categories">
+            Categories
           </a>
           <a class="nav-link"
-             routerLink="trip">Trips</a>
+             routerLinkActive="active-link"
+             routerLink="trips">Trips</a>
           <a class="nav-link"
+             routerLinkActive="active-link"
              routerLink="profil">Profil</a>
         </div>
       </div>
@@ -171,14 +183,17 @@
         <h4 class="card-header">Ambassador</h4>
         <div class="card-body">
           <a class="nav-link"
+             routerLinkActive="active-link"
              routerLink="categoriesValidator">
             Categories' validator
           </a>
           <a class="nav-link"
+             routerLinkActive="active-link"
              routerLink="brandsValidator">
             Brands' validator
           </a>
-          <a class="dropdown-item nav-link"
+          <a class="nav-link"
+             routerLinkActive="active-link"
              routerLink="equipmentsValidator">
             Equipments' validator
           </a>

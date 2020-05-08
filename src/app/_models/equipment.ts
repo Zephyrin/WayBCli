@@ -13,6 +13,7 @@ export class Equipment {
   subCategory: SubCategory;
   validate: boolean;
   has: boolean;
+  askValidate: boolean;
   // haves: Have;
   private currencyPipe = new CurrencyPipe('EN');
   constructor(eq: Equipment = null) {
@@ -26,6 +27,7 @@ export class Equipment {
       this.characteristics = [];
       this.subCategory = new SubCategory(eq.subCategory);
       this.validate = eq.validate;
+      this.askValidate = eq.askValidate;
       eq.characteristics.forEach(car => {
         this.characteristics.push(new Characteristic(car));
       });

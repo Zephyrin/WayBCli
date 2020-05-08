@@ -12,11 +12,11 @@ import { BrandUpdateComponent } from '@app/equipment/brand/brand-update/brand-up
 import { FormErrors } from '@app/_errors';
 
 @Component({
-  selector: 'app-brand-validator',
-  templateUrl: './brand-validator.component.html',
-  styleUrls: ['./brand-validator.component.less']
+  selector: 'app-brand',
+  templateUrl: './brand.component.html',
+  styleUrls: ['./brand.component.less']
 })
-export class BrandValidatorComponent implements OnInit {
+export class BrandComponent implements OnInit {
   @ViewChild('brandModal', { static: false }) brandModal: BrandUpdateComponent;
   loading = false;
   brands: Brand[];
@@ -54,7 +54,7 @@ export class BrandValidatorComponent implements OnInit {
   }
 
   canEditOrDelete(brand: Brand) {
-    return brand.validate || brand.askValidate;
+    return !brand.validate;
   }
 
   dblClick(brand: Brand) {
@@ -62,18 +62,17 @@ export class BrandValidatorComponent implements OnInit {
       this.brandModal.open(brand);
     }
   }
-
-  updateValidate(brand: Brand) {
+  updateAskValidate(brand: Brand) {
     this.errors = new FormErrors();
     this.setSelected(brand);
     this.loading = true;
-    brand.validate = !brand.validate;
+    brand.askValidate = !brand.askValidate;
     this.service.update(brand)
       .subscribe(returnValue => {
         this.loading = false;
       }, (error: any) => {
         this.errors.formatError(error);
-        brand.validate = !brand.validate;
+        brand.askValidate = !brand.askValidate;
         this.loading = false;
       });
   }

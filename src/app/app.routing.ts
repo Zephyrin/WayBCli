@@ -9,14 +9,16 @@ import { UserComponent } from './equipment/_admin/user/user.component';
 import { CategoryComponent } from './equipment/category/category.component';
 import { BrandValidatorComponent } from './equipment/brand/brand-validator/brand-validator.component';
 import { CategoryValidatorComponent } from './equipment/category/category-validator/category-validator.component';
+import { BrandComponent } from './equipment/brand/brand/brand.component';
 
 const routes: Routes = [
     { path: '', component: HomeComponent, canActivate: [AuthGuard] },
     { path: 'login', component: LoginComponent },
     { path: 'register', component: RegisterComponent },
-    { path: 'equipment', component: EquipmentComponent},
+    { path: 'equipments', component: EquipmentComponent},
     { path: 'users', component: UserComponent},
-    { path: 'category', component: CategoryComponent},
+    { path: 'categories', component: CategoryComponent},
+    { path: 'brands', component: BrandComponent },
     { path: 'brandsValidator', component: BrandValidatorComponent },
     { path: 'categoriesValidator', component: CategoryValidatorComponent},
 

@@ -111,7 +111,7 @@ export class BrandUpdateComponent implements OnInit {
   }
 
   onSubmit() {
-    this.manageDeleteError(undefined);
+    this.endTransactionError(undefined);
     this.submitted = true;
     this.errors = new FormErrors();
     if (this.form.invalid) {
@@ -146,7 +146,7 @@ export class BrandUpdateComponent implements OnInit {
   delete($event: boolean) {
     if ($event) {
       this.loading = true;
-      this.manageDeleteError(undefined);
+      this.endTransactionError(undefined);
       this.service.delete(this.selected).subscribe(next => {
         this._delete(this.selected);
         this.endTransaction();
@@ -155,23 +155,18 @@ export class BrandUpdateComponent implements OnInit {
           this._delete(this.selected);
           this.endTransaction();
         } else {
-          this.manageDeleteError(error.message);
+          this.endTransactionError(error);
         }
       });
     }
   }
 
   _delete(deleteValue: Brand) {
-    this.manageDeleteError(undefined);
+    this.endTransactionError(undefined);
     const index = this.brands.indexOf(deleteValue);
     this.brands.splice(index, 1);
     this.loading = false;
     this.selected = null;
-  }
-
-  manageDeleteError(message: string) {
-    this.deleteError = message;
-    this.deleteHasError = message !== undefined;
   }
 
   endTransaction() {
@@ -182,6 +177,10 @@ export class BrandUpdateComponent implements OnInit {
 
   endTransactionError(error) {
     this.loading = false;
-    this.errors.formatError(error);
+    if (error) {
+      this.errors.formatError(error);
+    } else {
+      this.errors = new FormErrors();
+    }
   }
 }
