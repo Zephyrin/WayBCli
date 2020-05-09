@@ -190,7 +190,6 @@ export class CharacteristicUpdateComponent implements OnInit {
     this.loading = false;
     this.submitted = false;
     this.isCreateForm = undefined;
-    //this.updateDone.emit(this.simpleChange);
     setTimeout(() => {
       if (this.simpleChange !== undefined && this.simpleChange !== null) {
         if (this.simpleChange.previousValue === null) {
