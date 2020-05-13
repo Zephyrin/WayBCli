@@ -40,7 +40,10 @@ export class CategoryComponent implements OnInit {
     this.service.getAll()
       .pipe(first())
       .subscribe(categories => {
-        this.categories = categories;
+        this.categories = categories.filter(x => x.validate || x.askValidate);
+        this.categories.forEach(category => {
+          category.subCategories = category.subCategories.filter(x => x.validate || x.askValidate);
+        });
         this.loading = false;
       });
   }

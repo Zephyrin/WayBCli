@@ -42,6 +42,9 @@
         </a>
       </li>
       <div class="dropdown d-lg-none">
+        <a class="nav-link"
+           routerLinkActive="active-link"
+           routerLink="">Backpacks</a>
         <a class="nav-link dropdown-toggle"
            href="#"
            id="dropdownInfo"
@@ -80,15 +83,15 @@
         <div class="dropdown-menu"
              routerLinkActive="active-link"
              aria-labelledby="dropdownInfo">
-          <a class="nav-link"
-             routerLinkActive="active-link"
-             routerLink="categoriesValidator">Categories' validator</a>
-          <a class="dropdown-item nav-link"
-             routerLinkActive="active-link"
-             routerLink="brandsValidator">Brands' validator</a>
           <a class="dropdown-item nav-link"
              routerLinkActive="active-link"
              routerLink="equipmentsValidator">Equipments' validator</a>
+          <a class="dropdown-item nav-link"
+             routerLinkActive="active-link"
+             routerLink="brandsValidator">Brands' validator</a>
+          <a class="nav-link"
+             routerLinkActive="active-link"
+             routerLink="categoriesValidator">Categories' validator</a>
         </div>
       </div>
       <li class="separator"
@@ -154,11 +157,13 @@
 <div class="container-fluid">
   <div class="row flex-xl-nowrap">
     <div class="col-12 col-xl-2 bd-sidebar d-none d-md-none d-lg-block">
-
       <div class="card mt-4"
            *ngIf="currentUser">
         <h4 class="card-header">Equipment</h4>
         <div class="card-body">
+          <a class="nav-link"
+             routerLinkActive="active-link"
+             routerLink="">Backpacks</a>
           <a class="nav-link"
              routerLinkActive="active-link"
              routerLink="equipments">Equipments</a>
@@ -184,8 +189,8 @@
         <div class="card-body">
           <a class="nav-link"
              routerLinkActive="active-link"
-             routerLink="categoriesValidator">
-            Categories' validator
+             routerLink="equipmentsValidator">
+            Equipments' validator
           </a>
           <a class="nav-link"
              routerLinkActive="active-link"
@@ -194,8 +199,8 @@
           </a>
           <a class="nav-link"
              routerLinkActive="active-link"
-             routerLink="equipmentsValidator">
-            Equipments' validator
+             routerLink="categoriesValidator">
+            Categories' validator
           </a>
         </div>
       </div>

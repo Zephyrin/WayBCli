@@ -1,0 +1,43 @@
+<div
+     class="table-responsive-sm table-responsive-md table-responsive-lg table-responsive-xl">
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Size</th>
+        <th scope="col">Gender</th>
+        <th scope="col">Weight</th>
+        <th scope="col">Price</th>
+        <th scope="col">Action</th>
+      </tr>
+    </thead>
+    <tr *ngFor="let characteristic of parentData?.characteristics"
+        (click)="setSelected(characteristic)"
+        (dblclick)="onUpdate(characteristic)"
+        [class.active]="characteristic == selected"
+        class="pointer">
+      <td>{{characteristic.size}}
+      </td>
+      <td>{{characteristic.gender}}</td>
+      <td>{{characteristic.weight}}</td>
+      <td>{{characteristic.price}}</td>
+      <td>
+        <div class="btn-group"
+             role="group"
+             *ngIf="canEdit(characteristic)"
+             aria-label="Tools">
+          <button type="button"
+                  class="btn btn-light"
+                  (click)="onUpdate(characteristic)">
+            <mat-icon>edit</mat-icon>
+          </button>
+        </div>
+        <app-switch [value]="characteristic.validate"
+                    [disabled]="loading"
+                    *ngIf="canEdit(characteristic)"
+                    (isChecked)="updateValidate(characteristic)">
+        </app-switch>
+
+      </td>
+    </tr>
+  </table>
+</div>

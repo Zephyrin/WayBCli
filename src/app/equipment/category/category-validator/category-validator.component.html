@@ -18,12 +18,7 @@
       <thead>
         <tr>
           <th scope="col"
-              class="col-9">
-            <button class="btn btn-light"
-                    (click)="categoryModal.open()">
-              <mat-icon>add</mat-icon>Category name
-            </button>
-          </th>
+              class="col-9">Category name</th>
           <th scope="col"
               class="col-2">Sub-categories count</th>
           <th scope="col"
@@ -50,11 +45,6 @@
                       class="btn btn-light"
                       (click)="categoryModal.open(category)">
                 <mat-icon>update</mat-icon>
-              </button>
-              <button type="button"
-                      class="btn btn-light"
-                      (click)="categoryModal.onDelete(category)">
-                <mat-icon>delete</mat-icon>
               </button>
               <app-switch [value]="category.validate"
                           [disabled]="loading"

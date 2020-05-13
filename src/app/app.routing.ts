@@ -10,6 +10,7 @@ import { CategoryComponent } from './equipment/category/category.component';
 import { BrandValidatorComponent } from './equipment/brand/brand-validator/brand-validator.component';
 import { CategoryValidatorComponent } from './equipment/category/category-validator/category-validator.component';
 import { BrandComponent } from './equipment/brand/brand/brand.component';
+import { EquipmentValidatorComponent } from './equipment/equipment/equipment-validator/equipment-validator.component';
 
 const routes: Routes = [
     { path: '', component: HomeComponent, canActivate: [AuthGuard] },
@@ -21,6 +22,7 @@ const routes: Routes = [
     { path: 'brands', component: BrandComponent },
     { path: 'brandsValidator', component: BrandValidatorComponent },
     { path: 'categoriesValidator', component: CategoryValidatorComponent},
+    { path: 'equipmentsValidator', component: EquipmentValidatorComponent},
 
     // otherwise redirect to home
     { path: '**', redirectTo: '' }

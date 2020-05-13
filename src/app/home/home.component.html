@@ -1,10 +1,1 @@
-﻿<div class="card mt-4">
-    <h4 class="card-header">You're logged in with Angular 8 & JWT!!</h4>
-    <div class="card-body">
-        <h6>Users from secure api end point</h6>
-        <div *ngIf="loading" class="spinner-border spinner-border-sm"></div>
-        <ul *ngIf="users">
-            <li *ngFor="let user of users">{{user.username}} {{user.email}} {{user.roles}} {{user.id}} {{user.gender}} {{user.password}} {{user.enabled}} {{user.token}}</li>
-        </ul>
-    </div>
-</div>
+﻿<p *ngIf="backpacks?.length === 0">You don't have backpack yet.</p>

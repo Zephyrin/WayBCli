@@ -29,7 +29,8 @@
             ],
             "styles": [
               "src/styles.less",
-              "node_modules/bootstrap/dist/css/bootstrap.min.css"
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "src/customize-bootstrap.scss"
             ],
             "scripts": [
               "node_modules/jquery/dist/jquery.min.js",
@@ -123,6 +124,12 @@
           }
         }
       }
-    }},
-  "defaultProject": "what-about-your-backpack"
+    }
+  },
+  "defaultProject": "what-about-your-backpack",
+  "schematics": {
+    "@schematics/angular:component": {
+      "styleext": "scss"
+    }
+  }
 }

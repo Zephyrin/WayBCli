@@ -1,28 +1,37 @@
 ﻿import { Component, NgModule, OnInit } from '@angular/core';
-import { first } from 'rxjs/operators';
 
-import { User } from '@app/_models';
-import { UserService, AuthenticationService } from '@app/_services';
 import { BrowserModule } from '@angular/platform-browser';
+import { Backpack } from '@app/_models/backpack';
+import { AuthenticationService } from '@app/_services';
+import { BackpackService } from '@app/_services/backpack.service';
+import { User } from '@app/_models';
+import { first } from 'rxjs/operators';
 
 @Component({ templateUrl: 'home.component.html' })
 
 @NgModule({
-  imports: [ BrowserModule ],
-  declarations: [ HomeComponent],
-  bootstrap: [ HomeComponent ]
+  imports: [BrowserModule],
+  declarations: [HomeComponent],
+  bootstrap: [HomeComponent]
 })
 export class HomeComponent implements OnInit {
-    loading = false;
-    users: User[];
+  loading = false;
+  currentUser: User;
+  backpacks: Backpack[];
+  constructor(
+    private authenticationService: AuthenticationService,
+    private backpackService: BackpackService
+  ) {
+    this.authenticationService.currentUser.pipe(first()).subscribe(
+      x => this.currentUser = x);
+   }
 
-    constructor(private userService: UserService) { }
-
-    ngOnInit() {
+  ngOnInit() {
+    this.loading = false;
+    this.backpackService.getAll(this.currentUser)
+      .subscribe(backpacks => {
+        this.backpacks = backpacks;
         this.loading = false;
-        this.userService.getAll().pipe(first()).subscribe(users => {
-            this.loading = false;
-            this.users = users;
-        });
-    }
+      });
+  }
 }

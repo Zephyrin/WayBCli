@@ -38,7 +38,7 @@ export class BrandValidatorComponent implements OnInit {
     this.errors = new FormErrors();
     this.brandService.getAll().pipe(first()).subscribe(brands => {
       this.loading = false;
-      this.brands = brands;
+      this.brands = brands.filter(x => x.validate || x.askValidate);
     });
   }
   returnUrl(uri: string) {

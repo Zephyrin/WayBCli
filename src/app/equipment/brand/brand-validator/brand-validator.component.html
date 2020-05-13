@@ -17,12 +17,7 @@
     <table class="table">
       <thead>
         <tr>
-          <th scope="col">
-            <button class="btn btn-light"
-                    (click)="brandModal.open()">
-              <mat-icon>add</mat-icon>Name
-            </button>
-          </th>
+          <th scope="col">Name</th>
           <th scope="col">URL</th>
           <th scope="col">Valide</th>
         </tr>
@@ -51,11 +46,6 @@
                       data-target="#addEquipmentModal"
                       (click)="brandModal.open(brand)">
                 <mat-icon>update</mat-icon>
-              </button>
-              <button type="button"
-                      class="btn btn-light"
-                      (click)="brandModal.onDelete(brand)">
-                <mat-icon>delete</mat-icon>
               </button>
               <app-switch [value]="brand.validate"
                           [disabled]="loading"
