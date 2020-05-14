@@ -11,7 +11,7 @@ declare var $: any;
 @Component({
   selector: 'app-user-owned',
   templateUrl: './user-owned.component.html',
-  styleUrls: ['./user-owned.component.less']
+  styleUrls: ['./user-owned.component.scss']
 })
 export class UserOwnedComponent implements OnInit {
   @ViewChild('cardFooterBody', { static: false }) cardFooterBody: ElementRef;

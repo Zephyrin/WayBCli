@@ -13,7 +13,7 @@ import { FormErrors } from '@app/_errors';
 @Component({
   selector: 'app-category-validator',
   templateUrl: './category-validator.component.html',
-  styleUrls: ['./category-validator.component.less']
+  styleUrls: ['./category-validator.component.scss']
 })
 export class CategoryValidatorComponent implements OnInit {
 

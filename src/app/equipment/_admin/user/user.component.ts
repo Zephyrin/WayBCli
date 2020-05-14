@@ -12,7 +12,7 @@ declare var $: any;
 @Component({
   selector: 'app-user',
   templateUrl: './user.component.html',
-  styleUrls: ['./user.component.less']
+  styleUrls: ['./user.component.scss']
 })
 export class UserComponent implements OnInit {
   @ViewChild("updateUser", {static:true}) updateUser;
@@ -36,7 +36,7 @@ export class UserComponent implements OnInit {
         this.router.navigate(['/'])
       }
      }
-  
+
   setSelectedUser(user : User){
     if (user == this.selectedUser){
       this.selectedUser = null;

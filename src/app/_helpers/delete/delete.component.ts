@@ -10,7 +10,7 @@ declare var $: any;
 @Component({
   selector: 'app-delete',
   templateUrl: './delete.component.html',
-  styleUrls: ['./delete.component.less']
+  styleUrls: ['./delete.component.scss']
 })
 export class DeleteComponent implements OnInit {
   @ViewChild('modal', { static: true }) modal;

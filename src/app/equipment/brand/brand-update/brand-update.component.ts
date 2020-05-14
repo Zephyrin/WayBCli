@@ -14,7 +14,7 @@ declare var $: any;
 @Component({
   selector: 'app-brand-update',
   templateUrl: './brand-update.component.html',
-  styleUrls: ['./brand-update.component.less']
+  styleUrls: ['./brand-update.component.scss']
 })
 export class BrandUpdateComponent implements OnInit {
   @ViewChild('modal', { static: true }) modal;

@@ -15,7 +15,7 @@ declare var $: any;
 @Component({
   selector: 'app-characteristic-update',
   templateUrl: './characteristic-update.component.html',
-  styleUrls: ['./characteristic-update.component.less']
+  styleUrls: ['./characteristic-update.component.scss']
 })
 export class CharacteristicUpdateComponent implements OnInit {
 

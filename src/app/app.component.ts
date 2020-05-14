@@ -11,7 +11,7 @@ declare var $: any;
   // tslint:disable-next-line: component-selector
   selector: 'app',
   templateUrl: 'app.component.html',
-  styleUrls: ['./app.component.less']
+  styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   currentUser: User;

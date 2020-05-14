@@ -15,7 +15,7 @@ declare var $: any;
 @Component({
   selector: 'app-user-owned-update',
   templateUrl: './user-owned-update.component.html',
-  styleUrls: ['./user-owned-update.component.less']
+  styleUrls: ['./user-owned-update.component.scss']
 })
 export class UserOwnedUpdateComponent implements OnInit {
   @ViewChild('modal', { static: true }) modal;

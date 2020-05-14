@@ -10,7 +10,7 @@ import { CharacteristicService } from '@app/_services/characteristic.service';
 @Component({
   selector: 'app-characteristic',
   templateUrl: './characteristic.component.html',
-  styleUrls: ['./characteristic.component.less']
+  styleUrls: ['./characteristic.component.scss']
 })
 export class CharacteristicComponent implements OnInit {
   @Input() parentData: Equipment;

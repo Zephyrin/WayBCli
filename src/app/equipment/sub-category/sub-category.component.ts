@@ -13,7 +13,7 @@ import { FormErrors } from '@app/_errors';
 @Component({
   selector: 'app-sub-category',
   templateUrl: './sub-category.component.html',
-  styleUrls: ['./sub-category.component.less']
+  styleUrls: ['./sub-category.component.scss']
 })
 export class SubCategoryComponent implements OnInit, OnDestroy {
   @Input() subCategories: SubCategory[];

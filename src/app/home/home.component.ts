@@ -12,7 +12,7 @@ import { first } from 'rxjs/operators';
 @NgModule({
   imports: [BrowserModule],
   declarations: [HomeComponent],
-  bootstrap: [HomeComponent]
+/*   bootstrap: [HomeComponent] */
 })
 export class HomeComponent implements OnInit {
   loading = false;

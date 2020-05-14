@@ -24,7 +24,7 @@ declare var $: any;
 @Component({
   selector: 'app-equipment-validator',
   templateUrl: './equipment-validator.component.html',
-  styleUrls: ['./equipment-validator.component.less']
+  styleUrls: ['./equipment-validator.component.scss']
 })
 export class EquipmentValidatorComponent implements OnInit {
   @ViewChild('categoryPopup', { static: true }) categoryPopup;

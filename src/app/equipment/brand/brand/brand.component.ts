@@ -14,7 +14,7 @@ import { FormErrors } from '@app/_errors';
 @Component({
   selector: 'app-brand',
   templateUrl: './brand.component.html',
-  styleUrls: ['./brand.component.less']
+  styleUrls: ['./brand.component.scss']
 })
 export class BrandComponent implements OnInit {
   @ViewChild('brandModal', { static: false }) brandModal: BrandUpdateComponent;

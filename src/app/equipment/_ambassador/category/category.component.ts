@@ -15,7 +15,7 @@ declare var $: any;
 @Component({
   selector: 'app-category',
   templateUrl: './category.component.html',
-  styleUrls: ['./category.component.less']
+  styleUrls: ['./category.component.scss']
 })
 export class CategoryComponentDeprecated implements OnInit {
   @ViewChild('modal', {static: true}) modal;

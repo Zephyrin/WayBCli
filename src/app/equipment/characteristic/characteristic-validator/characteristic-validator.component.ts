@@ -10,7 +10,7 @@ import { CharacteristicService } from '@app/_services/characteristic.service';
 @Component({
   selector: 'app-characteristic-validator',
   templateUrl: './characteristic-validator.component.html',
-  styleUrls: ['./characteristic-validator.component.less']
+  styleUrls: ['./characteristic-validator.component.scss']
 })
 export class CharacteristicValidatorComponent implements OnInit {
   @Input() parentData: Equipment;

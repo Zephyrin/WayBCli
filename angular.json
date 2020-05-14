@@ -7,7 +7,7 @@
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
-          "style": "less"
+          "style": "scss"
         }
       },
       "root": "",
@@ -28,9 +28,7 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.less",
-              "node_modules/bootstrap/dist/css/bootstrap.min.css",
-              "src/customize-bootstrap.scss"
+              "src/styles.scss"
             ],
             "scripts": [
               "node_modules/jquery/dist/jquery.min.js",
@@ -93,7 +91,7 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.less"
+              "src/styles.scss"
             ],
             "scripts": []
           }

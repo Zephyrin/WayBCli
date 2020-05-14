@@ -14,7 +14,7 @@ declare var $: any;
 @Component({
   selector: 'app-sub-category-update',
   templateUrl: './sub-category-update.component.html',
-  styleUrls: ['./sub-category-update.component.less']
+  styleUrls: ['./sub-category-update.component.scss']
 })
 export class SubCategoryUpdateComponent implements OnInit {
   @ViewChild('modal', { static: true }) modal;

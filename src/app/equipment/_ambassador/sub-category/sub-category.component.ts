@@ -14,7 +14,7 @@ declare var $: any;
 @Component({
   selector: 'app-sub-category',
   templateUrl: './sub-category.component.html',
-  styleUrls: ['./sub-category.component.less']
+  styleUrls: ['./sub-category.component.scss']
 })
 export class SubCategoryDeprecatedComponent implements OnInit {
   @Input() parentData;

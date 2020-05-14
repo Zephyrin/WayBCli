@@ -13,7 +13,7 @@ import { FormErrors } from '@app/_errors';
 @Component({
   selector: 'app-sub-category-validator',
   templateUrl: './sub-category-validator.component.html',
-  styleUrls: ['./sub-category-validator.component.less']
+  styleUrls: ['./sub-category-validator.component.scss']
 })
 export class SubCategoryValidatorComponent implements OnInit, OnDestroy {
   @Input() subCategories: SubCategory[];

@@ -27,7 +27,7 @@ declare var $: any;
 @Component({
   selector: 'app-equipment',
   templateUrl: './equipment.component.html',
-  styleUrls: ['./equipment.component.less']
+  styleUrls: ['./equipment.component.scss']
 })
 export class EquipmentComponent implements OnInit {
   @ViewChild('categoryPopup', { static: true }) categoryPopup;

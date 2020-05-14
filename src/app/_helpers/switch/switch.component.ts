@@ -20,7 +20,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 @Component({
   selector: 'app-switch',
   templateUrl: './switch.component.html',
-  styleUrls: ['./switch.component.less'],
+  styleUrls: ['./switch.component.scss'],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,

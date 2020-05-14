@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-equipment-filter',
   templateUrl: './equipment-filter.component.html',
-  styleUrls: ['./equipment-filter.component.less']
+  styleUrls: ['./equipment-filter.component.scss']
 })
 export class EquipmentFilterComponent implements OnInit {
   @ViewChild('ownedBtn', { static: false }) ownedBtn: ElementRef;
