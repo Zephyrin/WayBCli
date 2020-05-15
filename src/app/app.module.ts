@@ -10,7 +10,6 @@ import { AppComponent } from './app.component';
 import { appRoutingModule } from './app.routing';
 
 import { JwtInterceptor, ErrorInterceptor } from './_helpers';
-import { HomeComponent } from './home';
 import { LoginComponent } from './auth/login';
 import { RegisterComponent } from './auth/register/register.component';
 import { BrandValidatorComponent } from './equipment/brand/brand-validator/brand-validator.component';
@@ -47,7 +46,6 @@ import { CharacteristicValidatorComponent } from './equipment/characteristic/cha
   ],
   declarations: [
     AppComponent,
-    HomeComponent,
     LoginComponent,
     RegisterComponent,
     BrandValidatorComponent,

@@ -1,18 +1,13 @@
-﻿import { Component, NgModule, OnInit } from '@angular/core';
+﻿import { Component, OnInit } from '@angular/core';
 
-import { BrowserModule } from '@angular/platform-browser';
 import { Backpack } from '@app/_models/backpack';
 import { AuthenticationService } from '@app/_services';
 import { BackpackService } from '@app/_services/backpack.service';
 import { User } from '@app/_models';
 import { first } from 'rxjs/operators';
 
-@Component({ templateUrl: 'home.component.html' })
-
-@NgModule({
-  imports: [BrowserModule],
-  declarations: [HomeComponent],
-/*   bootstrap: [HomeComponent] */
+@Component({
+  templateUrl: 'home.component.html'
 })
 export class HomeComponent implements OnInit {
   loading = false;

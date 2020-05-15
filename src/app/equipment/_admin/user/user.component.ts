@@ -15,7 +15,7 @@ declare var $: any;
   styleUrls: ['./user.component.scss']
 })
 export class UserComponent implements OnInit {
-  @ViewChild("updateUser", {static:true}) updateUser;
+  @ViewChild('updateUser', {static: true}) updateUser;
 
   userForm: FormGroup;
   loading = false;
@@ -24,7 +24,7 @@ export class UserComponent implements OnInit {
   deleteError = '';
   deleteHasError = false;
   users: User[];
-  selectedUser : User;
+  selectedUser: User;
   formError = {};
 
   constructor(
@@ -33,23 +33,23 @@ export class UserComponent implements OnInit {
     private userService: UserService,
     private authenticationService: AuthenticationService) {
       if (!this.authenticationService.currentUserValue) {
-        this.router.navigate(['/'])
+        this.router.navigate(['/']);
       }
      }
 
-  setSelectedUser(user : User){
-    if (user == this.selectedUser){
+  setSelectedUser(user: User) {
+    if (user === this.selectedUser) {
       this.selectedUser = null;
-    }
-    else
+    } else {
       this.selectedUser = user;
+    }
   }
 
-  get isSelectedUser(){
+  get isSelectedUser() {
     return this.selectedUser == null;
   }
 
-  editUser(){
+  editUser() {
     this.userForm.patchValue(this.selectedUser);
   }
   ngOnInit() {
@@ -79,7 +79,7 @@ export class UserComponent implements OnInit {
       return;
     }
     this.loading = true;
-    this.userService.update(this.userForm.value).subscribe(user =>{
+    this.userService.update(this.userForm.value).subscribe(user => {
       this.loading = false;
       this.submitted = false;
       this.formError = {};
@@ -89,11 +89,15 @@ export class UserComponent implements OnInit {
       this.formError = {};
       // get the nested errors
       /* let errorData = error.json().errors.children; */
-      let errorData = error.error.errors[0].children;
+      const errorData = error.error.errors[0].children;
       // iterate the keys in errors
-      for(let key in errorData) {
+      for (const key in errorData) {
         // if key has nested "errors", get and set the error message, else set null
-         errorData[key].errors ? this.formError[key] = errorData[key].errors : this.formError[key] = null;
+        if (errorData[key].errors) {
+          this.formError[key] = errorData[key].errors;
+        } else {
+          this.formError[key] = null;
+        }
       }
       this.error = error;
       this.loading = false;
@@ -105,7 +109,7 @@ export class UserComponent implements OnInit {
   }
 
   deleteUser(user: User) {
-    var index = this.users.indexOf(user);
+    const index = this.users.indexOf(user);
     this.users.splice(index, 1);
     this.loading = false;
   }
@@ -115,11 +119,10 @@ export class UserComponent implements OnInit {
     this.deleteHasError = false;
     this.userService.delete(user).subscribe(next => {
       this.deleteUser(user);
-    },error => {
-      if(error.status == 404) {
+    }, error => {
+      if (error.status === 404) {
         this.deleteUser(user);
-      }
-      else {
+      } else {
         this.deleteHasError = true;
         this.deleteError = error.message;
         this.loading = false;
