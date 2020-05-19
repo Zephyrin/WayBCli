@@ -42,12 +42,12 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
       this.positionFooter();
     });
 
-    $(document).on('hidden.bs.modal', '.modal', function () {
+    $(document).on('hidden.bs.modal', '.modal', function() {
       $('.modal:visible').length && $(document.body).addClass('modal-open');
     });
 
-    $(document).on('show.bs.modal', '.modal', function () {
-      var zIndex = 1040 + (10 * $('.modal:visible').length);
+    $(document).on('show.bs.modal', '.modal', function() {
+      const zIndex = 1040 + (10 * $('.modal:visible').length);
       $(this).css('z-index', zIndex);
       setTimeout(function () {
         $('.modal-backdrop').not('.modal-stack').css('z-index', zIndex - 1).addClass('modal-stack');
@@ -64,7 +64,12 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     this.positionFooter();
   }
   positionFooter() {
-    $('main').css('padding-bottom', $('footer').height());
+    const height = $('footer').height();
+    const bdSidebarList = document.getElementsByClassName('bd-sidebar');
+    Array.from(bdSidebarList).forEach(element => {
+      (element as HTMLElement).style.paddingBottom = height + 'px';
+    });
+    $('main').css('padding-bottom', height);
   }
 
   get isAdmin() {

@@ -18,7 +18,7 @@
        aria-controls="filterEquipmentNavDropdown"
        aria-expanded="false"
        aria-label="Toggle filter"
-       *ngIf="router.url === '/equipments'">
+       *ngIf="router && router.url === '/equipments'">
       <mat-icon>search</mat-icon>
     </a>
     <a class="navbar-toggler"
