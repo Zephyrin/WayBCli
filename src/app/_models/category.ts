@@ -1,4 +1,5 @@
 import { SubCategory } from '@app/_models/sub-category';
+import { User } from './user';
 
 export class Category {
   id: number;
@@ -6,6 +7,7 @@ export class Category {
   subCategories: SubCategory[];
   askValidate: boolean;
   validate: boolean;
+  createdBy: User;
   constructor(cat: Category = null) {
     if (cat !== null) {
       this.id = cat.id;
@@ -18,6 +20,7 @@ export class Category {
       }
       this.askValidate = cat.askValidate;
       this.validate = cat.validate;
+      this.createdBy = cat.createdBy;
     }
   }
 }

@@ -1,7 +1,7 @@
 
 /* $brand-primary: #75B1A9; */
-/* $primary: #5C821A;
-$secondary: #C6D166;
+//$primary: #5C821A;
+/* $secondary: #C6D166;
  */
 //$light: lighten($primary, 20%);
 /* $dark: #0F1B07;
@@ -17,7 +17,14 @@ $light: lighten($primary, 20%);
 $dark: #0F1B07;
 $brand-primary: $primary; */
 
+b {
+  color: #7eb51d;
+  font-size: x-large;
+  font-weight: bold;
+}
 
+a { color: #7eb51d; }
+a :hover { color: darken($color: #7eb51d, $amount: 10%); }
 .pointer { cursor: pointer }
 a { cursor: pointer }
 .table tr.active td {

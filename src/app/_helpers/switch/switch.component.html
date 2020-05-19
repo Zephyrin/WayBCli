@@ -1,7 +1,9 @@
-<div (click)="switch()"
-     class="switch"
+<button (click)="switch()"
+     class="btn btn-light"
      [ngClass]="{ 'checked': value }">
-  <input type="checkbox"
+     <mat-icon *ngIf="value">check-box</mat-icon>
+     <mat-icon *ngIf="!value">check_box_outline_blank</mat-icon>
+<!--   <input type="checkbox"
          class="switch-input"
          [checked]="value"
          [value]="value"
@@ -10,5 +12,5 @@
         #switchLabel
         data-on="On"
         data-off="Off"></span>
-  <span class="switch-handle"></span>
-</div>
+  <span class="switch-handle"></span> -->
+</button>

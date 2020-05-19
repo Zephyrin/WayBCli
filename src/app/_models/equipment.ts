@@ -1,7 +1,7 @@
 import { Brand } from './brand';
 import { Characteristic } from './characteristic';
 import { SubCategory } from './sub-category';
-import { filter } from 'rxjs/operators';
+import { User } from './user';
 import { CurrencyPipe } from '@angular/common';
 
 export class Equipment {
@@ -12,8 +12,12 @@ export class Equipment {
   characteristics: Characteristic[];
   subCategory: SubCategory;
   validate: boolean;
+  /**
+   * Local variable to know if the user has this equipment or not.
+   */
   has: boolean;
   askValidate: boolean;
+  createdBy: User;
   // haves: Have;
   private currencyPipe = new CurrencyPipe('EN');
   constructor(eq: Equipment = null) {
@@ -31,6 +35,7 @@ export class Equipment {
       eq.characteristics.forEach(car => {
         this.characteristics.push(new Characteristic(car));
       });
+      this.createdBy = eq.createdBy;
     }
     this.has = false;
   }

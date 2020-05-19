@@ -1,4 +1,5 @@
 import { Equipment } from './equipment';
+import { User } from './user';
 
 export class Brand {
   id: number;
@@ -7,6 +8,7 @@ export class Brand {
   askValidate: boolean;
   uri: string;
   equipments: Equipment[];
+  createdBy: User;
 
   constructor(brand: Brand = null) {
     if (brand !== null && brand !== undefined) {
@@ -15,6 +17,7 @@ export class Brand {
       this.validate = brand.validate;
       this.uri = brand.uri;
       this.askValidate = brand.askValidate;
+      this.createdBy = brand.createdBy;
     }
   }
 }

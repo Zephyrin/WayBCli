@@ -3,7 +3,7 @@ import { ViewChild } from '@angular/core';
 
 import { first } from 'rxjs/operators';
 
-import { Brand } from '@app/_models';
+import { Brand, User } from '@app/_models';
 import { BrandService } from '@app/_services/brand.service';
 
 import { AuthenticationService } from '@app/_services';
@@ -22,6 +22,7 @@ export class BrandValidatorComponent implements OnInit {
   brands: Brand[];
   selected: Brand;
   errors: FormErrors;
+  currentUser: User;
 
   constructor(
     private brandService: BrandService,
@@ -31,6 +32,8 @@ export class BrandValidatorComponent implements OnInit {
     if (!this.authenticationService.currentUserValue) {
       this.router.navigate(['/login']);
     }
+    this.authenticationService.currentUser.subscribe(
+      x => this.currentUser = x);
   }
 
   ngOnInit() {
@@ -38,7 +41,8 @@ export class BrandValidatorComponent implements OnInit {
     this.errors = new FormErrors();
     this.brandService.getAll().pipe(first()).subscribe(brands => {
       this.loading = false;
-      this.brands = brands.filter(x => x.validate || x.askValidate);
+      this.brands = brands.filter(x => x.validate || x.askValidate
+        || x.createdBy.id === this.currentUser.id);
     });
   }
   returnUrl(uri: string) {

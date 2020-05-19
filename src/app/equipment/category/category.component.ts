@@ -4,7 +4,7 @@ import { ViewChild, SimpleChange } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
 import { CategoryService } from '@app/_services/category.service';
-import { Category } from '@app/_models/';
+import { Category, User } from '@app/_models/';
 
 import { AuthenticationService } from '@app/_services';
 import { Router } from '@angular/router';
@@ -24,6 +24,7 @@ export class CategoryComponent implements OnInit {
   selected = undefined;
   interval: any;
   errors = new FormErrors();
+  currentUser: User;
 
   constructor(
     private router: Router,
@@ -33,6 +34,8 @@ export class CategoryComponent implements OnInit {
     if (!this.authenticationService.currentUserValue) {
       this.router.navigate(['/login']);
     }
+    this.authenticationService.currentUser.subscribe(
+      x => this.currentUser = x);
   }
 
   ngOnInit(): void {
@@ -40,9 +43,12 @@ export class CategoryComponent implements OnInit {
     this.service.getAll()
       .pipe(first())
       .subscribe(categories => {
-        this.categories = categories.filter(x => x.validate || x.askValidate);
+        this.categories = categories.filter(x => x.validate || x.askValidate
+          || x.createdBy.id === this.currentUser.id);
         this.categories.forEach(category => {
-          category.subCategories = category.subCategories.filter(x => x.validate || x.askValidate);
+          category.subCategories = category.subCategories.filter(
+            x => x.validate || x.askValidate
+            || x.createdBy.id === this.currentUser.id);
         });
         this.loading = false;
       });
