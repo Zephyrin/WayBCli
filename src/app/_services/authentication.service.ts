@@ -28,7 +28,7 @@ export class AuthenticationService {
     }
 
     registerLogin(token: any) {
-      let user : User;
+      let user: User;
       user = new User();
       user.token = token.token;
       this.currentUserSubject.next(user);

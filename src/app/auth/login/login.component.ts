@@ -50,22 +50,23 @@ export class LoginComponent implements OnInit {
     this.authenticationService.login(
       this.f.username.value,
       this.f.password.value)
-      .pipe(first())
       .subscribe(
         data => {
           this.authenticationService.getUser(this.f.username.value)
             .pipe(first())
             .subscribe(data2 => {
-              console.log(data2);
+            this.router.navigate([this.returnUrl]);
             }, error => {
-              console.error(error);
+              this.manageError(error);
             });
-          this.router.navigate([this.returnUrl]);
-
         },
         error => {
-          this.error = error;
-          this.loading = false;
+          console.error(error);
         });
+  }
+
+  manageError(error: any) {
+    this.error = error;
+    this.loading = false;
   }
 }
