@@ -1,6 +1,5 @@
 ﻿import { Routes, RouterModule } from '@angular/router';
 
-import { HomeComponent } from './home';
 import { LoginComponent } from './auth/login';
 import { AuthGuard } from './_helpers';
 import { RegisterComponent } from './auth/register/register.component';
@@ -11,9 +10,10 @@ import { BrandValidatorComponent } from './equipment/brand/brand-validator/brand
 import { CategoryValidatorComponent } from './equipment/category/category-validator/category-validator.component';
 import { BrandComponent } from './equipment/brand/brand/brand.component';
 import { EquipmentValidatorComponent } from './equipment/equipment/equipment-validator/equipment-validator.component';
+import { BackpackComponent } from './backpack/backpack/backpack.component';
 
 const routes: Routes = [
-    { path: '', component: HomeComponent, canActivate: [AuthGuard] },
+    { path: '', component: BackpackComponent, canActivate: [AuthGuard] },
     { path: 'login', component: LoginComponent },
     { path: 'register', component: RegisterComponent },
     { path: 'equipments', component: EquipmentComponent},

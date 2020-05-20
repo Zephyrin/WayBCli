@@ -35,6 +35,7 @@ import { SubCategoryValidatorComponent } from './equipment/sub-category/sub-cate
 import { BrandComponent } from './equipment/brand/brand/brand.component';
 import { EquipmentValidatorComponent } from './equipment/equipment/equipment-validator/equipment-validator.component';
 import { CharacteristicValidatorComponent } from './equipment/characteristic/characteristic-validator/characteristic-validator.component';
+import { BackpackComponent } from './backpack/backpack/backpack.component';
 
 @NgModule({
   imports: [
@@ -68,7 +69,8 @@ import { CharacteristicValidatorComponent } from './equipment/characteristic/cha
     SubCategoryValidatorComponent,
     BrandComponent,
     EquipmentValidatorComponent,
-    CharacteristicValidatorComponent],
+    CharacteristicValidatorComponent,
+    BackpackComponent],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
