@@ -14,9 +14,9 @@
   width: 100%;
 }
 
-a[aria-expanded=true] .fa-menu-close {
+button[aria-expanded=true] .fa-menu-close {
   display: none;
 }
-a[aria-expanded=false] .fa-menu-open {
+button[aria-expanded=false] .fa-menu-open {
   display: none;
 }
