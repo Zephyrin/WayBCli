@@ -5,12 +5,12 @@ export class Mediaobject {
   id: number;
   description: string;
   filePath: string;
-  private _image: SafeResourceUrl;
+  private img: SafeResourceUrl;
   get image(): SafeResourceUrl {
-    return this._image;
+    return this.img;
   }
   set image(image: SafeResourceUrl) {
-    this._image = image;
+    this.img = image;
     this.timeStamp = (new Date()).getTime();
   }
   timeStamp: number;

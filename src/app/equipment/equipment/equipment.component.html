@@ -60,7 +60,11 @@
           </p>
         </td>
         <td class="d-none d-sm-table-cell d-md-table-cell">
-          {{equipment.brand?.name || ''}}</td>
+          <img [src]="equipment.brand?.logo.url()"
+            *ngIf="equipment.brand?.logo.hasUrl() || false"
+            class="img-thumbnail rounded mx-auto d-block" />
+          <p *ngIf="!equipment.brand?.logo.hasUrl() || false">{{equipment.brand?.name || ''}}</p>
+        </td>
         <td class="d-none d-sm-table-cell d-md-table-cell">
           {{equipment.subCategory.name}}</td>
         <td class="">{{equipment.compute('weight')}}g</td>
