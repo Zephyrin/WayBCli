@@ -10,6 +10,7 @@ import { AuthenticationService } from '@app/_services';
 import { Router } from '@angular/router';
 import { BrandUpdateComponent } from '@app/equipment/brand/brand-update/brand-update.component';
 import { FormErrors } from '@app/_errors';
+import { environment } from '@environments/environment';
 
 @Component({
   selector: 'app-brand-validator',
@@ -80,5 +81,9 @@ export class BrandValidatorComponent implements OnInit {
         brand.validate = !brand.validate;
         this.loading = false;
       });
+  }
+
+  getLogoUrl(brand: Brand) {
+    return `${environment.mediaUrl}/${brand.logo.filePath}`;
   }
 }

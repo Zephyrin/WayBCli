@@ -6,3 +6,4 @@ export * from './category';
 export * from './sub-category';
 export * from './characteristic';
 export * from './have';
+export * from './mediaobject';

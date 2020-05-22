@@ -10,6 +10,7 @@ import { AuthenticationService } from '@app/_services';
 import { Router } from '@angular/router';
 import { BrandUpdateComponent } from '@app/equipment/brand/brand-update/brand-update.component';
 import { FormErrors } from '@app/_errors';
+import { environment } from '@environments/environment';
 
 @Component({
   selector: 'app-brand',
@@ -36,9 +37,9 @@ export class BrandComponent implements OnInit {
   ngOnInit() {
     this.loading = true;
     this.errors = new FormErrors();
-    this.brandService.getAll().pipe(first()).subscribe(brands => {
+    this.brandService.getAll().subscribe(brands => {
       this.loading = false;
-      this.brands = brands;
+      this.brands = brands.map(x => new Brand(x));
     });
   }
   returnUrl(uri: string) {
@@ -75,5 +76,9 @@ export class BrandComponent implements OnInit {
         brand.askValidate = !brand.askValidate;
         this.loading = false;
       });
+  }
+
+  getLogoUrl(brand: Brand) {
+    return `${environment.mediaUrl}/${brand.logo.filePath}`;
   }
 }

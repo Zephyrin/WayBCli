@@ -95,6 +95,54 @@
             </div>
           </div>
           <!-- End form URI -->
+          <!-- Form image -->
+          <div formGroupName="logo">
+            <div class="form-group row">
+              <div class="col-sm-2 col-form-label">
+                <img [src]="imageSrc"
+                     *ngIf="imageSrc"
+                     class="img-thumbnail rounded" />
+              </div>
+              <div class="col-sm-10">
+                <div class="btn-group"
+                     role="group"
+                     aria-label="Tools">
+                  <div class="custom-file">
+                    <input formControlName="filePathUser"
+                           type="file"
+                           id="customFile"
+                           class="custom-file-input"
+                           (change)="onFileChange($event)" />
+                    <label class="custom-file-label"
+                           for="customFile">Logo</label>
+                  </div>
+                  <button type="button"
+                          class="btn btn-light"
+                          (click)="deleteLogo()"><mat-icon>delete</mat-icon></button>
+                </div>
+              </div>
+            </div>
+            <div class="form-group row"
+                 *ngIf="imageSrc">
+              <label for="description"
+                     class="col-sm-2 col-form-label pointer">Image
+                description</label>
+              <div class="col-sm-10">
+                <input type="text"
+                       formControlName="description"
+                       (ngModelChange)="clearError('description')"
+                       class="form-control"
+                       [ngClass]="{ 'is-invalid': isSubmittedAndHasError('description')}" />
+                <div *ngIf="submitted && errors.hasErrors['description']">
+                  <div
+                       *ngFor="let child of errors.errors['description'].errors">
+                    {{child}}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- End form image -->
         </form>
       </div>
       <!-- Form Buttons -->

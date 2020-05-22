@@ -3,11 +3,15 @@ import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BrandService } from '@app/_services/brand.service';
-import { Brand } from '@app/_models/';
+import { MediaobjectService } from '@app/_services/media-object.service';
+
+import { Brand, Mediaobject } from '@app/_models/';
 
 import { AuthenticationService } from '@app/_services';
 import { Router } from '@angular/router';
 import { FormErrors } from '@app/_errors';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { environment } from '@environments/environment';
 
 declare var $: any;
 
@@ -32,11 +36,15 @@ export class BrandUpdateComponent implements OnInit {
   deleteError: string = undefined;
   deleteHasError = false;
 
+  imageSrc: SafeResourceUrl;
+
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
     private service: BrandService,
-    private authenticationService: AuthenticationService) {
+    private mediaService: MediaobjectService,
+    private authenticationService: AuthenticationService,
+    private domSanitizer: DomSanitizer) {
     if (!this.authenticationService.currentUserValue) {
       this.router.navigate(['/login']);
     }
@@ -53,7 +61,14 @@ export class BrandUpdateComponent implements OnInit {
     this.form = this.formBuilder.group({
       id: [''],
       name: ['', Validators.required],
-      uri: ['', Validators.pattern(urlRegex)]
+      uri: ['', Validators.pattern(urlRegex)],
+      logo: this.formBuilder.group({
+        id: [''],
+        filePathUser: [''],
+        filePath: [''],
+        image: [''],
+        description: ['']
+      })
     });
 
     this.loading = false;
@@ -71,7 +86,7 @@ export class BrandUpdateComponent implements OnInit {
   }
 
   isSubmittedAndHasError(name: string) {
-    return this.submitted && this.form
+    return this.submitted && this.form && this.form.controls[name]
       && (this.form.controls[name].errors || this.errors.hasErrors[name]);
   }
 
@@ -87,14 +102,19 @@ export class BrandUpdateComponent implements OnInit {
 
   update(brand: Brand) {
     this.selected = brand;
+    this.imageSrc = '';
     this.form.reset(new Brand());
     this.form.patchValue(this.selected);
     this.isCreateForm = false;
+    if (brand.logo && brand.logo.filePath) {
+      this.imageSrc = `${environment.mediaUrl}/${brand.logo.filePath}`;
+    }
   }
 
   create() {
     this.form.reset(new Brand());
     this.selected = new Brand();
+    this.imageSrc = '';
     this.form.patchValue(this.selected);
     this.isCreateForm = true;
   }
@@ -118,6 +138,55 @@ export class BrandUpdateComponent implements OnInit {
       return;
     }
     this.loading = true;
+    this.manageImg();
+
+  }
+
+  manageImg() {
+    const logo = this.form.value.logo;
+    if (!this.form.controls.logo.touched) {
+      this.manageBrand();
+    } else if (logo.id === null) {
+      if (logo.image !== null) {
+        this.mediaService.create(logo)
+          .subscribe(logoC => {
+            this.form.patchValue({ logo: { id: logoC.id } });
+            this.form.patchValue({ logo: { filePath: logoC.filePath } });
+            this.manageBrand();
+          }, (error: any) => {
+            this.endTransactionError(error);
+          });
+      } else {
+        this.manageBrand();
+      }
+    } else {
+      if (logo.filePath === null) {
+        this.form.value.logo = null;
+        // Logo will be delete during the update.
+        this.manageBrand();
+      } else {
+        this.mediaService.update(logo)
+          .subscribe(logoC => {
+            const re = /(?:\.([^.]+))?$/;
+
+            const ext = re.exec(logo.filePath)[1];
+            const reSrc = /data:image\/([a-zA-Z0-9]+)\+?.*,.*/;
+            const extSrc = reSrc.exec(logo.image)[1];
+            if (ext !== extSrc) {
+              this.mediaService.get(logo)
+                .subscribe(newLogo => {
+                  this.form.patchValue({ logo: { filePath: newLogo.filePath } });
+                  this.manageBrand();
+                });
+            } else { this.manageBrand(); }
+          }, (error: any) => {
+            this.endTransactionError(error);
+          });
+      }
+    }
+  }
+
+  manageBrand() {
     if (this.isCreateForm) {
       this.service.create(this.form.value)
         .subscribe(brand => {
@@ -131,10 +200,31 @@ export class BrandUpdateComponent implements OnInit {
       this.service.update(this.form.value)
         .subscribe(returnValue => {
           this.endTransaction();
-          Object.assign(this.selected, this.form.value);
+          this.selected.update(this.form.value);
         }, (error: any) => {
           this.endTransactionError(error);
         });
+    }
+  }
+  deleteLogo() {
+    this.imageSrc = '';
+    this.form.patchValue({ logo: { image: null } });
+    this.form.patchValue({ logo: { filePath: null } });
+    this.form.controls.logo.markAsTouched();
+  }
+  onFileChange(event) {
+    const reader = new FileReader();
+    if (event.target.files && event.target.files.length) {
+      const [file] = event.target.files;
+      this.imageSrc = '';
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        this.imageSrc = this.domSanitizer.bypassSecurityTrustResourceUrl(reader.result as string); // reader.result as string;
+        this.form.patchValue({
+          logo: { image: reader.result }
+        });
+        this.selected.logo.image = this.imageSrc;
+      };
     }
   }
 

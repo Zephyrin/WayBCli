@@ -30,9 +30,12 @@
       <tr *ngFor="let brand of brands"
           (click)="setSelected(brand)"
           (dblclick)="dblClick(brand)"
-          [class.active]="brand == selected"
-          class="pointer">
-        <td><b>{{brand.name}}</b>
+          [class.active]="brand == selected && canEditOrDelete(brand)"
+          [class.pointer]="canEditOrDelete(brand)">
+        <td><img *ngIf="brand.logo.hasUrl()"
+               [src]="brand.logo.url()"
+               [alt]="brand.logo.description"
+               class="rounded img-thumbnail" /><b>{{brand.name}}</b>
         </td>
         <td>
           <a [attr.href]="returnUrl(brand.uri)"
