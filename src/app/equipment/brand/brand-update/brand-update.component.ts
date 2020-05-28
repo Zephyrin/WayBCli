@@ -2,7 +2,7 @@ import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 
 import { ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { BrandService } from '@app/_services/brand.service';
+import { BrandService } from '@app/_services/brand/brand.service';
 import { MediaobjectService } from '@app/_services/media-object.service';
 
 import { Brand, Mediaobject } from '@app/_models/';

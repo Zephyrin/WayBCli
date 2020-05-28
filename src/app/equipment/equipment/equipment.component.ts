@@ -7,7 +7,7 @@ import { EquipmentService } from '@app/_services/equipment.service';
 import { Equipment } from '@app/_models/equipment';
 
 import { CategoryService } from '@app/_services/category.service';
-import { BrandService } from '@app/_services/brand.service';
+import { BrandService } from '@app/_services/brand/brand.service';
 
 import { Category } from '@app/_models/category';
 import { Brand } from '@app/_models/brand';

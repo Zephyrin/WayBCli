@@ -82,7 +82,8 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     const isAmbassador = this.currentUser
       && this.currentUser.roles
       && (this.currentUser.roles.indexOf(Role.Ambassador) !== -1
-        || this.currentUser.roles.indexOf(Role.Admin) !== -1);
+        || this.currentUser.roles.indexOf(Role.Admin) !== -1
+        || this.currentUser.roles.indexOf(Role.SuperAdmin) !== -1);
     return isAmbassador;
   }
 

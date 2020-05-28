@@ -1,16 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ViewChild } from '@angular/core';
 
-import { first } from 'rxjs/operators';
-
 import { Brand } from '@app/_models';
-import { BrandService } from '@app/_services/brand.service';
+import { BrandPaginationSearchService } from '@app/_services/brand/brand-pagination-search.service';
 
 import { AuthenticationService } from '@app/_services';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { BrandUpdateComponent } from '@app/equipment/brand/brand-update/brand-update.component';
-import { FormErrors } from '@app/_errors';
-import { environment } from '@environments/environment';
 
 @Component({
   selector: 'app-brand',
@@ -19,66 +15,26 @@ import { environment } from '@environments/environment';
 })
 export class BrandComponent implements OnInit {
   @ViewChild('brandModal', { static: false }) brandModal: BrandUpdateComponent;
-  loading = false;
-  brands: Brand[];
-  selected: Brand;
-  errors: FormErrors;
 
   constructor(
-    private brandService: BrandService,
     private router: Router,
-    private service: BrandService,
+    private route: ActivatedRoute,
+    protected service: BrandPaginationSearchService,
     private authenticationService: AuthenticationService) {
     if (!this.authenticationService.currentUserValue) {
-      this.router.navigate(['/login']);
+      this.router.navigate(['/login?returnUrl=brands']);
     }
   }
 
   ngOnInit() {
-    this.loading = true;
-    this.errors = new FormErrors();
-    this.brandService.getAll().subscribe(brands => {
-      this.loading = false;
-      this.brands = brands.map(x => new Brand(x));
+    this.route.queryParams.subscribe(params => {
+      this.service.init(this.router, this.route, params);
     });
-  }
-  returnUrl(uri: string) {
-    return /^http(s)?:\/\//.test(uri) ? uri : 'https://' + uri;
-  }
-  setSelected(brand: Brand) {
-    if (!this.loading) {
-      if (this.selected !== brand) {
-        this.selected = brand;
-        this.errors = new FormErrors();
-      }
-    }
-  }
-
-  canEditOrDelete(brand: Brand) {
-    return !brand.validate;
   }
 
   dblClick(brand: Brand) {
-    if (this.canEditOrDelete(brand)) {
+    if (this.service.canEditOrDelete(brand)) {
       this.brandModal.open(brand);
     }
-  }
-  updateAskValidate(brand: Brand) {
-    this.errors = new FormErrors();
-    this.setSelected(brand);
-    this.loading = true;
-    brand.askValidate = !brand.askValidate;
-    this.service.update(brand)
-      .subscribe(returnValue => {
-        this.loading = false;
-      }, (error: any) => {
-        this.errors.formatError(error);
-        brand.askValidate = !brand.askValidate;
-        this.loading = false;
-      });
-  }
-
-  getLogoUrl(brand: Brand) {
-    return `${environment.mediaUrl}/${brand.logo.filePath}`;
   }
 }

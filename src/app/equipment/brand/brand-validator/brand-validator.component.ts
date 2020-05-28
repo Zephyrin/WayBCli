@@ -4,13 +4,14 @@ import { ViewChild } from '@angular/core';
 import { first } from 'rxjs/operators';
 
 import { Brand, User } from '@app/_models';
-import { BrandService } from '@app/_services/brand.service';
+import { BrandService } from '@app/_services/brand/brand.service';
 
 import { AuthenticationService } from '@app/_services';
 import { Router } from '@angular/router';
 import { BrandUpdateComponent } from '@app/equipment/brand/brand-update/brand-update.component';
 import { FormErrors } from '@app/_errors';
 import { environment } from '@environments/environment';
+import { HttpParams } from '@angular/common/http';
 
 @Component({
   selector: 'app-brand-validator',
@@ -40,9 +41,9 @@ export class BrandValidatorComponent implements OnInit {
   ngOnInit() {
     this.loading = true;
     this.errors = new FormErrors();
-    this.brandService.getAll().pipe(first()).subscribe(brands => {
+    this.brandService.getAll(new HttpParams()).pipe(first()).subscribe(brands => {
       this.loading = false;
-      this.brands = brands.filter(x => x.validate || x.askValidate
+      this.brands = brands.body.filter(x => x.validate || x.askValidate
         || x.createdBy.id === this.currentUser.id);
     });
   }

@@ -7,7 +7,7 @@ import { first, filter } from 'rxjs/operators';
 import { EquipmentService } from '@app/_services/equipment.service';
 import { Equipment } from '@app/_models/equipment';
 
-import { BrandService } from '@app/_services/brand.service';
+import { BrandService } from '@app/_services/brand/brand.service';
 
 import { Category } from '@app/_models/category';
 import { SubCategory } from '@app/_models/sub-category';
@@ -18,6 +18,7 @@ import { AuthenticationService } from '@app/_services';
 import { Router } from '@angular/router';
 import { FormErrors } from '@app/_errors';
 import { CharacteristicUpdateComponent } from '@app/equipment/characteristic/characteristic-update/characteristic-update.component';
+import { HttpParams } from '@angular/common/http';
 
 declare var $: any;
 
@@ -90,10 +91,10 @@ export class EquipmentUpdateComponent implements OnInit {
   ngOnInit(): void {
     this.deleteHasError = false;
     this.loading = true;
-    this.brandService.getAll()
+    this.brandService.getAll(new HttpParams())
       .pipe(first())
       .subscribe(brands => {
-        this.brands = brands;
+        this.brands = brands.body;
         this.loading = false;
       });
 

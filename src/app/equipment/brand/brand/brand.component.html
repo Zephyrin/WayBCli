@@ -1,19 +1,21 @@
 <div
      class="table-responsive-sm table-responsive-md table-responsive-lg table-responsive-xl">
-  <div *ngIf="errors.hasFatalError"
+  <div *ngIf="service.errors.hasFatalError"
        class="alert alert-danger">
-    <div [innerHTML]="errors.fatalError"></div>
+    <div [innerHTML]="service.errors.fatalError"></div>
   </div>
-  <div *ngIf="errors.hasMessage"
+  <div *ngIf="service.errors.hasMessage"
        class="alert alert-warning">
-    <div>{{errors.message}}</div>
+    <div>{{service.errors.message}}</div>
   </div>
-  <div *ngIf="errors.hasErrors['validate']">
-    <div *ngFor="let child of errors.errors['name'].errors">
+  <div *ngIf="service.errors.hasErrors['validate']">
+    <div *ngFor="let child of service.errors.errors['name'].errors">
       {{child}}
     </div>
   </div>
-  <fieldset [disabled]="loading">
+  <app-brand-filter></app-brand-filter>
+  <fieldset [disabled]="service.loading">
+    <app-pagination [pagination]="service"></app-pagination>
     <table class="table">
       <thead>
         <tr>
@@ -27,18 +29,18 @@
           <th scope="col">Action</th>
         </tr>
       </thead>
-      <tr *ngFor="let brand of brands"
-          (click)="setSelected(brand)"
+      <tr *ngFor="let brand of service.brands"
+          (click)="service.setSelected(brand)"
           (dblclick)="dblClick(brand)"
-          [class.active]="brand == selected && canEditOrDelete(brand)"
-          [class.pointer]="canEditOrDelete(brand)">
-        <td><img *ngIf="brand.logo.hasUrl()"
+          [class.active]="brand == service.selected && service.canEditOrDelete(brand)"
+          [class.pointer]="service.canEditOrDelete(brand)">
+        <td><img *ngIf="brand.logo && brand.logo.hasUrl()"
                [src]="brand.logo.url()"
                [alt]="brand.logo.description"
                class="rounded img-thumbnail" /><b>{{brand.name}}</b>
         </td>
         <td>
-          <a [attr.href]="returnUrl(brand.uri)"
+          <a [attr.href]="service.returnUrl(brand.uri)"
              target="_blank"
              rel="noopener noreferrer">{{brand.uri}}</a>
         </td>
@@ -48,7 +50,7 @@
               <div class="btn-group"
                    role="group"
                    aria-label="Tools"
-                   *ngIf="canEditOrDelete(brand)">
+                   *ngIf="service.canEditOrDelete(brand)">
                 <button type="button"
                         class="btn btn-light"
                         data-toggle="modal"
@@ -62,9 +64,9 @@
                   <mat-icon>delete</mat-icon>
                 </button>
                 <app-switch [value]="brand.askValidate"
-                            [disabled]="loading"
-                            (isChecked)="updateAskValidate(brand)"></app-switch>
-                <span *ngIf="loading && selected === brand"
+                            [disabled]="service.loading"
+                            (isChecked)="service.updateAskValidate(brand)"></app-switch>
+                <span *ngIf="service.loading && service.selected === brand"
                       class="spinner-border spinner-border-sm mr-1"></span>
               </div>
             </div>
@@ -72,20 +74,21 @@
         </td>
       </tr>
     </table>
+    <app-pagination [pagination]="service"></app-pagination>
   </fieldset>
-  <div *ngIf="errors.hasFatalError"
+  <div *ngIf="service.errors.hasFatalError"
        class="alert alert-danger">
-    <div [innerHTML]="errors.fatalError"></div>
+    <div [innerHTML]="service.errors.fatalError"></div>
   </div>
-  <div *ngIf="errors.hasMessage"
+  <div *ngIf="service.errors.hasMessage"
        class="alert alert-warning">
-    <div>{{errors.message}}</div>
+    <div>{{service.errors.message}}</div>
   </div>
-  <div *ngIf="errors.hasErrors['validate']">
-    <div *ngFor="let child of errors.errors['name'].errors">
+  <div *ngIf="service.errors.hasErrors['validate']">
+    <div *ngFor="let child of service.errors.errors['name'].errors">
       {{child}}
     </div>
   </div>
 </div>
 <app-brand-update #brandModal
-                  [brands]="brands"></app-brand-update>
+                  [brands]="service.brands"></app-brand-update>

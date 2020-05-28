@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { catchError, retry } from 'rxjs/operators';
+import { HttpParams } from '@angular/common/http';
 
 import { environment } from '@environments/environment';
 import { Brand } from '@app/_models';
@@ -12,10 +13,15 @@ import { Brand } from '@app/_models';
 })
 export class BrandService {
 
-  constructor(private http: HttpClient) { }
+  constructor(
+    private http: HttpClient,
+    ) { }
 
-  getAll() {
-    return this.http.get<Brand[]>(`${environment.apiUrl}/brand`);
+  getAll(httpParams: HttpParams) {
+    return this.http.get<Brand[]>(
+      `${environment.apiUrl}/brand`
+      , { params: httpParams, observe: 'response' }
+      );
   }
 
   create(brand: Brand): Observable<Brand> {
@@ -26,7 +32,9 @@ export class BrandService {
   }
 
   update(brand: Brand): Observable<Brand> {
-    return this.http.put<Brand>(`${environment.apiUrl}/brand/${brand.id}`, brand);
+    return this.http.put<Brand>(
+      `${environment.apiUrl}/brand/${brand.id}`
+      , brand);
   }
 
   delete(brand: Brand): Observable<{}> {

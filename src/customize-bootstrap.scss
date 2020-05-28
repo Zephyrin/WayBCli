@@ -96,3 +96,9 @@ border-radius: 6px 0 6px 6px;
 .img-thumbnail {
   max-height: 50px;
 }
+
+/* Align last column of table to the right */
+tbody tr td:last-child {
+  white-space: nowrap;
+  width: 1%
+}
