@@ -21,6 +21,36 @@ export abstract class PaginationAndParamsService {
   abstract changePage(): void;
 
   /**
+   * Add elt into the list. You have to call add() to update the pagination
+   * system.
+   * @param elt the element that has been added
+   */
+  abstract addElement(elt: any): void;
+
+  /**
+   * Delete elt from the list. You have to call delete() to update the
+   *  pagination system.
+   * @param elt the element that has been deleted
+   */
+  abstract deleteElement(elt: any): void;
+
+  /**
+   * Add something to the list
+   */
+  protected add() {
+    this.pagination.paginationCount ++;
+    this.pagination.totalCount ++;
+  }
+
+  /**
+   * Delete something to the list.
+   */
+  protected delete() {
+    this.pagination.paginationCount --;
+    this.pagination.totalCount --;
+  }
+
+  /**
    * Define pagination parameters from url parameters.
    *
    * {Params} params is given via this.route.queryParams.subscribe(params) in ngOnInit
@@ -59,7 +89,10 @@ export abstract class PaginationAndParamsService {
    *
    * @param response The response of HTTP whit get pagination information
    */
-  setParametersFromResponse(headers: HttpHeaders) {
+  setParametersFromResponse(
+    headers: HttpHeaders,
+    router: Router,
+    activatedRoute: ActivatedRoute) {
     this.isInit = true;
     let ret = headers.get('X-Total-Count');
     this.pagination.totalCount = parseInt(ret === null ? '0' : ret, 10);
@@ -72,6 +105,8 @@ export abstract class PaginationAndParamsService {
     this.pagination.lastPage = Math.ceil(
       this.pagination.totalCount / this.pagination.paginationLimit
     );
+    const httpParams = this.getHttpParameters();
+    this.paramsIntoUrl(httpParams, router, activatedRoute);
     this.isInit = false;
   }
 
@@ -119,6 +154,9 @@ export abstract class PaginationAndParamsService {
     }
   }
 
+  /**
+   * Set page to the first.
+   */
   goToFirst() {
     if (this.pagination.paginationPage !== this.pagination.firstPage) {
       this.pagination.paginationPage = this.pagination.firstPage;
@@ -132,6 +170,8 @@ export abstract class PaginationAndParamsService {
     this.pagination.paginationPage--;
     if (this.pagination.paginationPage < this.pagination.firstPage) {
       this.pagination.paginationPage = this.pagination.firstPage;
+    } else if (this.pagination.paginationPage > this.pagination.lastPage) {
+      this.pagination.paginationPage = this.pagination.lastPage;
     } else {
       if (!this.isInit) { this.changePage(); }
     }
@@ -144,11 +184,13 @@ export abstract class PaginationAndParamsService {
    * @param page the new page of pagination.
    */
   goTo(page: number) {
-    if (page >= this.pagination.firstPage && page <= this.pagination.lastPage) {
+    if (!this.isInit && page >= this.pagination.firstPage && page <= this.pagination.lastPage) {
       if (this.pagination.paginationPage !== page) {
         this.pagination.paginationPage = page;
         if (!this.isInit) { this.changePage(); }
       }
+    } else {
+      this.pagination.paginationPage = page;
     }
   }
 
@@ -164,6 +206,9 @@ export abstract class PaginationAndParamsService {
     }
   }
 
+  /**
+   * Set page to the last.
+   */
   goToLast() {
     if (this.pagination.paginationPage < this.pagination.lastPage) {
       this.pagination.paginationPage = this.pagination.lastPage;
@@ -176,7 +221,7 @@ export abstract class PaginationAndParamsService {
    * page 3 with a limit of 10, then you already got 20 records.
    */
   posBeginCount() {
-    return (this.pagination.paginationPage - 1) * this.pagination.paginationLimit + 1;
+    return (this.page() - 1) * this.limit() + 1;
   }
 
   /**
@@ -184,11 +229,10 @@ export abstract class PaginationAndParamsService {
    * number of record of current page.
    */
   posEndCount() {
-    const ret = this.posBeginCount() - 1 + this.pagination.paginationCount;
-    if (ret > this.total()) {
+    if (this.pagination.paginationCount > this.total()) {
       return this.total();
     }
-    return ret;
+    return this.pagination.paginationCount;
   }
 
   isFirst() {

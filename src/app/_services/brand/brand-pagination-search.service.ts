@@ -90,7 +90,7 @@ export class BrandPaginationSearchService extends PaginationAndParamsService {
     this.paramsIntoUrl(httpParams, this.router, this.route);
     this.service.getAll(httpParams).subscribe(brands => {
       this.loading = false;
-      this.setParametersFromResponse(brands.headers);
+      this.setParametersFromResponse(brands.headers, this.router, this.route);
       this.brands = brands.body.map(x => new Brand(x));
     });
   }
@@ -129,5 +129,18 @@ export class BrandPaginationSearchService extends PaginationAndParamsService {
 
   canEditOrDelete(brand: Brand) {
     return !brand.validate;
+  }
+
+  addElement(brand) {
+    this.brands.push(brand);
+    super.add();
+  }
+
+  deleteElement(brand: Brand) {
+    const index = this.brands.indexOf(brand);
+    if (index >= 0) {
+      this.brands.splice(index, 1);
+      super.delete();
+    }
   }
 }

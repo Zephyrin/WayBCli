@@ -12,6 +12,7 @@ import { Router } from '@angular/router';
 import { FormErrors } from '@app/_errors';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { environment } from '@environments/environment';
+import { BrandPaginationSearchService } from '@app/_services/brand/brand-pagination-search.service';
 
 declare var $: any;
 
@@ -23,8 +24,8 @@ declare var $: any;
 export class BrandUpdateComponent implements OnInit {
   @ViewChild('modal', { static: true }) modal;
   @ViewChild('deleteModal', { static: true }) deleteModal;
-  @Input() brands: Brand[];
   @Output() added = new EventEmitter<Brand>();
+  @Input() brandService: BrandPaginationSearchService;
 
   form: FormGroup;
   isCreateForm: boolean;
@@ -191,7 +192,7 @@ export class BrandUpdateComponent implements OnInit {
       this.service.create(this.form.value)
         .subscribe(brand => {
           this.endTransaction();
-          this.brands.push(brand);
+          this.brandService.addElement(brand);
           this.added.emit(brand);
         }, (error: any) => {
           this.endTransactionError(error);
@@ -253,8 +254,7 @@ export class BrandUpdateComponent implements OnInit {
 
   _delete(deleteValue: Brand) {
     this.endTransactionError(undefined);
-    const index = this.brands.indexOf(deleteValue);
-    this.brands.splice(index, 1);
+    this.brandService.deleteElement(deleteValue);
     this.loading = false;
     this.selected = null;
   }
