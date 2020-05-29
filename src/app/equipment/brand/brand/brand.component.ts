@@ -7,6 +7,7 @@ import { BrandPaginationSearchService } from '@app/_services/brand/brand-paginat
 import { AuthenticationService } from '@app/_services';
 import { Router, ActivatedRoute } from '@angular/router';
 import { BrandUpdateComponent } from '@app/equipment/brand/brand-update/brand-update.component';
+import { SortEnum, SortByEnum } from '@app/_enums/brand.enum';
 
 @Component({
   selector: 'app-brand',
@@ -25,6 +26,9 @@ export class BrandComponent implements OnInit {
       this.router.navigate(['/login?returnUrl=brands']);
     }
   }
+
+  get sortEnum() { return SortEnum; }
+  get sortByEnum() { return SortByEnum; }
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {

@@ -7,7 +7,7 @@ import { BrandService } from './brand.service';
 import { Brand } from '@app/_models';
 import { FormErrors } from '@app/_errors';
 import { environment } from '@environments/environment';
-import { sortEnum, sortByEnum, booleanEnum } from '@app/_enums/brand.enum';
+import { SortEnum, SortByEnum, BooleanEnum } from '@app/_enums/brand.enum';
 
 @Injectable({
   providedIn: 'root'
@@ -19,10 +19,10 @@ export class BrandPaginationSearchService extends PaginationAndParamsService {
   public loading = false;
 
   /* Search */
-  public sort = sortEnum.asc;
-  public sortBy = sortByEnum.name;
-  public validate = booleanEnum.undefined;
-  public askValidate = booleanEnum.undefined;
+  public sort = SortEnum.asc;
+  public sortBy = SortByEnum.name;
+  public validate = BooleanEnum.undefined;
+  public askValidate = BooleanEnum.undefined;
   public search = '';
 
   /* Route and router for URL */
@@ -33,31 +33,47 @@ export class BrandPaginationSearchService extends PaginationAndParamsService {
     super();
   }
 
+  sortByOrOrient(sortByEnum: SortByEnum) {
+    if (this.sortBy === sortByEnum) {
+      switch (this.sort) {
+        case SortEnum.asc:
+          this.sort = SortEnum.desc;
+          break;
+        case SortEnum.desc:
+          this.sort = SortEnum.asc;
+          break;
+      }
+    } else {
+      this.sortBy = sortByEnum;
+    }
+    this.changePage();
+  }
+
   setDefaultParamsFormUrl(params: Params) {
     super.setDefaultParamsFromUrl(params);
     if (params.hasOwnProperty('sort')) {
-      if (Object.values(sortEnum).includes(params.sort)) {
+      if (Object.values(SortEnum).includes(params.sort)) {
         this.sort = params.sort;
-      } else { this.sort = sortEnum.asc; }
-    } else { this.sort = sortEnum.asc; }
+      } else { this.sort = SortEnum.asc; }
+    } else { this.sort = SortEnum.asc; }
 
     if (params.hasOwnProperty('sortBy')) {
-      if (Object.values(sortByEnum).includes(params.sortBy)) {
+      if (Object.values(SortByEnum).includes(params.sortBy)) {
         this.sortBy = params.sortBy;
-      } else { this.sortBy = sortByEnum.name; }
-    } else { this.sortBy = sortByEnum.name; }
+      } else { this.sortBy = SortByEnum.name; }
+    } else { this.sortBy = SortByEnum.name; }
 
     if (params.hasOwnProperty('validate')) {
-      if (Object.values(booleanEnum).includes(params.validate)) {
+      if (Object.values(BooleanEnum).includes(params.validate)) {
         this.validate = params.validate;
-      } else { this.validate = booleanEnum.undefined; }
-    } else { this.validate = booleanEnum.undefined; }
+      } else { this.validate = BooleanEnum.undefined; }
+    } else { this.validate = BooleanEnum.undefined; }
 
     if (params.hasOwnProperty('askValidate')) {
-      if (Object.values(booleanEnum).includes(params.askValidate)) {
+      if (Object.values(BooleanEnum).includes(params.askValidate)) {
         this.askValidate = params.askValidate;
-      } else { this.askValidate = booleanEnum.undefined; }
-    } else { this.askValidate = booleanEnum.undefined; }
+      } else { this.askValidate = BooleanEnum.undefined; }
+    } else { this.askValidate = BooleanEnum.undefined; }
 
     if (params.hasOwnProperty('search')) {
       this.search = params.search;
@@ -69,6 +85,20 @@ export class BrandPaginationSearchService extends PaginationAndParamsService {
     this.router = router;
     this.errors = new FormErrors();
     this.setDefaultParamsFromUrl(params);
+    if (params && params.hasOwnProperty('sort')) {
+      if (Object.values(SortEnum).includes(params.sort)) {
+        this.sort = params.sort;
+      } else { this.sort = SortEnum.asc; }
+    } else {
+      this.sort = SortEnum.asc;
+    }
+    if (params && params.hasOwnProperty('sortBy')) {
+      if (Object.values(SortByEnum).includes(params.sortBy)) {
+        this.sortBy = params.sortBy;
+      } else { this.sortBy = SortByEnum.name; }
+    } else {
+      this.sortBy = SortByEnum.name;
+    }
     this.changePage();
   }
 
@@ -78,10 +108,10 @@ export class BrandPaginationSearchService extends PaginationAndParamsService {
     let httpParams = this.getHttpParameters();
     httpParams = httpParams.append('sort', this.sort);
     httpParams = httpParams.append('sortBy', this.sortBy);
-    if (this.validate !== booleanEnum.undefined) {
+    if (this.validate !== BooleanEnum.undefined) {
       httpParams = httpParams.append('validate', this.validate);
     }
-    if (this.askValidate !== booleanEnum.undefined) {
+    if (this.askValidate !== BooleanEnum.undefined) {
       httpParams = httpParams.append('askValidate', this.askValidate);
     }
     if (this.search !== '') {

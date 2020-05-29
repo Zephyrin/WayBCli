@@ -15,18 +15,52 @@
   </div>
   <app-brand-filter></app-brand-filter>
   <fieldset [disabled]="service.loading">
-    <app-pagination [pagination]="service"></app-pagination>
+    <div class="d-flex justify-content-between">
+      <button class="btn btn-light"
+              (click)="brandModal.open()">
+        <mat-icon>add</mat-icon>
+      </button>
+      <app-pagination [pagination]="service"></app-pagination>
+    </div>
     <table class="table">
       <thead>
         <tr>
-          <th scope="col">
-            <button class="btn btn-light"
-                    (click)="brandModal.open()">
-              <mat-icon>add</mat-icon>Name
-            </button>
+          <th scope="col"
+              class="col-md-5 pointer"
+              (click)="service.sortByOrOrient(sortByEnum.name)">
+            <div class="d-flex">Name
+              <div *ngIf="service.sortBy === sortByEnum.name">
+                <mat-icon *ngIf="service.sort === sortEnum.asc">arrow_drop_down
+                </mat-icon>
+                <mat-icon *ngIf="service.sort === sortEnum.desc">arrow_drop_up
+                </mat-icon>
+              </div>
+            </div>
           </th>
-          <th scope="col">URL</th>
-          <th scope="col">Action</th>
+          <th scope="col"
+              class="col-md-6 pointer"
+              (click)="service.sortByOrOrient(sortByEnum.uri)">
+            <div class="d-flex">URL
+              <div *ngIf="service.sortBy === sortByEnum.uri">
+                <mat-icon *ngIf="service.sort === sortEnum.asc">arrow_drop_down
+                </mat-icon>
+                <mat-icon *ngIf="service.sort === sortEnum.desc">arrow_drop_up
+                </mat-icon>
+              </div>
+            </div>
+          </th>
+          <th scope="col"
+              class="col-md-1 pointer"
+              (click)="service.sortByOrOrient(sortByEnum.askValidate)">
+            <div class="d-flex justify-content-center">Action
+              <div *ngIf="service.sortBy === sortByEnum.askValidate">
+                <mat-icon *ngIf="service.sort === sortEnum.asc">arrow_drop_down
+                </mat-icon>
+                <mat-icon *ngIf="service.sort === sortEnum.desc">arrow_drop_up
+                </mat-icon>
+              </div>
+            </div>
+          </th>
         </tr>
       </thead>
       <tr *ngFor="let brand of service.brands"
@@ -65,7 +99,8 @@
                 </button>
                 <app-switch [value]="brand.askValidate"
                             [disabled]="service.loading"
-                            (isChecked)="service.updateAskValidate(brand)"></app-switch>
+                            (isChecked)="service.updateAskValidate(brand)">
+                </app-switch>
                 <span *ngIf="service.loading && service.selected === brand"
                       class="spinner-border spinner-border-sm mr-1"></span>
               </div>
