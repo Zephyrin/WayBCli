@@ -72,6 +72,10 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     $('main').css('padding-bottom', height);
   }
 
+  get pathname() {
+    return window.location.pathname;
+  }
+
   get isAdmin() {
     return this.currentUser
       && this.currentUser.roles

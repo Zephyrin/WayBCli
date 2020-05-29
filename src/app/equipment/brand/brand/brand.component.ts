@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { ViewChild } from '@angular/core';
 
 import { Brand } from '@app/_models';
@@ -16,6 +16,7 @@ import { SortEnum, SortByEnum } from '@app/_enums/brand.enum';
 })
 export class BrandComponent implements OnInit {
   @ViewChild('brandModal', { static: false }) brandModal: BrandUpdateComponent;
+  @Input() isValidator = false;
 
   constructor(
     private router: Router,
@@ -24,6 +25,9 @@ export class BrandComponent implements OnInit {
     private authenticationService: AuthenticationService) {
     if (!this.authenticationService.currentUserValue) {
       this.router.navigate(['/login?returnUrl=brands']);
+    }
+    if (window.location.pathname === '/brandsValidator') {
+      this.isValidator = true;
     }
   }
 

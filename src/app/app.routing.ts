@@ -20,7 +20,7 @@ const routes: Routes = [
     { path: 'users', component: UserComponent},
     { path: 'categories', component: CategoryComponent},
     { path: 'brands', component: BrandComponent },
-    { path: 'brandsValidator', component: BrandValidatorComponent },
+    { path: 'brandsValidator', component: BrandComponent },
     { path: 'categoriesValidator', component: CategoryValidatorComponent},
     { path: 'equipmentsValidator', component: EquipmentValidatorComponent},
 

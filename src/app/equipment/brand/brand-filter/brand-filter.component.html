@@ -1,15 +1,16 @@
-<div class="d-flex align-items-center">
+<div class="d-flex d-sm-flex flex-column flex-sm-row align-items-sm-center align-items-right">
   <div (click)="changeValidate()"
-       class="pointer checkbox">
+       class="pointer checkbox d-flex align-items-right">
     <mat-icon *ngIf="service.validate === booleanEnum.false">
       check_box_outline_blank</mat-icon>
-    <mat-icon *ngIf="service.validate === booleanEnum.true">check_box</mat-icon>
+    <mat-icon *ngIf="service.validate === booleanEnum.true">check_box
+    </mat-icon>
     <mat-icon *ngIf="service.validate === booleanEnum.undefined">
       indeterminate_check_box</mat-icon>
     Validate
   </div>
   <div (click)="changeAskValidation()"
-       class="pointer checkbox">
+       class="pointer checkbox d-flex align-items-right">
     <mat-icon *ngIf="service.askValidate === booleanEnum.false">
       check_box_outline_blank</mat-icon>
     <mat-icon *ngIf="service.askValidate === booleanEnum.true">check_box
@@ -25,6 +26,7 @@
            id="searchText"
            #searchText
            type="search"
+           [(ngModel)]="service.search"
            placeholder="Search"
            aria-label="Search">
     <button for="searchText"

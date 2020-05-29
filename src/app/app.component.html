@@ -17,7 +17,7 @@
          width="20" /> Hey {{currentUser.username | titlecase}}, Way.B ?
   </a>
   <span class="form-inline">
-
+    <!-- Equipment filter for sm device -->
     <a class="navbar-toggler topright d-block d-sm-none"
        type="button"
        data-toggle="collapse"
@@ -28,14 +28,27 @@
        *ngIf="router && router.url === '/equipments'">
       <mat-icon>search</mat-icon>
     </a>
-    <button class="navbar-toggler"
+    <!-- End Equipment filter for sm device -->
+    <!-- Brand filter for sm device -->
+    <a class="navbar-toggler topright d-block d-sm-none"
        type="button"
        data-toggle="collapse"
-       data-target="#navbarNavDropdown"
-       aria-controls="navbarNavDropdown"
+       data-target="#filterBrandNavDropdown"
+       aria-controls="filterBrandNavDropdown"
        aria-expanded="false"
-       aria-label="Toggle navigation">
-       <mat-icon class="fa-menu-close">menu</mat-icon>
+       aria-label="Toggle filter"
+       *ngIf="pathname === '/brands' || pathname === '/brandsValidator'">
+      <mat-icon>search</mat-icon>
+    </a>
+    <!-- End Brand filter for sm device -->
+    <button class="navbar-toggler"
+            type="button"
+            data-toggle="collapse"
+            data-target="#navbarNavDropdown"
+            aria-controls="navbarNavDropdown"
+            aria-expanded="false"
+            aria-label="Toggle navigation">
+      <mat-icon class="fa-menu-close">menu</mat-icon>
       <mat-icon class="fa-menu-open">drag_handle</mat-icon>
     </button>
   </span>

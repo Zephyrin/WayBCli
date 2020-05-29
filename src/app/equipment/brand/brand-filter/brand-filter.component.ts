@@ -16,12 +16,6 @@ export class BrandFilterComponent implements OnInit {
   @ViewChild('searchText', { static: false }) searchText: ElementRef;
   @ViewChild('askValidationBtn', { static: false }) askValidationBtn: ElementRef;
   @Input() service: BrandPaginationSearchService;
-  /* set service(service: BrandPaginationSearchService) {
-    this.serviceP = service;
-  }
-  get service() {
-    return this.serviceP;
-  } */
 
   searchForm: FormGroup;
 

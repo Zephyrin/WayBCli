@@ -34,18 +34,8 @@ export class BrandPaginationSearchService extends PaginationAndParamsService {
   }
 
   setSearch(text: string) {
-    const tt = text.trim();
-    if (tt.trim() !== '') {
-      if (tt !== this.search) {
-        this.search = tt;
-        this.changePage();
-      }
-    } else {
-      if (this.search !== '') {
-        this.search = '';
-        this.changePage();
-      }
-    }
+    this.search = text.trim();
+    this.changePage();
   }
 
   private filterBoolean(bool: BooleanEnum) {
@@ -200,6 +190,21 @@ export class BrandPaginationSearchService extends PaginationAndParamsService {
       }, (error: any) => {
         this.errors.formatError(error);
         brand.askValidate = !brand.askValidate;
+        this.loading = false;
+      });
+  }
+
+  updateValidate(brand: Brand) {
+    this.errors = new FormErrors();
+    this.setSelected(brand);
+    this.loading = true;
+    brand.validate = !brand.validate;
+    this.service.update(brand)
+      .subscribe(returnValue => {
+        this.loading = false;
+      }, (error: any) => {
+        this.errors.formatError(error);
+        brand.validate = !brand.validate;
         this.loading = false;
       });
   }

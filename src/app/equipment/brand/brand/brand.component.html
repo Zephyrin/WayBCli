@@ -14,12 +14,21 @@
     </div>
   </div>
   <fieldset [disabled]="service.loading">
-    <div class="d-flex justify-content-between">
+    <nav
+         class="navbar navbar-expand-md navbar-light bg-light d-block d-sm-none">
+      <div class="navbar-collapse collapse"
+           id="filterBrandNavDropdown">
+        <app-brand-filter [service]="service"></app-brand-filter>
+      </div>
+    </nav>
+    <div class="d-flex justify-content-between align-items-center">
       <button class="btn btn-light"
+              *ngIf="!isValidator"
               (click)="brandModal.open()">
         <mat-icon>add</mat-icon>
       </button>
-      <app-brand-filter [service]="service"></app-brand-filter>
+      <app-brand-filter [service]="service"
+                        class="d-none d-sm-block"></app-brand-filter>
       <app-pagination [pagination]="service"></app-pagination>
     </div>
     <table class="table">
@@ -38,7 +47,7 @@
             </div>
           </th>
           <th scope="col"
-              class="col-md-6 pointer"
+              class="col-md-5 pointer"
               (click)="service.sortByOrOrient(sortByEnum.uri)">
             <div class="d-flex">URL
               <div *ngIf="service.sortBy === sortByEnum.uri">
@@ -51,9 +60,28 @@
           </th>
           <th scope="col"
               class="col-md-1 pointer"
+              *ngIf="isValidator"
               (click)="service.sortByOrOrient(sortByEnum.askValidate)">
-            <div class="d-flex justify-content-center">Action
+            <div class="d-flex justify-content-center">Ask validation
               <div *ngIf="service.sortBy === sortByEnum.askValidate">
+                <mat-icon *ngIf="service.sort === sortEnum.asc">arrow_drop_down
+                </mat-icon>
+                <mat-icon *ngIf="service.sort === sortEnum.desc">arrow_drop_up
+                </mat-icon>
+              </div>
+            </div>
+          </th>
+          <th scope="col"
+              class="col-md-1 pointer"
+              (click)="service.sortByOrOrient(isValidator ? sortByEnum.validate : sortByEnum.askValidate)">
+            <div class="d-flex justify-content-center">Action
+              <div *ngIf="!isValidator && service.sortBy === sortByEnum.askValidate">
+                <mat-icon *ngIf="service.sort === sortEnum.asc">arrow_drop_down
+                </mat-icon>
+                <mat-icon *ngIf="service.sort === sortEnum.desc">arrow_drop_up
+                </mat-icon>
+              </div>
+              <div *ngIf="isValidator && service.sortBy === sortByEnum.validate">
                 <mat-icon *ngIf="service.sort === sortEnum.asc">arrow_drop_down
                 </mat-icon>
                 <mat-icon *ngIf="service.sort === sortEnum.desc">arrow_drop_up
@@ -78,6 +106,12 @@
              target="_blank"
              rel="noopener noreferrer">{{brand.uri}}</a>
         </td>
+        <td *ngIf="isValidator">
+          <app-switch [value]="brand.askValidate"
+                      [disabled]="true"
+                      >
+          </app-switch>
+        </td>
         <td>
           <div class="col">
             <div>
@@ -99,8 +133,13 @@
                 </button>
                 <app-switch [value]="brand.askValidate"
                             [disabled]="service.loading"
-                            (isChecked)="service.updateAskValidate(brand)">
+                            (isChecked)="service.updateAskValidate(brand)"
+                            *ngIf="!isValidator">
                 </app-switch>
+                <app-switch [value]="brand.validate"
+                            [disabled]="service.loading"
+                            (isChecked)="service.updateValidate(brand)"
+                            *ngIf="isValidator"></app-switch>
                 <span *ngIf="service.loading && service.selected === brand"
                       class="spinner-border spinner-border-sm mr-1"></span>
               </div>

@@ -1,19 +1,19 @@
 <div
      class="table-responsive-sm table-responsive-md table-responsive-lg table-responsive-xl">
-  <div *ngIf="errors.hasFatalError"
+  <div *ngIf="service.errors.hasFatalError"
        class="alert alert-danger">
-    <div [innerHTML]="errors.fatalError"></div>
+    <div [innerHTML]="service.errors.fatalError"></div>
   </div>
-  <div *ngIf="errors.hasMessage"
+  <div *ngIf="service.errors.hasMessage"
        class="alert alert-warning">
-    <div>{{errors.message}}</div>
+    <div>{{service.errors.message}}</div>
   </div>
-  <div *ngIf="errors.hasErrors['validate']">
-    <div *ngFor="let child of errors.errors['name'].errors">
+  <div *ngIf="service.errors.hasErrors['validate']">
+    <div *ngFor="let child of service.errors.errors['name'].errors">
       {{child}}
     </div>
   </div>
-  <fieldset [disabled]="loading">
+  <fieldset [disabled]="service.loading">
     <table class="table">
       <thead>
         <tr>
