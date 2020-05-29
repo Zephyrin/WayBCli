@@ -33,6 +33,42 @@ export class BrandPaginationSearchService extends PaginationAndParamsService {
     super();
   }
 
+  setSearch(text: string) {
+    const tt = text.trim();
+    if (tt.trim() !== '') {
+      if (tt !== this.search) {
+        this.search = tt;
+        this.changePage();
+      }
+    } else {
+      if (this.search !== '') {
+        this.search = '';
+        this.changePage();
+      }
+    }
+  }
+
+  private filterBoolean(bool: BooleanEnum) {
+    switch (bool) {
+      case BooleanEnum.false:
+        return BooleanEnum.undefined;
+      case BooleanEnum.undefined:
+        return BooleanEnum.true;
+      case BooleanEnum.true:
+        return BooleanEnum.false;
+    }
+  }
+  filterValidate() {
+    this.validate = this.filterBoolean(this.validate);
+    this.changePage();
+  }
+
+
+  filterAskValidate() {
+    this.askValidate = this.filterBoolean(this.askValidate);
+    this.changePage();
+  }
+
   sortByOrOrient(sortByEnum: SortByEnum) {
     if (this.sortBy === sortByEnum) {
       switch (this.sort) {
@@ -98,6 +134,25 @@ export class BrandPaginationSearchService extends PaginationAndParamsService {
       } else { this.sortBy = SortByEnum.name; }
     } else {
       this.sortBy = SortByEnum.name;
+    }
+    if (params && params.hasOwnProperty('search')) {
+      this.search = params.search;
+    } else {
+      this.search = '';
+    }
+    if (params && params.hasOwnProperty('validate')) {
+      if (Object.values(BooleanEnum).includes(params.validate)) {
+        this.validate = params.validate;
+      } else { this.validate = BooleanEnum.undefined; }
+    } else {
+      this.validate = BooleanEnum.undefined;
+    }
+    if (params && params.hasOwnProperty('askValidate')) {
+      if (Object.values(BooleanEnum).includes(params.askValidate)) {
+        this.askValidate = params.askValidate;
+      } else { this.askValidate = BooleanEnum.undefined; }
+    } else {
+      this.askValidate = BooleanEnum.undefined;
     }
     this.changePage();
   }

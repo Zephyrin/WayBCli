@@ -13,13 +13,13 @@
       {{child}}
     </div>
   </div>
-  <app-brand-filter></app-brand-filter>
   <fieldset [disabled]="service.loading">
     <div class="d-flex justify-content-between">
       <button class="btn btn-light"
               (click)="brandModal.open()">
         <mat-icon>add</mat-icon>
       </button>
+      <app-brand-filter [service]="service"></app-brand-filter>
       <app-pagination [pagination]="service"></app-pagination>
     </div>
     <table class="table">

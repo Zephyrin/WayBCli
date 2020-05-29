@@ -38,16 +38,16 @@ export abstract class PaginationAndParamsService {
    * Add something to the list
    */
   protected add() {
-    this.pagination.paginationCount ++;
-    this.pagination.totalCount ++;
+    this.pagination.paginationCount++;
+    this.pagination.totalCount++;
   }
 
   /**
    * Delete something to the list.
    */
   protected delete() {
-    this.pagination.paginationCount --;
-    this.pagination.totalCount --;
+    this.pagination.paginationCount--;
+    this.pagination.totalCount--;
   }
 
   /**
@@ -105,8 +105,6 @@ export abstract class PaginationAndParamsService {
     this.pagination.lastPage = Math.ceil(
       this.pagination.totalCount / this.pagination.paginationLimit
     );
-    const httpParams = this.getHttpParameters();
-    this.paramsIntoUrl(httpParams, router, activatedRoute);
     this.isInit = false;
   }
 
@@ -126,6 +124,15 @@ export abstract class PaginationAndParamsService {
       const val = httpParams.get(key);
       query[key] = val;
     });
+    if (!query.hasOwnProperty('search')) {
+      query['search'] = null;
+    }
+    if (!query.hasOwnProperty('validate')) {
+      query['validate'] = null;
+    }
+    if (!query.hasOwnProperty('askValidate')) {
+      query['askValidate'] = null;
+    }
     router.navigate(
       [],
       {

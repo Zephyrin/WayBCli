@@ -1,11 +1,11 @@
 import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
-import { EventEmitter, Output } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 
 import { AuthenticationService } from '@app/_services';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 
-import { Brand } from '@app/_models';
+import { BrandPaginationSearchService } from '@app/_services/brand/brand-pagination-search.service';
+import { BooleanEnum } from '@app/_enums/brand.enum';
 
 @Component({
   selector: 'app-brand-filter',
@@ -13,16 +13,23 @@ import { Brand } from '@app/_models';
   styleUrls: ['./brand-filter.component.scss']
 })
 export class BrandFilterComponent implements OnInit {
-  @Output() filterDone = new EventEmitter<Brand[]>();
-
-  private brandP: Brand[];
+  @ViewChild('searchText', { static: false }) searchText: ElementRef;
+  @ViewChild('askValidationBtn', { static: false }) askValidationBtn: ElementRef;
+  @Input() service: BrandPaginationSearchService;
+  /* set service(service: BrandPaginationSearchService) {
+    this.serviceP = service;
+  }
+  get service() {
+    return this.serviceP;
+  } */
 
   searchForm: FormGroup;
+
+  private serviceP: BrandPaginationSearchService;
 
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
-    private route: ActivatedRoute,
     private authenticationService: AuthenticationService) {
     if (!this.authenticationService.currentUserValue) {
       this.router.navigate(['/login?returnURL=brands']);
@@ -31,11 +38,22 @@ export class BrandFilterComponent implements OnInit {
 
   ngOnInit(): void {
     this.searchForm = this.formBuilder.group({
-      search: ['']
-    });
-    this.route.paramMap.subscribe(params => {
-      console.log(params);
+      search: [this.service.search]
     });
   }
 
+  get booleanEnum() { return BooleanEnum; }
+
+  search() {
+    const text = this.searchText.nativeElement.value.toLocaleLowerCase();
+    this.service.setSearch(text);
+  }
+
+  changeAskValidation() {
+    this.service.filterAskValidate();
+  }
+
+  changeValidate() {
+    this.service.filterValidate();
+  }
 }

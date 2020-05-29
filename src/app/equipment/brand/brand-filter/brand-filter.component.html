@@ -1,1 +1,37 @@
-<p>brand-filter works!</p>
+<div class="d-flex align-items-center">
+  <div (click)="changeValidate()"
+       class="pointer checkbox">
+    <mat-icon *ngIf="service.validate === booleanEnum.false">
+      check_box_outline_blank</mat-icon>
+    <mat-icon *ngIf="service.validate === booleanEnum.true">check_box</mat-icon>
+    <mat-icon *ngIf="service.validate === booleanEnum.undefined">
+      indeterminate_check_box</mat-icon>
+    Validate
+  </div>
+  <div (click)="changeAskValidation()"
+       class="pointer checkbox">
+    <mat-icon *ngIf="service.askValidate === booleanEnum.false">
+      check_box_outline_blank</mat-icon>
+    <mat-icon *ngIf="service.askValidate === booleanEnum.true">check_box
+    </mat-icon>
+    <mat-icon *ngIf="service.askValidate === booleanEnum.undefined">
+      indeterminate_check_box</mat-icon>
+    Ask Validation
+  </div>
+  <form class="form-inline my-2 my-lg-0"
+        [formGroup]="searchForm">
+    <input class="form-control mr-sm-2"
+           formControlName="search"
+           id="searchText"
+           #searchText
+           type="search"
+           placeholder="Search"
+           aria-label="Search">
+    <button for="searchText"
+            class="btn btn-light my-2 my-sm-0"
+            type="submit"
+            (click)="search()">
+      <mat-icon>search</mat-icon>Search
+    </button>
+  </form>
+</div>
