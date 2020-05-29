@@ -1,0 +1,33 @@
+<div class="dropdown">
+  <button type="buton"
+          class="btn btn-light dropdown-toggle"
+          data-toggle="dropdown"
+          aria-haspopup="true"
+          aria-expanded="false">
+    {{selectedOrEmptyText}}
+  </button>
+  <div class="dropdown-menu">
+    <div class="dropdown-item">
+      <app-pagination [pagination]="paginate"
+                      (click)="prevent($event)"></app-pagination>
+    </div>
+    <div class="dropdown-divider"></div>
+    <a class="dropdown-item"
+       (click)="changeElt(null)"
+       href="#"
+       type="button"
+       [ngClass]="{'active': null === value}">None</a>
+    <a class="dropdown-item"
+       *ngFor="let elt of paginate.list()"
+       (click)="changeElt(elt)"
+       href="#"
+       type="button"
+       [ngClass]="{'active': value != null && elt.id === value.id}">{{paginate.displayName(elt)}}</a>
+    <div class="dropdown-divider"></div>
+    <div class="dropdown-item">
+    <app-pagination [pagination]="paginate"
+                    (click)="prevent($event)"></app-pagination>
+                    </div><div class="dropdown-item">
+    <app-brand-filter (click)="prevent($event)"></app-brand-filter></div>
+  </div>
+</div>

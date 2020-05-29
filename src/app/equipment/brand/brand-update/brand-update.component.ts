@@ -190,8 +190,9 @@ export class BrandUpdateComponent implements OnInit {
   manageBrand() {
     if (this.isCreateForm) {
       this.service.create(this.form.value)
-        .subscribe(brand => {
+        .subscribe(x => {
           this.endTransaction();
+          const brand = new Brand(x);
           this.brandService.addElement(brand);
           this.added.emit(brand);
         }, (error: any) => {

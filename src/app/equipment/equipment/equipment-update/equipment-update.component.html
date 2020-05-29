@@ -86,21 +86,25 @@
             <!-- Brand -->
             <div class="form-group row">
               <label for="brand"
-                     class="col-sm-2 col-form-label">
+                     class="col-sm-2 col-form-label pointer">
                 Brand
               </label>
               <div class="col-sm-10">
                 <div class="input-group"
                      role="group"
                      aria-label="Brand selector">
-                  <select id="brandCombo"
+                  <app-combo-paginate [paginate]="brandService"
+                                      formControlName="brand">
+                  </app-combo-paginate>
+
+                  <!-- <select id="brandCombo"
                           formControlName="brand"
                           class="form-control custom-select"
                           [compareWith]="compareByID">
                     <option [ngValue]="null">None</option>
                     <option *ngFor="let brand of brands"
                             [ngValue]="brand">{{brand.name}}</option>
-                  </select>
+                  </select> -->
                   <button (click)="brandModal.open()"
                           type="button"
                           class="btn btn-light"
@@ -174,7 +178,7 @@
                                 (create)="characteristicModal.create(selected)"
                                 (update)="characteristicModal.update(selected, $event)"
                                 (delete)="characteristicModal.delete(selected, $event)">
-                                <!-- [updateData]="simpleChangeCharacteristic" -->
+              <!-- [updateData]="simpleChangeCharacteristic" -->
             </app-characteristic>
           </fieldset>
           <div class="modal-footer form-group">

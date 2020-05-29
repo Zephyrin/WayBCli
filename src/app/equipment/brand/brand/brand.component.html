@@ -18,7 +18,7 @@
          class="navbar navbar-expand-md navbar-light bg-light d-block d-sm-none">
       <div class="navbar-collapse collapse"
            id="filterBrandNavDropdown">
-        <app-brand-filter [service]="service"></app-brand-filter>
+        <app-brand-filter></app-brand-filter>
       </div>
     </nav>
     <div class="d-flex justify-content-between align-items-center">
@@ -27,8 +27,7 @@
               (click)="brandModal.open()">
         <mat-icon>add</mat-icon>
       </button>
-      <app-brand-filter [service]="service"
-                        class="d-none d-sm-block"></app-brand-filter>
+      <app-brand-filter class="d-none d-sm-block"></app-brand-filter>
       <app-pagination [pagination]="service"></app-pagination>
     </div>
     <table class="table">

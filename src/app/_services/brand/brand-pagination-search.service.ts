@@ -33,6 +33,17 @@ export class BrandPaginationSearchService extends PaginationAndParamsService {
     super();
   }
 
+  displayName(elt: any): string {
+    if (elt instanceof Brand) {
+      return elt.name;
+    }
+    return '';
+  }
+
+  list(): any[] {
+    return this.brands;
+  }
+
   setSearch(text: string) {
     this.search = text.trim();
     this.changePage();
@@ -77,31 +88,31 @@ export class BrandPaginationSearchService extends PaginationAndParamsService {
 
   setDefaultParamsFormUrl(params: Params) {
     super.setDefaultParamsFromUrl(params);
-    if (params.hasOwnProperty('sort')) {
+    if (params && params.hasOwnProperty('sort')) {
       if (Object.values(SortEnum).includes(params.sort)) {
         this.sort = params.sort;
       } else { this.sort = SortEnum.asc; }
     } else { this.sort = SortEnum.asc; }
 
-    if (params.hasOwnProperty('sortBy')) {
+    if (params && params.hasOwnProperty('sortBy')) {
       if (Object.values(SortByEnum).includes(params.sortBy)) {
         this.sortBy = params.sortBy;
       } else { this.sortBy = SortByEnum.name; }
     } else { this.sortBy = SortByEnum.name; }
 
-    if (params.hasOwnProperty('validate')) {
+    if (params && params.hasOwnProperty('validate')) {
       if (Object.values(BooleanEnum).includes(params.validate)) {
         this.validate = params.validate;
       } else { this.validate = BooleanEnum.undefined; }
     } else { this.validate = BooleanEnum.undefined; }
 
-    if (params.hasOwnProperty('askValidate')) {
+    if (params && params.hasOwnProperty('askValidate')) {
       if (Object.values(BooleanEnum).includes(params.askValidate)) {
         this.askValidate = params.askValidate;
       } else { this.askValidate = BooleanEnum.undefined; }
     } else { this.askValidate = BooleanEnum.undefined; }
 
-    if (params.hasOwnProperty('search')) {
+    if (params && params.hasOwnProperty('search')) {
       this.search = params.search;
     } else { this.search = ''; }
   }
@@ -175,7 +186,7 @@ export class BrandPaginationSearchService extends PaginationAndParamsService {
     this.paramsIntoUrl(httpParams, this.router, this.route);
     this.service.getAll(httpParams).subscribe(brands => {
       this.loading = false;
-      this.setParametersFromResponse(brands.headers, this.router, this.route);
+      this.setParametersFromResponse(brands.headers);
       this.brands = brands.body.map(x => new Brand(x));
     });
   }

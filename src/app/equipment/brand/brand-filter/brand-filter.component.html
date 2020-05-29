@@ -1,5 +1,4 @@
-<div
-     class="d-flex d-sm-flex flex-column flex-sm-row align-items-sm-center align-items-right">
+<div class="align-items-center">
   <app-filter-switch [disabled]="service.loading"
                      [value]="service.validate"
                      [text]="'Validate'"
@@ -8,21 +7,23 @@
                      [value]="service.askValidate"
                      [text]="'Ask Validation'"
                      (check)="changeAskValidation()"></app-filter-switch>
-  <form class="form-inline my-2 my-lg-0"
+  <form class="form-inline"
         [formGroup]="searchForm">
-    <input class="form-control mr-sm-2"
-           formControlName="search"
-           id="searchText"
-           #searchText
-           type="search"
-           [(ngModel)]="service.search"
-           placeholder="Search"
-           aria-label="Search">
-    <button for="searchText"
-            class="btn btn-light my-2 my-sm-0"
-            type="submit"
-            (click)="search()">
-      <mat-icon>search</mat-icon>Search
-    </button>
+    <div class="form-group row nowrap">
+      <input class="form-control col-8"
+             formControlName="search"
+             id="searchText"
+             #searchText
+             type="search"
+             [(ngModel)]="service.search"
+             placeholder="Search"
+             aria-label="Search">
+      <button for="searchText"
+              class="btn btn-light col-4"
+              type="submit"
+              (click)="search()">
+        <mat-icon>search</mat-icon>Search
+      </button>
+    </div>
   </form>
 </div>

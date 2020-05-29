@@ -15,20 +15,20 @@ import { BooleanEnum } from '@app/_enums/brand.enum';
 export class BrandFilterComponent implements OnInit {
   @ViewChild('searchText', { static: false }) searchText: ElementRef;
   @ViewChild('askValidationBtn', { static: false }) askValidationBtn: ElementRef;
-  @Input() service: BrandPaginationSearchService;
 
   searchForm: FormGroup;
-
-  private serviceP: BrandPaginationSearchService;
 
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
-    private authenticationService: AuthenticationService) {
+    private authenticationService: AuthenticationService,
+    private serviceP: BrandPaginationSearchService) {
     if (!this.authenticationService.currentUserValue) {
       this.router.navigate(['/login?returnURL=brands']);
     }
   }
+
+  get service() { return this.serviceP; }
 
   ngOnInit(): void {
     this.searchForm = this.formBuilder.group({

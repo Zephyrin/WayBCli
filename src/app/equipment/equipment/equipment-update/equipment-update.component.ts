@@ -19,6 +19,7 @@ import { Router } from '@angular/router';
 import { FormErrors } from '@app/_errors';
 import { CharacteristicUpdateComponent } from '@app/equipment/characteristic/characteristic-update/characteristic-update.component';
 import { HttpParams } from '@angular/common/http';
+import { BrandPaginationSearchService } from '@app/_services/brand/brand-pagination-search.service';
 
 declare var $: any;
 
@@ -78,7 +79,7 @@ export class EquipmentUpdateComponent implements OnInit {
     private formBuilder: FormBuilder,
     private router: Router,
     private service: EquipmentService,
-    private brandService: BrandService,
+    private brandServiceP: BrandPaginationSearchService,
     private authenticationService: AuthenticationService
   ) {
     if (!this.authenticationService.currentUserValue) {
@@ -88,15 +89,12 @@ export class EquipmentUpdateComponent implements OnInit {
       x => this.currentUser = x);
   }
 
+  get brandService() { return this.brandServiceP; }
+
   ngOnInit(): void {
     this.deleteHasError = false;
     this.loading = true;
-    this.brandService.getAll(new HttpParams())
-      .pipe(first())
-      .subscribe(brands => {
-        this.brands = brands.body;
-        this.loading = false;
-      });
+    this.brandServiceP.init(undefined, undefined, undefined, false);
 
     this.form = this.formBuilder.group({
       id: [''],
@@ -109,6 +107,7 @@ export class EquipmentUpdateComponent implements OnInit {
     this.categoryForm = this.formBuilder.group({
       category: [null, Validators.required]
     });
+    this.loading = false;
   }
 
   hasError(name) {

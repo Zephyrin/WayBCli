@@ -5,6 +5,7 @@ import { AuthenticationService } from '@app/_services';
 import { BackpackService } from '@app/_services/backpack.service';
 import { User } from '@app/_models';
 import { first } from 'rxjs/operators';
+import { BrandPaginationSearchService } from '@app/_services/brand/brand-pagination-search.service';
 
 @Component({
   selector: 'app-backpack',
@@ -17,10 +18,14 @@ export class BackpackComponent implements OnInit {
   backpacks: Backpack[];
   constructor(
     private authenticationService: AuthenticationService,
-    private backpackService: BackpackService
+    private backpackService: BackpackService,
+    private brandServiceP: BrandPaginationSearchService
   ) {
 
   }
+
+  get brandService() { return this.brandServiceP; }
+
   ngOnInit(): void {
 
     this.loading = false;
@@ -33,6 +38,8 @@ export class BackpackComponent implements OnInit {
             this.loading = false;
           });
       });
+    this.brandService.init(undefined, undefined, undefined, false);
+    this.brandServiceP.changePage();
   }
 
 }

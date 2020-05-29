@@ -21,6 +21,16 @@ export abstract class PaginationAndParamsService {
   abstract changePage(): void;
 
   /**
+   * Get the list of element.
+   */
+  abstract list(): any[];
+
+  /**
+   * Display the name of an element.
+   */
+  abstract displayName(elt: any): string;
+
+  /**
    * Add elt into the list. You have to call add() to update the pagination
    * system.
    * @param elt the element that has been added
@@ -89,10 +99,7 @@ export abstract class PaginationAndParamsService {
    *
    * @param response The response of HTTP whit get pagination information
    */
-  setParametersFromResponse(
-    headers: HttpHeaders,
-    router: Router,
-    activatedRoute: ActivatedRoute) {
+  setParametersFromResponse(headers: HttpHeaders) {
     this.isInit = true;
     let ret = headers.get('X-Total-Count');
     this.pagination.totalCount = parseInt(ret === null ? '0' : ret, 10);
@@ -133,6 +140,7 @@ export abstract class PaginationAndParamsService {
     if (!query.hasOwnProperty('askValidate')) {
       query[`askValidate`] = null;
     }
+    if (router && activatedRoute) {
     router.navigate(
       [],
       {
@@ -140,6 +148,7 @@ export abstract class PaginationAndParamsService {
         queryParams: query,
         queryParamsHandling: 'merge', // remove to replace all query params by provided
       });
+    }
   }
 
   /**
