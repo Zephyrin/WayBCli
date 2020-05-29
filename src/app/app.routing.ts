@@ -6,7 +6,6 @@ import { RegisterComponent } from './auth/register/register.component';
 import { EquipmentComponent } from './equipment/equipment/equipment.component';
 import { UserComponent } from './equipment/_admin/user/user.component';
 import { CategoryComponent } from './equipment/category/category.component';
-import { BrandValidatorComponent } from './equipment/brand/brand-validator/brand-validator.component';
 import { CategoryValidatorComponent } from './equipment/category/category-validator/category-validator.component';
 import { BrandComponent } from './equipment/brand/brand/brand.component';
 import { EquipmentValidatorComponent } from './equipment/equipment/equipment-validator/equipment-validator.component';
