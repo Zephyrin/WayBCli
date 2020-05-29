@@ -125,13 +125,13 @@ export abstract class PaginationAndParamsService {
       query[key] = val;
     });
     if (!query.hasOwnProperty('search')) {
-      query['search'] = null;
+      query[`search`] = null;
     }
     if (!query.hasOwnProperty('validate')) {
-      query['validate'] = null;
+      query[`validate`] = null;
     }
     if (!query.hasOwnProperty('askValidate')) {
-      query['askValidate'] = null;
+      query[`askValidate`] = null;
     }
     router.navigate(
       [],
