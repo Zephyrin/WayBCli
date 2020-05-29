@@ -135,7 +135,7 @@ export class BrandPaginationSearchService extends PaginationAndParamsService {
         this.validate = params.validate;
       } else { this.validate = BooleanEnum.undefined; }
     } else {
-      if (isValidator) {
+      if (isValidator && !params.hasOwnProperty('page')) {
         this.validate = BooleanEnum.false;
       } else {
         this.validate = BooleanEnum.undefined;
@@ -146,7 +146,9 @@ export class BrandPaginationSearchService extends PaginationAndParamsService {
         this.askValidate = params.askValidate;
       } else { this.askValidate = BooleanEnum.undefined; }
     } else {
-      if (isValidator) {
+      // Look if param is empty, means it comes from router link. Otherwise
+      // it is the choice of the user.
+      if (isValidator && !params.hasOwnProperty('page')) {
         this.askValidate = BooleanEnum.true;
       } else {
         this.askValidate = BooleanEnum.undefined;
