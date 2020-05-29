@@ -1,24 +1,13 @@
-<div class="d-flex d-sm-flex flex-column flex-sm-row align-items-sm-center align-items-right">
-  <div (click)="changeValidate()"
-       class="pointer checkbox d-flex align-items-right">
-    <mat-icon *ngIf="service.validate === booleanEnum.false">
-      check_box_outline_blank</mat-icon>
-    <mat-icon *ngIf="service.validate === booleanEnum.true">check_box
-    </mat-icon>
-    <mat-icon *ngIf="service.validate === booleanEnum.undefined">
-      indeterminate_check_box</mat-icon>
-    Validate
-  </div>
-  <div (click)="changeAskValidation()"
-       class="pointer checkbox d-flex align-items-right">
-    <mat-icon *ngIf="service.askValidate === booleanEnum.false">
-      check_box_outline_blank</mat-icon>
-    <mat-icon *ngIf="service.askValidate === booleanEnum.true">check_box
-    </mat-icon>
-    <mat-icon *ngIf="service.askValidate === booleanEnum.undefined">
-      indeterminate_check_box</mat-icon>
-    Ask Validation
-  </div>
+<div
+     class="d-flex d-sm-flex flex-column flex-sm-row align-items-sm-center align-items-right">
+  <app-filter-switch [disabled]="service.loading"
+                     [value]="service.validate"
+                     [text]="'Validate'"
+                     (check)="changeValidate()"></app-filter-switch>
+  <app-filter-switch [disabled]="service.loading"
+                     [value]="service.askValidate"
+                     [text]="'Ask Validation'"
+                     (check)="changeAskValidation()"></app-filter-switch>
   <form class="form-inline my-2 my-lg-0"
         [formGroup]="searchForm">
     <input class="form-control mr-sm-2"

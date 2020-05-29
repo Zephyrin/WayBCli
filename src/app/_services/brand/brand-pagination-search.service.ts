@@ -106,7 +106,7 @@ export class BrandPaginationSearchService extends PaginationAndParamsService {
     } else { this.search = ''; }
   }
 
-  init(router: Router, route: ActivatedRoute, params: Params) {
+  init(router: Router, route: ActivatedRoute, params: Params, isValidator) {
     this.route = route;
     this.router = router;
     this.errors = new FormErrors();
@@ -135,14 +135,22 @@ export class BrandPaginationSearchService extends PaginationAndParamsService {
         this.validate = params.validate;
       } else { this.validate = BooleanEnum.undefined; }
     } else {
-      this.validate = BooleanEnum.undefined;
+      if (isValidator) {
+        this.validate = BooleanEnum.false;
+      } else {
+        this.validate = BooleanEnum.undefined;
+      }
     }
     if (params && params.hasOwnProperty('askValidate')) {
       if (Object.values(BooleanEnum).includes(params.askValidate)) {
         this.askValidate = params.askValidate;
       } else { this.askValidate = BooleanEnum.undefined; }
     } else {
-      this.askValidate = BooleanEnum.undefined;
+      if (isValidator) {
+        this.askValidate = BooleanEnum.true;
+      } else {
+        this.askValidate = BooleanEnum.undefined;
+      }
     }
     this.changePage();
   }
