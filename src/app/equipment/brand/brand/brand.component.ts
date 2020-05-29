@@ -21,7 +21,7 @@ export class BrandComponent implements OnInit {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    protected service: BrandPaginationSearchService,
+    private serviceP: BrandPaginationSearchService,
     private authenticationService: AuthenticationService) {
     if (!this.authenticationService.currentUserValue) {
       this.router.navigate(['/login?returnUrl=brands']);
@@ -33,7 +33,7 @@ export class BrandComponent implements OnInit {
 
   get sortEnum() { return SortEnum; }
   get sortByEnum() { return SortByEnum; }
-
+  get service() { return this.serviceP; }
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
       this.service.init(this.router, this.route, params, this.isValidator);

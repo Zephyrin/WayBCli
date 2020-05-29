@@ -25,7 +25,6 @@ export class BrandUpdateComponent implements OnInit {
   @ViewChild('modal', { static: true }) modal;
   @ViewChild('deleteModal', { static: true }) deleteModal;
   @Output() added = new EventEmitter<Brand>();
-  @Input() brandService: BrandPaginationSearchService;
 
   form: FormGroup;
   isCreateForm: boolean;
@@ -45,7 +44,8 @@ export class BrandUpdateComponent implements OnInit {
     private service: BrandService,
     private mediaService: MediaobjectService,
     private authenticationService: AuthenticationService,
-    private domSanitizer: DomSanitizer) {
+    private domSanitizer: DomSanitizer,
+    private brandService: BrandPaginationSearchService) {
     if (!this.authenticationService.currentUserValue) {
       this.router.navigate(['/login']);
     }
