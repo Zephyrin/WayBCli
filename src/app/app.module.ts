@@ -12,7 +12,6 @@ import { appRoutingModule } from './app.routing';
 import { JwtInterceptor, ErrorInterceptor } from './_helpers';
 import { LoginComponent } from './auth/login';
 import { RegisterComponent } from './auth/register/register.component';
-import { BrandValidatorComponent } from './equipment/brand/brand-validator/brand-validator.component';
 import { LogService } from './_services/log.service';
 import { EquipmentComponent } from './equipment/equipment/equipment.component';
 import { UserComponent } from './equipment/_admin/user/user.component';
@@ -52,7 +51,6 @@ import { FilterSwitchComponent } from './_helpers/filter-switch/filter-switch.co
     AppComponent,
     LoginComponent,
     RegisterComponent,
-    BrandValidatorComponent,
     EquipmentComponent,
     UserComponent,
     CategoryComponent,
