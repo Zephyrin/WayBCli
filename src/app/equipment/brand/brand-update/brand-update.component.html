@@ -36,6 +36,7 @@
           <div [innerHTML]="errors.fatalError"></div>
         </div>
         <form [formGroup]="form"
+        id="brandUpdateForm"
               (ngSubmit)="onSubmit()">
           <div *ngIf="submitted && f.message"
                class="invalid-feedback">
@@ -149,8 +150,9 @@
       <div class="modal-footer form-group">
         <button [disabled]="loading"
                 type="submit"
-                class="btn btn-primary"
-                (click)="onSubmit()">
+                form="brandUpdateForm"
+                value="submit"
+                class="btn btn-primary">
           <span *ngIf="loading"
                 class="spinner-border spinner-border-sm mr-1"></span>
           <span *ngIf="isCreateForm">Add</span>

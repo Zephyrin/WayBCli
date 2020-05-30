@@ -1,6 +1,4 @@
-import { Component, Input, forwardRef, HostBinding } from '@angular/core';
-import { ViewChild, EventEmitter, Output } from '@angular/core';
-import { Renderer2 } from '@angular/core';
+import { Component, Input, forwardRef, HostListener } from '@angular/core';
 
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { PaginationAndParamsService } from '@app/_services/helpers/pagination-and-params.service';
@@ -20,12 +18,18 @@ import { PaginationAndParamsService } from '@app/_services/helpers/pagination-an
 export class ComboPaginateComponent<T> implements ControlValueAccessor {
   @Input() paginate: PaginationAndParamsService;
   @Input() emptyText = 'Select...';
+  @Input() comboId = '';
 
   public disabled = false;
   public value: T;
 
-  constructor(private render: Renderer2) { }
+  constructor() { }
 
+  @HostListener('document:keydown', ['$event']) onKeydownHandler(event: KeyboardEvent) {
+    if (event.key === 'Escape' || event.key === 'Esc') {
+        event.stopPropagation();
+    }
+}
   get selectedOrEmptyText() {
     return this.value ? this.paginate.displayName(this.value) : this.emptyText;
   }
