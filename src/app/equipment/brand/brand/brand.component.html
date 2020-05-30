@@ -15,14 +15,15 @@
   </div>
   <fieldset [disabled]="service.loading">
 
-    <app-brand-filter></app-brand-filter>
+    <app-brand-filter class="d-block d-sm-block d-md-block d-lg-block d-xl-none"></app-brand-filter>
 
     <div class="d-flex justify-content-between align-items-center">
-      <button class="btn btn-light"
+      <button class="btn btn-light btn-sm d-flex justify-content-center align-content-between"
               *ngIf="!isValidator"
               (click)="brandModal.open()">
         <mat-icon>add</mat-icon>
       </button>
+      <app-brand-filter class="d-none d-sm-none d-md-none d-lg-none d-xl-block"></app-brand-filter>
       <app-pagination [pagination]="service"></app-pagination>
     </div>
     <table class="table">

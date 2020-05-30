@@ -1,8 +1,9 @@
 <nav aria-label="Filter"
-     class="navbar navbar-expand-md">
-  <div class="navbar-collapse collapse"
+     class="navbar"
+     [ngClass]="{'navbar-expand-sm': !isCombo}">
+  <div [ngClass]="{'navbar-collapse': !isCombo, 'collapse': !isCombo}"
        id="filterBrandNavDropdown">
-    <ul class="navbar-nav align-items-md-center">
+    <ul class="navbar-nav align-items-sm-center">
       <li class="nav-item nav-link">
         <app-filter-switch [disabled]="service.loading"
                            [value]="service.validate"
@@ -12,14 +13,14 @@
       <li class="nav-item nav-link">
         <app-filter-switch [disabled]="service.loading"
                            [value]="service.askValidate"
-                           [text]="'Ask Validation'"
+                           [text]="'Ask Validation'"
                            (check)="changeAskValidation()"></app-filter-switch>
       </li>
       <li class="nav-item nav-link align-items-center">
-        <form class="form-inline col-sm-12"
+        <form class="form-inline"
               [formGroup]="searchForm">
-          <div class="form-group row nowrap">
-            <input class="form-control col-8"
+          <div class="input-group row nowrap">
+            <input class="form-control"
                    formControlName="search"
                    id="searchText"
                    #searchText
@@ -27,12 +28,14 @@
                    [(ngModel)]="service.search"
                    placeholder="Search"
                    aria-label="Search">
-            <button for="searchText"
-                    class="btn btn-light col-4"
-                    type="submit"
-                    (click)="search()">
-              <mat-icon>search</mat-icon>Search
-            </button>
+            <div class="input-group-append">
+              <button for="searchText"
+                      class="btn btn-outline-secondary d-flex justify-content-center align-content-between"
+                      type="submit"
+                      (click)="search()">
+                <mat-icon>search</mat-icon>Search
+              </button>
+            </div>
           </div>
         </form>
       </li>

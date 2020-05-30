@@ -15,7 +15,7 @@ import { BooleanEnum } from '@app/_enums/brand.enum';
 export class BrandFilterComponent implements OnInit {
   @ViewChild('searchText', { static: false }) searchText: ElementRef;
   @ViewChild('askValidationBtn', { static: false }) askValidationBtn: ElementRef;
-
+  @Input() isCombo = false;
   searchForm: FormGroup;
 
   constructor(
