@@ -3,6 +3,7 @@ import { Component, Input, forwardRef, ViewChild, ElementRef } from '@angular/co
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { PaginationAndParamsService } from '@app/_services/helpers/pagination-and-params.service';
 
+import { FilterEnum } from '@app/_enums/filter.enum.ts';
 declare var $: any;
 
 @Component({
@@ -23,6 +24,7 @@ export class ComboPaginateComponent<T> implements ControlValueAccessor {
   @Input() paginate: PaginationAndParamsService;
   @Input() emptyText = 'Select...';
   @Input() comboId = '';
+  @Input() filterEnum = FilterEnum.none;
 
   public disabled = false;
   public value: T;
@@ -40,6 +42,8 @@ export class ComboPaginateComponent<T> implements ControlValueAccessor {
   get selectedOrEmptyText() {
     return this.value ? this.paginate.displayName(this.value) : this.emptyText;
   }
+
+  get FilterType() { return FilterEnum; }
 
   /**
    * Call when value has changed programmatically

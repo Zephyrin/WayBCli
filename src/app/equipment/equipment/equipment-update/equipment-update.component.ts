@@ -20,6 +20,7 @@ import { FormErrors } from '@app/_errors';
 import { CharacteristicUpdateComponent } from '@app/equipment/characteristic/characteristic-update/characteristic-update.component';
 import { HttpParams } from '@angular/common/http';
 import { BrandPaginationSearchService } from '@app/_services/brand/brand-pagination-search.service';
+import { FilterEnum } from '@app/_enums/filter.enum';
 
 declare var $: any;
 
@@ -90,6 +91,8 @@ export class EquipmentUpdateComponent implements OnInit {
   }
 
   get brandService() { return this.brandServiceP; }
+
+  get filterType() { return FilterEnum; }
 
   ngOnInit(): void {
     this.deleteHasError = false;

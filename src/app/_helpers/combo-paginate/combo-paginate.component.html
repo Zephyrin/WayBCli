@@ -37,8 +37,12 @@
                       (click)="prevent($event)"></app-pagination>
     </div>
     <div class="dropdown-item"
+         [ngSwitch]="filterEnum"
+         *ngIf="filterEnum !== FilterType.none"
          (click)="prevent($event)">
-      <app-brand-filter (click)="prevent($event)" [isCombo]="true"></app-brand-filter>
+      <app-brand-filter (click)="prevent($event)"
+                        *ngSwitchCase="filterEnum === FilterType.brand"
+                        [isCombo]="true"></app-brand-filter>
     </div>
   </div>
 </div>

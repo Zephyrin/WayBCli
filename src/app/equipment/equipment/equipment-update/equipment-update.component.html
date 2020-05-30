@@ -95,6 +95,7 @@
                      aria-label="Brand selector">
                   <app-combo-paginate [paginate]="brandService"
                                       [comboId]="'brand'"
+                                      [filterEnum]="filterType.brand"
                                       formControlName="brand">
                   </app-combo-paginate>
                   <button (click)="brandModal.open()"
