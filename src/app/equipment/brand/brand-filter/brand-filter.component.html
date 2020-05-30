@@ -1,29 +1,41 @@
-<div class="align-items-center">
-  <app-filter-switch [disabled]="service.loading"
-                     [value]="service.validate"
-                     [text]="'Validate'"
-                     (check)="changeValidate()"></app-filter-switch>
-  <app-filter-switch [disabled]="service.loading"
-                     [value]="service.askValidate"
-                     [text]="'Ask Validation'"
-                     (check)="changeAskValidation()"></app-filter-switch>
-  <form class="form-inline"
-        [formGroup]="searchForm">
-    <div class="form-group row nowrap">
-      <input class="form-control col-8"
-             formControlName="search"
-             id="searchText"
-             #searchText
-             type="search"
-             [(ngModel)]="service.search"
-             placeholder="Search"
-             aria-label="Search">
-      <button for="searchText"
-              class="btn btn-light col-4"
-              type="submit"
-              (click)="search()">
-        <mat-icon>search</mat-icon>Search
-      </button>
-    </div>
-  </form>
-</div>
+<nav aria-label="Filter"
+     class="navbar navbar-expand-md">
+  <div class="navbar-collapse collapse"
+       id="filterBrandNavDropdown">
+    <ul class="navbar-nav align-items-md-center">
+      <li class="nav-item nav-link">
+        <app-filter-switch [disabled]="service.loading"
+                           [value]="service.validate"
+                           [text]="'Validate'"
+                           (check)="changeValidate()"></app-filter-switch>
+      </li>
+      <li class="nav-item nav-link">
+        <app-filter-switch [disabled]="service.loading"
+                           [value]="service.askValidate"
+                           [text]="'Ask Validation'"
+                           (check)="changeAskValidation()"></app-filter-switch>
+      </li>
+      <li class="nav-item nav-link align-items-center">
+        <form class="form-inline col-sm-12"
+              [formGroup]="searchForm">
+          <div class="form-group row nowrap">
+            <input class="form-control col-8"
+                   formControlName="search"
+                   id="searchText"
+                   #searchText
+                   type="search"
+                   [(ngModel)]="service.search"
+                   placeholder="Search"
+                   aria-label="Search">
+            <button for="searchText"
+                    class="btn btn-light col-4"
+                    type="submit"
+                    (click)="search()">
+              <mat-icon>search</mat-icon>Search
+            </button>
+          </div>
+        </form>
+      </li>
+    </ul>
+  </div>
+</nav>

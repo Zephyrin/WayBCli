@@ -1,7 +1,9 @@
-import { Component, Input, forwardRef, HostListener } from '@angular/core';
+import { Component, Input, forwardRef, ViewChild, ElementRef } from '@angular/core';
 
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { PaginationAndParamsService } from '@app/_services/helpers/pagination-and-params.service';
+
+declare var $: any;
 
 @Component({
   selector: 'app-combo-paginate',
@@ -16,6 +18,8 @@ import { PaginationAndParamsService } from '@app/_services/helpers/pagination-an
   ]
 })
 export class ComboPaginateComponent<T> implements ControlValueAccessor {
+  @ViewChild('combo', { static: false }) combo;
+
   @Input() paginate: PaginationAndParamsService;
   @Input() emptyText = 'Select...';
   @Input() comboId = '';
@@ -25,11 +29,14 @@ export class ComboPaginateComponent<T> implements ControlValueAccessor {
 
   constructor() { }
 
-  @HostListener('document:keydown', ['$event']) onKeydownHandler(event: KeyboardEvent) {
+  catchKeyDown(event) {
     if (event.key === 'Escape' || event.key === 'Esc') {
+      if ($(this.combo.nativeElement).attr('aria-expanded') === 'true') {
+        $(this.combo.nativeElement).dropdown('toggle');
         event.stopPropagation();
+      }
     }
-}
+  }
   get selectedOrEmptyText() {
     return this.value ? this.paginate.displayName(this.value) : this.emptyText;
   }

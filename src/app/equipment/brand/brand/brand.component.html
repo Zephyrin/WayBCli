@@ -14,20 +14,15 @@
     </div>
   </div>
   <fieldset [disabled]="service.loading">
-    <nav
-         class="navbar navbar-expand-md navbar-light bg-light d-block d-sm-none">
-      <div class="navbar-collapse collapse"
-           id="filterBrandNavDropdown">
-        <app-brand-filter></app-brand-filter>
-      </div>
-    </nav>
+
+    <app-brand-filter></app-brand-filter>
+
     <div class="d-flex justify-content-between align-items-center">
       <button class="btn btn-light"
               *ngIf="!isValidator"
               (click)="brandModal.open()">
         <mat-icon>add</mat-icon>
       </button>
-      <app-brand-filter class="d-none d-sm-block"></app-brand-filter>
       <app-pagination [pagination]="service"></app-pagination>
     </div>
     <table class="table">
@@ -74,13 +69,15 @@
               class="col-md-1 pointer"
               (click)="service.sortByOrOrient(isValidator ? sortByEnum.validate : sortByEnum.askValidate)">
             <div class="d-flex justify-content-center">Action
-              <div *ngIf="!isValidator && service.sortBy === sortByEnum.askValidate">
+              <div
+                   *ngIf="!isValidator && service.sortBy === sortByEnum.askValidate">
                 <mat-icon *ngIf="service.sort === sortEnum.asc">arrow_drop_down
                 </mat-icon>
                 <mat-icon *ngIf="service.sort === sortEnum.desc">arrow_drop_up
                 </mat-icon>
               </div>
-              <div *ngIf="isValidator && service.sortBy === sortByEnum.validate">
+              <div
+                   *ngIf="isValidator && service.sortBy === sortByEnum.validate">
                 <mat-icon *ngIf="service.sort === sortEnum.asc">arrow_drop_down
                 </mat-icon>
                 <mat-icon *ngIf="service.sort === sortEnum.desc">arrow_drop_up
@@ -107,8 +104,7 @@
         </td>
         <td *ngIf="isValidator">
           <app-switch [value]="brand.askValidate"
-                      [disabled]="true"
-                      >
+                      [disabled]="true">
           </app-switch>
         </td>
         <td>

@@ -1,14 +1,20 @@
 <div class="dropdown">
   <button type="buton"
+          #combo
           id="{{comboId}}"
+          (keydown)="catchKeyDown($event)"
           class="btn btn-light dropdown-toggle"
           data-toggle="dropdown"
           aria-haspopup="true"
+          data-boundary=""
           aria-expanded="false">
     {{selectedOrEmptyText}}
   </button>
-  <div class="dropdown-menu">
-    <div class="dropdown-item">
+  <div class="dropdown-menu"
+       (keydown)="catchKeyDown($event)"
+       attr.aria-labelledby="{{comboId}}">
+    <div class="dropdown-item"
+         (click)="prevent($event)">
       <app-pagination [pagination]="paginate"
                       (click)="prevent($event)"></app-pagination>
     </div>
@@ -25,10 +31,14 @@
        type="button"
        [ngClass]="{'active': value != null && elt.id === value.id}">{{paginate.displayName(elt)}}</a>
     <div class="dropdown-divider"></div>
-    <div class="dropdown-item">
-    <app-pagination [pagination]="paginate"
-                    (click)="prevent($event)"></app-pagination>
-                    </div><div class="dropdown-item">
-    <app-brand-filter (click)="prevent($event)"></app-brand-filter></div>
+    <div class="dropdown-item"
+         (click)="prevent($event)">
+      <app-pagination [pagination]="paginate"
+                      (click)="prevent($event)"></app-pagination>
+    </div>
+    <div class="dropdown-item"
+         (click)="prevent($event)">
+      <app-brand-filter (click)="prevent($event)"></app-brand-filter>
+    </div>
   </div>
 </div>

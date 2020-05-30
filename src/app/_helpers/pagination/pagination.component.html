@@ -1,57 +1,69 @@
-<div class="row align-items-center">
-  <span class="col-4 nowrap">
-    <small>{{pagination.posBeginCount()}}</small><small
-           *ngIf="pagination.posBeginCount() !== pagination.posEndCount()"> -
-      {{pagination.posEndCount()}}</small><small> on
-      {{pagination.total()}}</small>
-  </span>
-  <span *ngIf="pagination.total() > pagination.limit()"
-        class="col-8 nowrap">
-
-    <button class="btn btn-light btn-sm"
-            type="button"
-            (click)="pagination.goToFirst()"
-            [disabled]="pagination.isFirst()">
-      <mat-icon>first_page</mat-icon>
-    </button>
-
-    <button class="btn btn-light btn-sm"
-            type="button"
-            *ngIf="pagination.hasPreviousPage()"
-            (click)="pagination.goTo(pagination.getPreviousPage())">
-      {{pagination.getPreviousPage()}}
-    </button>
-
-    <button class="btn btn-light btn-sm"
-            type="button"
-            (click)="pagination.goToPrevious()"
-            [disabled]="pagination.isFirst()">
-      <mat-icon>navigate_before</mat-icon>
-    </button>
-
-    <button class="btn btn-light btn-sm"
-            type="button"
-            [disabled]="true">{{pagination.page()}}</button>
-
-    <button class="btn btn-light btn-sm"
-            type="button"
-            [disabled]="pagination.isLast()"
-            (click)="pagination.goToNext()">
-      <mat-icon>navigate_next</mat-icon>
-    </button>
-
-    <button class="btn btn-light btn-sm"
-            type="button"
-            *ngIf="pagination.hasNextPage()"
-            (click)="pagination.goTo(pagination.getNextPage())">
-      {{pagination.getNextPage()}}
-    </button>
-
-    <button class="btn btn-light btn-sm"
-            type="button"
-            [disabled]="pagination.isLast()"
-            (click)="pagination.goToLast()">
-      <mat-icon>last_page</mat-icon>
-    </button>
-  </span>
-</div>
+<nav aria-label="Pagination navigation">
+  <ul
+      class="pagination pagination-sm justify-content-end d-flex align-items-center">
+    <li class="page-item">
+      <small>{{pagination.posBeginCount()}}</small><small
+             *ngIf="pagination.posBeginCount() !== pagination.posEndCount()"> -
+        {{pagination.posEndCount()}}</small><small> on
+        {{pagination.total()}}</small>
+    </li>
+    <li class="page-item"
+        [ngClass]="{'disabled': pagination.isFirst()}">
+      <button class="page-link"
+              role="link"
+              type="button"
+              (click)="pagination.goToFirst()">
+        <mat-icon>first_page</mat-icon>
+      </button>
+    </li>
+    <li class="page-item">
+      <button class="page-link"
+              role="link"
+              type="button"
+              *ngIf="pagination.hasPreviousPage()"
+              (click)="pagination.goTo(pagination.getPreviousPage())">
+        {{pagination.getPreviousPage()}}
+      </button>
+    </li>
+    <li class="page-item" [ngClass]="{'disabled': pagination.isFirst()}">
+      <button class="page-link"
+              role="link"
+              type="button"
+              (click)="pagination.goToPrevious()"
+              >
+        <mat-icon>navigate_before</mat-icon>
+      </button>
+    </li>
+    <li class="page-item">
+      <button class="page-link"
+              type="button"
+              role="link"
+              (click)="pagination.changePage()">{{pagination.page()}}</button>
+    </li>
+    <li class="page-item" [ngClass]="{'disabled': pagination.isLast()}">
+      <button class="page-link"
+              type="button"
+              role="link"
+              (click)="pagination.goToNext()">
+        <mat-icon>navigate_next</mat-icon>
+      </button>
+    </li>
+    <li class="page-item">
+      <button class="page-link"
+              type="button"
+              role="link"
+              *ngIf="pagination.hasNextPage()"
+              (click)="pagination.goTo(pagination.getNextPage())">
+        {{pagination.getNextPage()}}
+      </button>
+    </li>
+    <li class="page-item" [ngClass]="{'disabled': pagination.isLast()}">
+      <button class="page-link"
+              type="button"
+              role="link"
+              (click)="pagination.goToLast()">
+        <mat-icon>last_page</mat-icon>
+      </button>
+    </li>
+  </ul>
+</nav>
