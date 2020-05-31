@@ -32,6 +32,12 @@ export abstract class PaginationAndParamsService {
   abstract displayName(elt: any): string;
 
   /**
+   * Return the id of elt.
+   * @param elt the element.
+   */
+  abstract getId(elt: any): number;
+
+  /**
    * Add elt into the list. You have to call add() to update the pagination
    * system.
    * @param elt the element that has been added

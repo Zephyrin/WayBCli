@@ -47,6 +47,12 @@ export class CategoryPaginationSearchService extends PaginationAndParamsService 
     return '';
   }
 
+  getId(elt: any): number {
+    if (elt instanceof Category) {
+      return elt.id;
+    }
+    return -1;
+  }
   list(): any[] {
     return this.categories;
   }

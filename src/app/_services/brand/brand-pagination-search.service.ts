@@ -41,6 +41,13 @@ export class BrandPaginationSearchService extends PaginationAndParamsService {
     return '';
   }
 
+  getId(elt: any): number {
+    if (elt instanceof Brand) {
+      return elt.id;
+    }
+    return -1;
+  }
+
   list(): any[] {
     return this.brands;
   }
