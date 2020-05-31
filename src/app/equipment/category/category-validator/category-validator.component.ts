@@ -37,10 +37,10 @@ export class CategoryValidatorComponent implements OnInit {
 
   ngOnInit(): void {
     this.loading = true;
-    this.service.getAll()
+    this.service.getAll(null)
       .pipe(first())
       .subscribe(categories => {
-        this.categories = categories;
+        this.categories = categories.body;
         this.loading = false;
       });
   }

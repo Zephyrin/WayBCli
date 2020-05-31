@@ -91,11 +91,11 @@ export class EquipmentValidatorComponent implements OnInit {
           equipment.characteristics = equipment.characteristics.filter(x => x.askValidate || x.validate);
         });
       });
-
-    this.categoryService.getAll()
+      // TODO Update with srevicePaginate.
+    this.categoryService.getAll(null)
       .pipe(first())
       .subscribe(categories => {
-        this.categories = categories;
+        this.categories = categories.body;
       });
 
     this.haveForm = this.formBuilder.group({
