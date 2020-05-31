@@ -2,6 +2,7 @@ import { Params, Router, ActivatedRoute } from '@angular/router';
 import { HttpParams, HttpResponse, HttpHeaders } from '@angular/common/http';
 
 import { Pagination } from '@app/_models/helpers/pagination';
+import { BooleanEnum } from '@app/_enums/boolean.enum';
 
 export abstract class PaginationAndParamsService {
 
@@ -45,6 +46,21 @@ export abstract class PaginationAndParamsService {
   abstract deleteElement(elt: any): void;
 
   /**
+   * Make the circle of boolean true -> false -> undefined -> true.
+   *
+   * @param bool previous state of the boolean
+   */
+  protected booleanCycle(bool: BooleanEnum) {
+    switch (bool) {
+      case BooleanEnum.false:
+        return BooleanEnum.undefined;
+      case BooleanEnum.undefined:
+        return BooleanEnum.true;
+      case BooleanEnum.true:
+        return BooleanEnum.false;
+    }
+  }
+  /**
    * Add something to the list
    */
   protected add() {
@@ -65,7 +81,7 @@ export abstract class PaginationAndParamsService {
    *
    * {Params} params is given via this.route.queryParams.subscribe(params) in ngOnInit
    */
-  setDefaultParamsFromUrl(params: Params) {
+  setDefaultParamsFromUrl(params: Params, isValidator) {
     this.isInit = true;
     if (params && params.hasOwnProperty('page')) {
       this.goTo(parseInt(params.page ? params.page : '1', 10));
@@ -141,13 +157,13 @@ export abstract class PaginationAndParamsService {
       query[`askValidate`] = null;
     }
     if (router && activatedRoute) {
-    router.navigate(
-      [],
-      {
-        relativeTo: activatedRoute,
-        queryParams: query,
-        queryParamsHandling: 'merge', // remove to replace all query params by provided
-      });
+      router.navigate(
+        [],
+        {
+          relativeTo: activatedRoute,
+          queryParams: query,
+          queryParamsHandling: 'merge', // remove to replace all query params by provided
+        });
     }
   }
 

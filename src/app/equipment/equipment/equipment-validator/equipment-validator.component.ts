@@ -6,7 +6,7 @@ import { first, filter } from 'rxjs/operators';
 import { EquipmentService } from '@app/_services/equipment.service';
 import { Equipment } from '@app/_models/equipment';
 
-import { CategoryService } from '@app/_services/category.service';
+import { CategoryService } from '@app/_services/category/category.service';
 import { BrandService } from '@app/_services/brand/brand.service';
 
 import { Category } from '@app/_models/category';

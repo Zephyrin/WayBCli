@@ -4,15 +4,15 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { AuthenticationService } from '@app/_services';
 import { Router } from '@angular/router';
 
-import { BrandPaginationSearchService } from '@app/_services/brand/brand-pagination-search.service';
 import { BooleanEnum } from '@app/_enums/boolean.enum';
+import { CategoryPaginationSearchService } from '../../../_services/category/category-pagination-search.service';
 
 @Component({
-  selector: 'app-brand-filter',
-  templateUrl: './brand-filter.component.html',
-  styleUrls: ['./brand-filter.component.scss']
+  selector: 'app-category-filter',
+  templateUrl: './category-filter.component.html',
+  styleUrls: ['./category-filter.component.scss']
 })
-export class BrandFilterComponent implements OnInit {
+export class CategoryFilterComponent implements OnInit {
   @ViewChild('searchText', { static: false }) searchText: ElementRef;
   @ViewChild('askValidationBtn', { static: false }) askValidationBtn: ElementRef;
   @Input() isCombo = false;
@@ -22,7 +22,7 @@ export class BrandFilterComponent implements OnInit {
     private formBuilder: FormBuilder,
     private router: Router,
     private authenticationService: AuthenticationService,
-    private serviceP: BrandPaginationSearchService) {
+    private serviceP: CategoryPaginationSearchService) {
     if (!this.authenticationService.currentUserValue) {
       this.router.navigate(['/login?returnURL=brands']);
     }

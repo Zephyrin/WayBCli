@@ -3,7 +3,6 @@ import { Router } from '@angular/router';
 import { fromEvent, Observable, Subscription } from 'rxjs';
 import { AuthenticationService } from './_services';
 import { User, Role } from './_models';
-import { CategoryService } from './_services/category.service';
 
 declare var $: any;
 
@@ -23,8 +22,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
   constructor(
     public router: Router,
-    private authenticationService: AuthenticationService,
-    private categoryService: CategoryService,
+    private authenticationService: AuthenticationService
   ) {
     this.authenticationService.currentUser.subscribe(
       x => this.currentUser = x);
@@ -89,23 +87,6 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         || this.currentUser.roles.indexOf(Role.Admin) !== -1
         || this.currentUser.roles.indexOf(Role.SuperAdmin) !== -1);
     return isAmbassador;
-  }
-
-  startTimer() {
-    this.interval = setInterval(() => {
-      if (this.isAmbassador) {
-        this.categoryService.count()
-          .subscribe(
-            response => {
-              this.badgeCategory = Number(response.headers.get('X-Total-Count'));
-            }
-          );
-      }
-    }, 1000);
-  }
-
-  pauseTimer() {
-    clearInterval(this.interval);
   }
 
   logout() {

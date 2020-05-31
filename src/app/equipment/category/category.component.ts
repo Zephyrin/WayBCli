@@ -1,16 +1,13 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { ViewChild, SimpleChange } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { ViewChild } from '@angular/core';
 
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { first } from 'rxjs/operators';
-import { CategoryService } from '@app/_services/category.service';
-import { Category, User } from '@app/_models/';
+import { Category } from '@app/_models/';
 
 import { AuthenticationService } from '@app/_services';
-import { Router } from '@angular/router';
-import { FormErrors } from '@app/_errors';
+import { CategoryPaginationSearchService } from '@app/_services/category/category-pagination-search.service';
+import { Router, ActivatedRoute } from '@angular/router';
+import { SortEnum, SortByEnum } from '@app/_enums/category.enum';
 
-declare var $: any;
 @Component({
   selector: 'app-category',
   templateUrl: './category.component.html',
@@ -18,95 +15,49 @@ declare var $: any;
 })
 export class CategoryComponent implements OnInit {
   @ViewChild('categoryModal', { static: true }) categoryModal;
+  @Input() isValidator = false;
 
-  categories: Category[];
-  loading = false;
-  selected = undefined;
   interval: any;
-  errors = new FormErrors();
-  currentUser: User;
 
   constructor(
     private router: Router,
-    private service: CategoryService,
-    private authenticationService: AuthenticationService,
-    private cd: ChangeDetectorRef) {
+    private route: ActivatedRoute,
+    private serviceP: CategoryPaginationSearchService,
+    private authenticationService: AuthenticationService) {
     if (!this.authenticationService.currentUserValue) {
       this.router.navigate(['/login']);
     }
-    this.authenticationService.currentUser.subscribe(
-      x => this.currentUser = x);
+    if (window.location.pathname === '/categoriesValidator') {
+      this.isValidator = true;
+    }
   }
 
+  get sortEnum() { return SortEnum; }
+  get sortByEnum() { return SortByEnum; }
+  get service() { return this.serviceP; }
+
   ngOnInit(): void {
-    this.loading = true;
-    this.service.getAll()
-      .pipe(first())
-      .subscribe(categories => {
-        this.categories = categories.filter(x => x.validate || x.askValidate
-          || x.createdBy.id === this.currentUser.id);
-        this.categories.forEach(category => {
-          category.subCategories = category.subCategories.filter(
-            x => x.validate || x.askValidate
-            || x.createdBy.id === this.currentUser.id);
-        });
-        this.loading = false;
-      });
+    this.route.queryParamMap.subscribe(params => {
+      this.service.init(this.router, this.route, params, this.isValidator);
+    });
   }
 
   setSelected(category: Category) {
     clearInterval(this.interval);
-    if (this.selected === category) {
+    if (this.service.selected === category) {
       this.interval = setInterval(() => {
-        this.selected = undefined;
+        this.service.setSelected(undefined);
       }, 200);
 
     } else {
-      this.selected = category;
+      this.service.setSelected(category);
     }
   }
 
   dblClick(category: Category) {
     clearInterval(this.interval);
-    if (this.canEditOrDelete(category)) {
+    if (this.service.canEditOrDelete(category)) {
       this.categoryModal.open(category);
     }
-  }
-
-  canEditOrDelete(category: Category) {
-    return !category.validate;
-  }
-
-  onUpdateDone(simple: SimpleChange) {
-    setTimeout(() => {
-      if (simple !== undefined && simple !== null) {
-        if (simple.previousValue === null) {
-          this.categories.push(simple.currentValue);
-        } else if (simple.currentValue === null) {
-          const index = this.categories.indexOf(simple.previousValue);
-          if (index > 0) {
-            this.categories.splice(index, 1);
-          }
-        } else {
-          Object.assign(simple.previousValue, simple.currentValue);
-        }
-        this.cd.detectChanges();
-      }
-    });
-  }
-
-  updateAskValidate(category: Category) {
-    this.errors = new FormErrors();
-    this.setSelected(category);
-    this.loading = true;
-    category.askValidate = !category.askValidate;
-    this.service.update(category)
-      .subscribe(returnValue => {
-        this.loading = false;
-      }, (error: any) => {
-        this.errors.formatError(error);
-        category.askValidate = !category.askValidate;
-        this.loading = false;
-      });
   }
 }

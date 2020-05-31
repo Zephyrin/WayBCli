@@ -39,6 +39,7 @@ import { BrandFilterComponent } from './equipment/brand/brand-filter/brand-filte
 import { PaginationComponent } from './_helpers/pagination/pagination.component';
 import { FilterSwitchComponent } from './_helpers/filter-switch/filter-switch.component';
 import { ComboPaginateComponent } from './_helpers/combo-paginate/combo-paginate.component';
+import { CategoryFilterComponent } from './equipment/category/category-filter/category-filter.component';
 
 @NgModule({
   imports: [
@@ -76,7 +77,8 @@ import { ComboPaginateComponent } from './_helpers/combo-paginate/combo-paginate
     BrandFilterComponent,
     PaginationComponent,
     FilterSwitchComponent,
-    ComboPaginateComponent],
+    ComboPaginateComponent,
+    CategoryFilterComponent],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },

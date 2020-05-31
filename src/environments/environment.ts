@@ -8,12 +8,12 @@ export const environment = {
     /*, apiUrl: 'http://127.0.0.1:8000/api'
     , mediaUrl: 'http://127.0.0.1:8000/media'
     */
-    /* , apiUrl: 'https://127.0.0.1:8000/api'
-    , mediaUrl: 'https://127.0.0.1:8000/media' */
-    /* , apiUrl: 'https://192.168.0.17:8000/api'
+     , apiUrl: 'http://127.0.1.1:8000/api'
+    , mediaUrl: 'http://127.0.1.1:8000/media'
+    /* , apiUrl: 'http://192.168.0.17:8000/api'
     , mediaUrl: 'https://192.168.0.17:8000/media' */
-    , apiUrl: 'https://wayb.herokuapp.com/api'
-    , mediaUrl: 'https://wayb.herokuapp.com/media'
+    /* , apiUrl: 'https://wayb.herokuapp.com/api'
+    , mediaUrl: 'https://wayb.herokuapp.com/media' */
 };
 
 /*

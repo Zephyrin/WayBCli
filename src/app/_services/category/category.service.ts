@@ -1,22 +1,22 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
 import { environment } from '@environments/environment';
 import { Category } from '@app/_models';
-import { AuthenticationService } from './authentication.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CategoryService {
 
-  constructor(private http: HttpClient,
-              private authenticationService: AuthenticationService) { }
+  constructor(private http: HttpClient) { }
 
-  getAll() {
-    return this.http.get<Category[]>(`${environment.apiUrl}/category`);
+  getAll(httpParams: HttpParams) {
+    return this.http.get<Category[]>(
+      `${environment.apiUrl}/category`
+      , { params: httpParams, observe: 'response'});
   }
 
   count() {

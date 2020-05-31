@@ -7,7 +7,7 @@ import { BrandPaginationSearchService } from '@app/_services/brand/brand-paginat
 import { AuthenticationService } from '@app/_services';
 import { Router, ActivatedRoute } from '@angular/router';
 import { BrandUpdateComponent } from '@app/equipment/brand/brand-update/brand-update.component';
-import { SortEnum, SortByEnum, BooleanEnum } from '@app/_enums/brand.enum';
+import { SortEnum, SortByEnum } from '@app/_enums/brand.enum';
 
 @Component({
   selector: 'app-brand',

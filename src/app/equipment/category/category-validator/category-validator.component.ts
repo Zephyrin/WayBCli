@@ -3,7 +3,7 @@ import { ViewChild, SimpleChange } from '@angular/core';
 
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
-import { CategoryService } from '@app/_services/category.service';
+import { CategoryService } from '@app/_services/category/category.service';
 import { Category } from '@app/_models/';
 
 import { AuthenticationService } from '@app/_services';

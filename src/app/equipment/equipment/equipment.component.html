@@ -1,5 +1,5 @@
 <app-equipment-filter [equipments]="equipments"
-                      [categories]="categories"
+                      [categories]="categoryService.categories"
                       (filterDone)="filterDone($event)"
                       #equipmentFilter></app-equipment-filter>
 

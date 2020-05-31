@@ -1,21 +1,20 @@
-import { Injectable } from '@angular/core';
+import { Injectable, SimpleChange, ChangeDetectorRef } from '@angular/core';
 import { Router, ActivatedRoute, Route, Params } from '@angular/router';
 
 import { PaginationAndParamsService } from '../helpers/pagination-and-params.service';
-import { BrandService } from './brand.service';
+import { CategoryService } from './category.service';
 
-import { Brand } from '@app/_models';
+import { Category } from '@app/_models';
 import { FormErrors } from '@app/_errors';
-import { environment } from '@environments/environment';
-import { SortEnum, SortByEnum } from '@app/_enums/brand.enum';
+import { SortEnum, SortByEnum } from '@app/_enums/category.enum';
 import { BooleanEnum } from '@app/_enums/boolean.enum';
 
 @Injectable({
   providedIn: 'root'
 })
-export class BrandPaginationSearchService extends PaginationAndParamsService {
-  public brands: Brand[];
-  public selected: Brand;
+export class CategoryPaginationSearchService extends PaginationAndParamsService {
+  public categories: Category[];
+  public selected: Category;
   public errors: FormErrors;
   public loading = false;
 
@@ -30,19 +29,21 @@ export class BrandPaginationSearchService extends PaginationAndParamsService {
   private router: Router;
   private route: ActivatedRoute;
 
-  constructor(private service: BrandService) {
+  constructor(
+    private service: CategoryService) {
     super();
-  }
+   }
+
   /* Part of PaginationAndParamsService */
   displayName(elt: any): string {
-    if (elt instanceof Brand) {
+    if (elt instanceof Category) {
       return elt.name;
     }
     return '';
   }
 
   list(): any[] {
-    return this.brands;
+    return this.categories;
   }
 
   setSearch(text: string) {
@@ -91,10 +92,6 @@ export class BrandPaginationSearchService extends PaginationAndParamsService {
       } else { this.sortBy = SortByEnum.name; }
     } else { this.sortBy = SortByEnum.name; }
 
-    if (params && params.hasOwnProperty('search')) {
-      this.search = params.search;
-    } else { this.search = ''; }
-
     if (params && params.hasOwnProperty('validate')) {
       if (Object.values(BooleanEnum).includes(params.validate)) {
         this.validate = params.validate;
@@ -119,14 +116,16 @@ export class BrandPaginationSearchService extends PaginationAndParamsService {
         this.askValidate = BooleanEnum.undefined;
       }
     }
+    if (params && params.hasOwnProperty('search')) {
+      this.search = params.search;
+    } else { this.search = ''; }
   }
 
-  init(router: Router, route: ActivatedRoute, params: Params, isValidator) {
+  init(router: Router, route: ActivatedRoute, params: Params, isValidator: boolean, noPagination = false) {
     this.route = route;
     this.router = router;
     this.errors = new FormErrors();
-    this.setDefaultParamsFromUrl(params, isValidator);
-
+    this.setDefaultParamsFromUrl(params === undefined ? params : params.params, isValidator);
     this.changePage();
   }
 
@@ -146,74 +145,85 @@ export class BrandPaginationSearchService extends PaginationAndParamsService {
       httpParams = httpParams.append('search', this.search);
     }
     this.paramsIntoUrl(httpParams, this.router, this.route);
-    this.service.getAll(httpParams).subscribe(brands => {
+    this.service.getAll(httpParams).subscribe(categories => {
       this.loading = false;
-      this.setParametersFromResponse(brands.headers);
-      this.brands = brands.body.map(x => new Brand(x));
+      this.setParametersFromResponse(categories.headers);
+      this.categories = categories.body.map(x => new Category(x));
     });
   }
 
-  setSelected(brand: Brand) {
+  setSelected(category: Category) {
     if (!this.loading) {
-      if (this.selected !== brand) {
-        this.selected = brand;
+      if (this.selected !== category) {
+        this.selected = category;
         this.errors = new FormErrors();
       }
     }
   }
 
-  updateAskValidate(brand: Brand) {
+  updateAskValidate(category: Category) {
     this.errors = new FormErrors();
-    this.setSelected(brand);
+    this.setSelected(category);
     this.loading = true;
-    brand.askValidate = !brand.askValidate;
-    this.service.update(brand)
+    category.askValidate = !category.askValidate;
+    this.service.update(category)
       .subscribe(returnValue => {
         this.loading = false;
       }, (error: any) => {
         this.errors.formatError(error);
-        brand.askValidate = !brand.askValidate;
+        category.askValidate = !category.askValidate;
         this.loading = false;
       });
   }
 
-  updateValidate(brand: Brand) {
+  updateValidate(category: Category) {
     this.errors = new FormErrors();
-    this.setSelected(brand);
+    this.setSelected(category);
     this.loading = true;
-    brand.validate = !brand.validate;
-    this.service.update(brand)
+    category.validate = !category.validate;
+    this.service.update(category)
       .subscribe(returnValue => {
         this.loading = false;
       }, (error: any) => {
         this.errors.formatError(error);
-        brand.validate = !brand.validate;
+        category.validate = !category.validate;
         this.loading = false;
       });
   }
 
-  getLogoUrl(brand: Brand) {
-    return `${environment.mediaUrl}/${brand.logo.filePath}`;
+  canEditOrDelete(category: Category) {
+    return !category.validate;
   }
 
-  returnUrl(uri: string) {
-    return /^http(s)?:\/\//.test(uri) ? uri : 'https://' + uri;
+  onUpdateDone(simple: SimpleChange) {
+    setTimeout(() => {
+      if (simple !== undefined && simple !== null) {
+        if (simple.previousValue === null) {
+          this.categories.push(simple.currentValue);
+        } else if (simple.currentValue === null) {
+          const index = this.categories.indexOf(simple.previousValue);
+          if (index > 0) {
+            this.categories.splice(index, 1);
+          }
+        } else {
+          Object.assign(simple.previousValue, simple.currentValue);
+        }
+        /* this.cd.detectChanges(); */
+      }
+    });
   }
 
-  canEditOrDelete(brand: Brand) {
-    return !brand.validate;
-  }
-
-  addElement(brand) {
-    this.brands.push(brand);
+  addElement(category: Category) {
+    this.categories.push(category);
     super.add();
   }
 
-  deleteElement(brand: Brand) {
-    const index = this.brands.indexOf(brand);
+  deleteElement(category: Category) {
+    const index = this.categories.indexOf(category);
     if (index >= 0) {
-      this.brands.splice(index, 1);
+      this.categories.splice(index, 1);
       super.delete();
     }
   }
+
 }

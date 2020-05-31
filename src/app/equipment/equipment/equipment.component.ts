@@ -2,25 +2,21 @@ import { Component, OnInit, SimpleChange } from '@angular/core';
 import { ViewChild } from '@angular/core';
 
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { first, filter } from 'rxjs/operators';
+import { first } from 'rxjs/operators';
 import { EquipmentService } from '@app/_services/equipment.service';
 import { Equipment } from '@app/_models/equipment';
 
-import { CategoryService } from '@app/_services/category.service';
-import { BrandService } from '@app/_services/brand/brand.service';
-
 import { Category } from '@app/_models/category';
-import { Brand } from '@app/_models/brand';
 import { User, Role } from '@app/_models';
 
 import { AuthenticationService } from '@app/_services';
 import { Router } from '@angular/router';
 import { FormErrors } from '@app/_errors';
-import { SubCategory, Characteristic } from '@app/_models';
 import { UserOwnedUpdateComponent } from '../user-owned-update/user-owned-update.component';
 import { BrandUpdateComponent } from '@app/equipment/brand/brand-update/brand-update.component';
 import { EquipmentFilterComponent } from './equipment-filter/equipment-filter.component';
 import { EquipmentUpdateComponent } from './equipment-update/equipment-update.component';
+import { CategoryPaginationSearchService } from '@app/_services/category/category-pagination-search.service';
 
 declare var $: any;
 
@@ -44,9 +40,6 @@ export class EquipmentComponent implements OnInit {
 
   loading = false;
 
-
-  categories: Category[];
-
   haveEquipment: Equipment = null;
 
   currentUser: User;
@@ -59,8 +52,7 @@ export class EquipmentComponent implements OnInit {
     private formBuilder: FormBuilder,
     private router: Router,
     private service: EquipmentService,
-    private categoryService: CategoryService,
-    private brandService: BrandService,
+    private categoryServiceP: CategoryPaginationSearchService,
     private authenticationService: AuthenticationService) {
     if (!this.authenticationService.currentUserValue) {
       this.router.navigate(['/login']);
@@ -76,6 +68,8 @@ export class EquipmentComponent implements OnInit {
         || this.currentUser.roles.indexOf(Role.Admin) !== -1);
     return isAmbassador;
   }
+
+  get categoryService() { return this.categoryServiceP; }
 
   canEditOrDelete(equipment) {
     return equipment
@@ -99,11 +93,7 @@ export class EquipmentComponent implements OnInit {
         });
       });
 
-    this.categoryService.getAll()
-      .pipe(first())
-      .subscribe(categories => {
-        this.categories = categories;
-      });
+    this.categoryService.init(undefined, undefined, undefined, false, true);
 
     this.haveForm = this.formBuilder.group({
       wantQuantity: [0, Validators.required],

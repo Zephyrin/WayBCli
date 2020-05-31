@@ -4,7 +4,7 @@ import { Renderer2 } from '@angular/core';
 
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
-import { BooleanEnum} from '@app/_enums/brand.enum';
+import { BooleanEnum} from '@app/_enums/boolean.enum';
 
 @Component({
   selector: 'app-filter-switch',

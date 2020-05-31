@@ -1,0 +1,44 @@
+<nav aria-label="Filter"
+     class="navbar"
+     [ngClass]="{'navbar-expand-sm': !isCombo}">
+  <div [ngClass]="{'navbar-collapse': !isCombo, 'collapse': !isCombo}"
+       id="filterBrandNavDropdown">
+    <ul class="navbar-nav align-items-sm-center">
+      <li class="nav-item nav-link">
+        <app-filter-switch [disabled]="service.loading"
+                           [value]="service.validate"
+                           [text]="'Validate'"
+                           (check)="changeValidate()"></app-filter-switch>
+      </li>
+      <li class="nav-item nav-link">
+        <app-filter-switch [disabled]="service.loading"
+                           [value]="service.askValidate"
+                           [text]="'Ask Validation'"
+                           (check)="changeAskValidation()"></app-filter-switch>
+      </li>
+      <li class="nav-item nav-link align-items-center">
+        <form class="form-inline"
+              [formGroup]="searchForm">
+          <div class="input-group row nowrap">
+            <input class="form-control"
+                   formControlName="search"
+                   id="searchText"
+                   #searchText
+                   type="search"
+                   [(ngModel)]="service.search"
+                   placeholder="Search"
+                   aria-label="Search">
+            <div class="input-group-append">
+              <button for="searchText"
+                      class="btn btn-outline-secondary d-flex justify-content-center align-content-between"
+                      type="submit"
+                      (click)="search()">
+                <mat-icon>search</mat-icon>Search
+              </button>
+            </div>
+          </div>
+        </form>
+      </li>
+    </ul>
+  </div>
+</nav>
