@@ -24,6 +24,11 @@ export class CategoryPaginationSearchService extends PaginationAndParamsService 
   public validate = BooleanEnum.undefined;
   public askValidate = BooleanEnum.undefined;
   public search = '';
+  public lower: string = undefined;
+  public lowerOrEq: string = undefined;
+  public eq: string = undefined;
+  public greater: string = undefined;
+  public greaterOrEq: string = undefined;
 
   /* Route and router for URL */
   private router: Router;
@@ -32,7 +37,7 @@ export class CategoryPaginationSearchService extends PaginationAndParamsService 
   constructor(
     private service: CategoryService) {
     super();
-   }
+  }
 
   /* Part of PaginationAndParamsService */
   displayName(elt: any): string {
@@ -78,7 +83,7 @@ export class CategoryPaginationSearchService extends PaginationAndParamsService 
     this.changePage();
   }
 
-  setDefaultParamsFormUrl(params: Params, isValidator) {
+  setDefaultParamsFromUrl(params: Params, isValidator) {
     super.setDefaultParamsFromUrl(params, isValidator);
     if (params && params.hasOwnProperty('sort')) {
       if (Object.values(SortEnum).includes(params.sort)) {
@@ -119,6 +124,34 @@ export class CategoryPaginationSearchService extends PaginationAndParamsService 
     if (params && params.hasOwnProperty('search')) {
       this.search = params.search;
     } else { this.search = ''; }
+    this.lower = this.lowerOrEq = this.eq = this.greater = this.greaterOrEq = undefined;
+    if (params && params.hasOWnProperty('subCategoryCount')) {
+      const $subCategoryCount = params.subCategoryCount;
+      const $match = /(l|le|e|g|ge)(\d+)((l|le|e|g|ge)(\d+))?/.exec($subCategoryCount);
+      for (let $i = 1; $i <= 3; $i = $i + 2) {
+        if ($match[$i] !== undefined && $match[$i] !== undefined) {
+          switch ($match[$i]) {
+            case 'l':
+              this.lower = $match[$i + 1];
+              break;
+            case 'le':
+              this.lowerOrEq = $match[$i + 1];
+              break;
+            case 'e':
+              this.eq = $match[$i + 1];
+              break;
+            case 'g':
+              this.greater = $match[$i + 1];
+              break;
+            case 'ge':
+              this.greaterOrEq = $match[$i + 1];
+              break;
+            default:
+              break;
+          }
+        }
+      }
+    }
   }
 
   init(router: Router, route: ActivatedRoute, params: Params, isValidator: boolean, noPagination = false) {
@@ -126,6 +159,29 @@ export class CategoryPaginationSearchService extends PaginationAndParamsService 
     this.router = router;
     this.errors = new FormErrors();
     this.setDefaultParamsFromUrl(params === undefined ? params : params.params, isValidator);
+    this.changePage();
+  }
+
+  initWithParams(
+    router: Router,
+    route: ActivatedRoute,
+    params: Params,
+    isValidator: boolean,
+    noPagination: boolean,
+    lower: string,
+    lowerOrEq: string,
+    eq: string,
+    greater: string,
+    greaterOrEq: string) {
+    this.route = route;
+    this.router = router;
+    this.errors = new FormErrors();
+    this.setDefaultParamsFromUrl(params === undefined ? params : params.params, isValidator);
+    this.lower = lower;
+    this.lowerOrEq = lowerOrEq;
+    this.eq = eq;
+    this.greater = greater;
+    this.greaterOrEq = greaterOrEq;
     this.changePage();
   }
 
@@ -143,6 +199,15 @@ export class CategoryPaginationSearchService extends PaginationAndParamsService 
     }
     if (this.search !== '') {
       httpParams = httpParams.append('search', this.search);
+    }
+    if (this.lower || this.lowerOrEq || this.eq || this.greater || this.greaterOrEq) {
+      let val = '';
+      if (this.lower) { val = 'l' + this.lower; }
+      if (this.lowerOrEq) { val = 'lE' + this.lowerOrEq; }
+      if (this.eq) { val = 'e' + this.eq; }
+      if (this.greater) { val = 'g' + this.greater; }
+      if (this.greaterOrEq) { val = 'gE' + this.greaterOrEq; }
+      httpParams = httpParams.append('subCategoryCount', val);
     }
     this.paramsIntoUrl(httpParams, this.router, this.route);
     this.service.getAll(httpParams).subscribe(categories => {

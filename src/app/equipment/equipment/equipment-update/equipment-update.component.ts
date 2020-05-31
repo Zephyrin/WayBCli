@@ -21,6 +21,7 @@ import { CharacteristicUpdateComponent } from '@app/equipment/characteristic/cha
 import { HttpParams } from '@angular/common/http';
 import { BrandPaginationSearchService } from '@app/_services/brand/brand-pagination-search.service';
 import { FilterEnum } from '@app/_enums/filter.enum';
+import { CategoryPaginationSearchService } from '@app/_services/category/category-pagination-search.service';
 
 declare var $: any;
 
@@ -39,16 +40,13 @@ export class EquipmentUpdateComponent implements OnInit {
     this.equipmentsP = equipments;
   }
   get equipments() { return this.equipmentsP; }
-  @Input()
-  set categories(categories: Category[]) {
-    this.categoriesP = categories;
-  }
-  get categories() { return this.categoriesP; }
- /*  @Input()
-  set parentData(equipment: Equipment) {
-    this.selected = equipment;
-  }
-  get parentData() { return this.selected; }*/
+
+  get categories() { return this.categoryService.categories; }
+  /*  @Input()
+   set parentData(equipment: Equipment) {
+     this.selected = equipment;
+   }
+   get parentData() { return this.selected; }*/
   currentUser: User;
 
   form: FormGroup;
@@ -74,12 +72,12 @@ export class EquipmentUpdateComponent implements OnInit {
   get f() { return this.form.controls; }
 
   private equipmentsP: Equipment[];
-  private categoriesP: Category[];
 
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
     private service: EquipmentService,
+    private categoryService: CategoryPaginationSearchService,
     private brandServiceP: BrandPaginationSearchService,
     private authenticationService: AuthenticationService
   ) {
@@ -97,6 +95,8 @@ export class EquipmentUpdateComponent implements OnInit {
   ngOnInit(): void {
     this.deleteHasError = false;
     this.loading = true;
+    this.categoryService.initWithParams(undefined, undefined, undefined, false,
+      true, undefined, undefined, undefined, '0', undefined);
     this.brandServiceP.init(undefined, undefined, undefined, false);
 
     this.form = this.formBuilder.group({
