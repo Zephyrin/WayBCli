@@ -1,6 +1,6 @@
-<nav aria-label="Pagination navigation" class="navbar justify-content-end d-flex">
+<nav aria-label="Pagination navigation">
   <ul
-      class="pagination pagination-sm align-items-center">
+      class="pagination pagination-sm align-items-center justify-content-end d-flex">
     <li class="page-item">
       <small>{{pagination.posBeginCount()}}</small><small
              *ngIf="pagination.posBeginCount() !== pagination.posEndCount()"> - {{pagination.posEndCount()}}</small><small> on {{pagination.total()}} </small>
