@@ -18,6 +18,7 @@ import { FormErrors } from '@app/_errors';
 export class SubCategoryComponent implements OnInit, OnDestroy {
   @Input() subCategories: SubCategory[];
   @Input() loadingParent: boolean;
+  @Input() isValidator: boolean;
   @Input()
   set parent(parent: Category) {
     this.$parent = parent;
@@ -101,6 +102,21 @@ export class SubCategoryComponent implements OnInit, OnDestroy {
          this.loading = false;
        });
   }
+
+  updateValidate(subCategory: SubCategory) {
+    this.errors = new FormErrors();
+    this.setSelected(subCategory);
+    this.loading = true;
+    subCategory.validate = !subCategory.validate;
+    this.service.update(this.parent.id, subCategory)
+      .subscribe(returnValue => {
+        this.loading = false;
+      }, (error: any) => {
+        this.errors.formatError(error);
+        subCategory.validate = !subCategory.validate;
+        this.loading = false;
+      });
+ }
 
   onUpdateDone(simple: SimpleChange) {
     setTimeout(() => {

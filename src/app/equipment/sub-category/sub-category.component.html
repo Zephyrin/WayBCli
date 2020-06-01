@@ -18,12 +18,17 @@
       <thead>
         <tr>
           <th scope="col"
-              class="col-11">
-            <button class="btn btn-light"
+              class="col-10">
+            <button class="btn btn-light btn-sm d-flex justify-content-center align-content-between"
+                    *ngIf="!isValidator"
                     (click)="subCategoryModal.open()">
               <mat-icon>add</mat-icon>Sub-category name
             </button>
+            <p *ngIf="isValidator">Sub-category name</p>
           </th>
+          <th scope="col"
+              class="col-1"
+              *ngIf="isValidator">Ask Validation</th>
           <th class="col-1 action">Action</th>
         </tr>
       </thead>
@@ -32,27 +37,36 @@
           [class.active]="subCategory === selected"
           (dblclick)="dblClick(subCategory)"
           class="pointer">
-        <td class="col-11">
+        <td class="col-10">
           <b>{{subCategory.name}}</b>
         </td>
+        <td class="col-1"
+            *ngIf="isValidator"><app-switch [value]="subCategory.askValidate"
+            [disabled]="true"></app-switch></td>
         <td class="col-1 action">
           <div class="btn-group"
                role="group"
                *ngIf="canEditOrDelete(subCategory)"
                aria-label="Tools">
             <button type="button"
-                    class="btn btn-light"
+                    class="btn btn-light btn-sm d-flex justify-content-center align-content-between"
                     (click)="subCategoryModal.open(subCategory)">
               <mat-icon>update</mat-icon>
             </button>
             <button type="button"
-                    class="btn btn-light"
+                    class="btn btn-light btn-sm d-flex justify-content-center align-content-between"
                     (click)="subCategoryModal.onDelete(subCategory)">
               <mat-icon>delete</mat-icon>
             </button>
             <app-switch [value]="subCategory.askValidate"
+                        *ngIf="!isValidator"
                         [disabled]="loading"
                         (isChecked)="updateAskValidate(subCategory)">
+            </app-switch>
+            <app-switch [value]="subCategory.askValidate"
+                        *ngIf="isValidator"
+                        [disabled]="loading"
+                        (isChecked)="updateValidate(subCategory)">
             </app-switch>
           </div>
         </td>
