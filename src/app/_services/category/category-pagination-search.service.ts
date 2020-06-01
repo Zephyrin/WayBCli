@@ -131,7 +131,7 @@ export class CategoryPaginationSearchService extends PaginationAndParamsService 
       this.search = params.search;
     } else { this.search = ''; }
     this.lower = this.lowerOrEq = this.eq = this.greater = this.greaterOrEq = undefined;
-    if (params && params.hasOWnProperty('subCategoryCount')) {
+    if (params && params.hasOwnProperty('subCategoryCount')) {
       const $subCategoryCount = params.subCategoryCount;
       const $match = /(l|le|e|g|ge)(\d+)((l|le|e|g|ge)(\d+))?/.exec($subCategoryCount);
       for (let $i = 1; $i <= 3; $i = $i + 2) {
@@ -263,7 +263,7 @@ export class CategoryPaginationSearchService extends PaginationAndParamsService 
   }
 
   canEditOrDelete(category: Category) {
-    return !category.validate;
+    return this.isValidator ? !category.askValidate : !category.validate;
   }
 
   onUpdateDone(simple: SimpleChange) {

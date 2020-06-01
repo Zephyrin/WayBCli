@@ -79,10 +79,13 @@
              routerLink="equipments">Equipments</a>
           <a class="dropdown-item"
              routerLinkActive="active-link"
-             routerLink="brands">Brands</a>
+             routerLink="brands"
+             [queryParams]="{page:'1', limit: '10', sort: 'asc', sortBy: 'name'}"
+             >Brands</a>
           <a class="dropdown-item"
              routerLinkActive="active-link"
-             routerLink="categories">Categories</a>
+             routerLink="categories"
+             [queryParams]="{page:'1', limit: '10', sort: 'asc', sortBy: 'name'}">Categories</a>
           <a class="dropdown-item"
              routerLinkActive="active-link"
              routerLink="trips">Trips</a>
@@ -108,10 +111,12 @@
              routerLink="equipmentsValidator">Equipments' validator</a>
           <a class="dropdown-item nav-link"
              routerLinkActive="active-link"
-             routerLink="brandsValidator">Brands' validator</a>
+             routerLink="brandsValidator"
+             [queryParams]="{page:'1', limit: '10', sort: 'asc', sortBy: 'name', validate: 'false', askValidate: 'true'}">Brands' validator</a>
           <a class="nav-link"
              routerLinkActive="active-link"
-             routerLink="categoriesValidator">Categories' validator</a>
+             routerLink="categoriesValidator"
+             [queryParams]="{page:'1', limit: '10', sort: 'asc', sortBy: 'name', validate: 'false', askValidate: 'true'}">Categories' validator</a>
         </div>
       </div>
       <li class="separator"
@@ -192,10 +197,12 @@
              routerLink="equipments">Equipments</a>
           <a class="nav-link"
              routerLinkActive="active-link"
-             routerLink="brands">Brands</a>
+             routerLink="brands"
+             [queryParams]="{page:'1', limit: '10', sort: 'asc', sortBy: 'name'}">Brands</a>
           <a class="nav-link"
              routerLinkActive="active-link"
-             routerLink="categories">
+             routerLink="categories"
+             [queryParams]="{page:'1', limit: '10', sort: 'asc', sortBy: 'name'}">
             Categories
           </a>
           <a class="nav-link"
@@ -217,12 +224,14 @@
           </a>
           <a class="nav-link"
              routerLinkActive="active-link"
-             routerLink="brandsValidator">
+             routerLink="brandsValidator"
+             [queryParams]="{page:'1', limit: '10', sort: 'asc', sortBy: 'name', validate: 'false', askValidate: 'true'}">
             Brands' validator
           </a>
           <a class="nav-link"
              routerLinkActive="active-link"
-             routerLink="categoriesValidator">
+             routerLink="categoriesValidator"
+             [queryParams]="{page:'1', limit: '10', sort: 'asc', sortBy: 'name', validate: 'false', askValidate: 'true'}">
             Categories' validator
           </a>
         </div>

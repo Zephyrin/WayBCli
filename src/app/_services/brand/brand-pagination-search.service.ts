@@ -84,7 +84,7 @@ export class BrandPaginationSearchService extends PaginationAndParamsService {
     this.changePage();
   }
 
-  setDefaultParamsFormUrl(params: Params, isValidator) {
+  setDefaultParamsFromUrl(params: Params, isValidator) {
     super.setDefaultParamsFromUrl(params, isValidator);
     if (params && params.hasOwnProperty('sort')) {
       if (Object.values(SortEnum).includes(params.sort)) {
@@ -133,7 +133,6 @@ export class BrandPaginationSearchService extends PaginationAndParamsService {
     this.router = router;
     this.errors = new FormErrors();
     this.setDefaultParamsFromUrl(params, isValidator);
-
     this.changePage();
   }
 

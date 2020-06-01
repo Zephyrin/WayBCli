@@ -171,7 +171,7 @@ export abstract class PaginationAndParamsService {
         {
           relativeTo: activatedRoute,
           queryParams: query,
-          queryParamsHandling: 'merge', // remove to replace all query params by provided
+          queryParamsHandling: 'merge'
         });
     }
   }

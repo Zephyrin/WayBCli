@@ -6,7 +6,6 @@ import { RegisterComponent } from './auth/register/register.component';
 import { EquipmentComponent } from './equipment/equipment/equipment.component';
 import { UserComponent } from './equipment/_admin/user/user.component';
 import { CategoryComponent } from './equipment/category/category.component';
-import { CategoryValidatorComponent } from './equipment/category/category-validator/category-validator.component';
 import { BrandComponent } from './equipment/brand/brand/brand.component';
 import { EquipmentValidatorComponent } from './equipment/equipment/equipment-validator/equipment-validator.component';
 import { BackpackComponent } from './backpack/backpack/backpack.component';
@@ -20,7 +19,7 @@ const routes: Routes = [
     { path: 'categories', component: CategoryComponent},
     { path: 'brands', component: BrandComponent },
     { path: 'brandsValidator', component: BrandComponent},
-    { path: 'categoriesValidator', component: CategoryValidatorComponent},
+    { path: 'categoriesValidator', component: CategoryComponent},
     { path: 'equipmentsValidator', component: EquipmentValidatorComponent},
 
     // otherwise redirect to home
