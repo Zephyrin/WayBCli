@@ -47,23 +47,8 @@ export class SwitchComponent implements ControlValueAccessor {
     return this._ID;
   }
 
-  @Input()
-  set disabled(disabled: boolean) {
-    this.disabledP = disabled;
-    if (disabled) {
-      if (this.switchLabel) {
-        this.render.addClass(this.switchLabel.nativeElement, 'disabled');
-      }
-    } else {
-      if (this.switchLabel) {
-        this.render.removeClass(this.switchLabel.nativeElement, 'disabled');
-      }
-    }
-  }
+  @Input() disabled: boolean;
 
-  get disabled() { return this.disabledP; }
-
-  private disabledP = false;
   private _ID = '';
 
 

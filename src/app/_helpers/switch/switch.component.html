@@ -1,16 +1,6 @@
 <button (click)="switch()"
-     class="btn btn-light"
-     [ngClass]="{ 'checked': value }">
+     class="btn btn-light btn-sm d-flex justify-content-center align-content-between"
+     [ngClass]="{ 'checked': value, 'disabled': disabled }">
      <mat-icon *ngIf="value">check-box</mat-icon>
      <mat-icon *ngIf="!value">check_box_outline_blank</mat-icon>
-<!--   <input type="checkbox"
-         class="switch-input"
-         [checked]="value"
-         [value]="value"
-         [id]="id">
-  <span class="switch-label"
-        #switchLabel
-        data-on="On"
-        data-off="Off"></span>
-  <span class="switch-handle"></span> -->
 </button>

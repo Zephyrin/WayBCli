@@ -208,7 +208,7 @@ export class BrandPaginationSearchService extends PaginationAndParamsService {
   }
 
   canEditOrDelete(brand: Brand) {
-    return !brand.validate;
+    return this.isValidator ? brand.askValidate : !brand.validate;
   }
 
   addElement(brand) {

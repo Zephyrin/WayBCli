@@ -8,6 +8,8 @@ export abstract class PaginationAndParamsService {
 
   public pagination: Pagination;
   private isInit = false;
+  public isValidator = false;
+
   constructor(pagination: Pagination = null) {
     if (pagination !== null) {
       this.pagination = pagination;
@@ -87,8 +89,9 @@ export abstract class PaginationAndParamsService {
    *
    * {Params} params is given via this.route.queryParams.subscribe(params) in ngOnInit
    */
-  setDefaultParamsFromUrl(params: Params, isValidator) {
+  setDefaultParamsFromUrl(params: Params, isValidator: boolean) {
     this.isInit = true;
+    this.isValidator = isValidator;
     if (params && params.hasOwnProperty('page')) {
       this.goTo(parseInt(params.page ? params.page : '1', 10));
     } else {

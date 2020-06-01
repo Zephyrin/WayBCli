@@ -19,7 +19,7 @@
 
     <div class="d-flex justify-content-between align-items-center">
       <button class="btn btn-light btn-sm d-flex justify-content-center align-content-between"
-              *ngIf="!isValidator"
+              *ngIf="!service.isValidator"
               (click)="brandModal.open()">
         <mat-icon>add</mat-icon>
       </button>
