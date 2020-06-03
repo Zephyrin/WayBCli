@@ -3,24 +3,24 @@ import { Characteristic } from './characteristic';
 import { SubCategory } from './sub-category';
 import { User } from './user';
 import { CurrencyPipe } from '@angular/common';
+import { Validation } from './validation';
 
-export class Equipment {
+export class Equipment extends Validation {
   id: number;
   name: string;
   description: string;
   brand: Brand;
   characteristics: Characteristic[];
   subCategory: SubCategory;
-  validate: boolean;
   /**
    * Local variable to know if the user has this equipment or not.
    */
   has: boolean;
-  askValidate: boolean;
   createdBy: User;
   // haves: Have;
   private currencyPipe = new CurrencyPipe('EN');
   constructor(eq: Equipment = null) {
+    super(eq);
     if (eq) {
       this.id = eq.id;
       this.name = eq.name;
@@ -30,8 +30,6 @@ export class Equipment {
       }
       this.characteristics = [];
       this.subCategory = new SubCategory(eq.subCategory);
-      this.validate = eq.validate;
-      this.askValidate = eq.askValidate;
       eq.characteristics.forEach(car => {
         this.characteristics.push(new Characteristic(car));
       });

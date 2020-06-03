@@ -42,6 +42,18 @@ export class CategoryPaginationSearchService extends PaginationAndParamsService<
   }
 
 
+  removeParamsFromUrl(query: {}) {
+    if (!query.hasOwnProperty('search')) {
+      query[`search`] = null;
+    }
+    if (!query.hasOwnProperty('validate')) {
+      query[`validate`] = null;
+    }
+    if (!query.hasOwnProperty('askValidate')) {
+      query[`askValidate`] = null;
+    }
+  }
+
   filterAskValidate() {
     this.askValidate = this.booleanCycle(this.askValidate);
     this.changePage();

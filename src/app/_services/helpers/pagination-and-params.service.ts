@@ -1,5 +1,5 @@
 import { Params, Router, ActivatedRoute } from '@angular/router';
-import { HttpParams, HttpResponse, HttpHeaders } from '@angular/common/http';
+import { HttpParams, HttpHeaders } from '@angular/common/http';
 
 import { Pagination } from '@app/_models/helpers/pagination';
 import { BooleanEnum } from '@app/_enums/boolean.enum';
@@ -253,6 +253,14 @@ export abstract class PaginationAndParamsService<T> {
   }
 
   /**
+   * To remove a parameter from the URL that has been already set, you should
+   * set the param to null like this:
+   * if (!query.hasOwnProperty('validate')) {
+   *   query[`validate`] = null;
+   * }
+   */
+  abstract removeParamsFromUrl(query: {}): void;
+  /**
    * Change navigator URL with information from httpParams.
    *
    * @param httpParams Parameters use to call HTTP Get
@@ -264,15 +272,7 @@ export abstract class PaginationAndParamsService<T> {
       const val = httpParams.get(key);
       query[key] = val;
     });
-    if (!query.hasOwnProperty('search')) {
-      query[`search`] = null;
-    }
-    if (!query.hasOwnProperty('validate')) {
-      query[`validate`] = null;
-    }
-    if (!query.hasOwnProperty('askValidate')) {
-      query[`askValidate`] = null;
-    }
+    this.removeParamsFromUrl(query);
     if (this.router && this.route) {
       this.router.navigate(
         [],

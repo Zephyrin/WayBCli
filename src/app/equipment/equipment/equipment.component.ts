@@ -2,16 +2,13 @@ import { Component, OnInit, SimpleChange, Input } from '@angular/core';
 import { ViewChild } from '@angular/core';
 
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { first } from 'rxjs/operators';
-import { EquipmentService } from '@app/_services/equipment/equipment.service';
 import { Equipment } from '@app/_models/equipment';
 
-import { Category } from '@app/_models/category';
 import { User, Role } from '@app/_models';
 
 import { AuthenticationService } from '@app/_services';
 import { Router, ActivatedRoute } from '@angular/router';
-import { FormErrors } from '@app/_errors';
+
 import { UserOwnedUpdateComponent } from '../user-owned-update/user-owned-update.component';
 import { BrandUpdateComponent } from '@app/equipment/brand/brand-update/brand-update.component';
 import { EquipmentFilterComponent } from './equipment-filter/equipment-filter.component';
@@ -97,7 +94,6 @@ export class EquipmentComponent implements OnInit {
 
   onDoneHave($event) {
     if ($event) {
-      this.equipmentFilter.filters();
     }
   }
 

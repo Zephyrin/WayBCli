@@ -17,18 +17,17 @@
          width="50" /> Hey {{currentUser.username | titlecase}}, Way.B ?
   </a>
   <span class="form-inline">
-    <!-- Equipment filter for sm device -->
+    <!-- filter for sm device -->
     <a class="navbar-toggler topright d-block d-sm-none"
        type="button"
        data-toggle="collapse"
-       data-target="#filterEquipmentNavDropdown"
-       aria-controls="filterEquipmentNavDropdown"
+       data-target=".filterDropdown"
        aria-expanded="false"
        aria-label="Toggle filter"
-       *ngIf="router && router.url === '/equipments'">
+       *ngIf="pathname === '/equipments' || pathname === '/equipmentsValidator'">
       <mat-icon [inline]="true">search</mat-icon>
     </a>
-    <!-- End Equipment filter for sm device -->
+    <!-- End filter for sm device -->
     <!-- Brand filter for sm device -->
     <a class="navbar-toggler topright d-block d-sm-none"
        type="button"

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Params, Router, ActivatedRoute } from '@angular/router';
 
-import { PaginationAndParamsService } from '../helpers/pagination-and-params.service';
+import { ValidationAndSearchService } from '../helpers/validation-and-search.service';
 import { EquipmentService } from './equipment.service';
 
 import { Equipment, User } from '@app/_models';
@@ -12,7 +12,7 @@ import { HttpParams } from '@angular/common/http';
 @Injectable({
   providedIn: 'root'
 })
-export class EquipmentPaginationSearchService extends PaginationAndParamsService<Equipment> {
+export class EquipmentPaginationSearchService extends ValidationAndSearchService<Equipment> {
   public currentUser: User;
 
   /* Search */
@@ -21,6 +21,9 @@ export class EquipmentPaginationSearchService extends PaginationAndParamsService
   public validate = BooleanEnum.undefined;
   public askValidate = BooleanEnum.undefined;
   public search = '';
+  public owned = BooleanEnum.undefined;
+  public wishes = BooleanEnum.undefined;
+  public others = BooleanEnum.undefined;
 
   constructor(private service: EquipmentService) {
     super(service);
@@ -35,19 +38,18 @@ export class EquipmentPaginationSearchService extends PaginationAndParamsService
     return equipment;
   }
 
-  setSearch(text: string) {
-    this.search = text.trim();
+  filterOwned() {
+    this.owned = this.booleanCycle(this.owned);
     this.changePage();
   }
 
-  filterValidate() {
-    this.validate = this.booleanCycle(this.validate);
+  filterWishes() {
+    this.wishes = this.booleanCycle(this.wishes);
     this.changePage();
   }
 
-
-  filterAskValidate() {
-    this.askValidate = this.booleanCycle(this.askValidate);
+  filterOthers() {
+    this.others = this.booleanCycle(this.others);
     this.changePage();
   }
 
@@ -81,28 +83,43 @@ export class EquipmentPaginationSearchService extends PaginationAndParamsService
       } else { this.sortBy = SortByEnum.name; }
     } else { this.sortBy = SortByEnum.name; }
 
-    if (params && params.hasOwnProperty('search')) {
-      this.search = params.search;
-    } else { this.search = ''; }
-
-    if (params && params.hasOwnProperty('validate')) {
-      if (Object.values(BooleanEnum).includes(params.validate)) {
-        this.validate = params.validate;
-      } else { this.validate = BooleanEnum.undefined; }
-    } else {
-      this.validate = BooleanEnum.undefined;
-    }
-    if (params && params.hasOwnProperty('askValidate')) {
-      if (Object.values(BooleanEnum).includes(params.askValidate)) {
-        this.askValidate = params.askValidate;
-      } else { this.askValidate = BooleanEnum.undefined; }
-    } else {
-      this.askValidate = BooleanEnum.undefined;
-    }
+    this.owned = this.getBooleanParam(params, 'owned');
+    this.wishes = this.getBooleanParam(params, 'wishes');
+    this.others = this.getBooleanParam(params, 'others');
   }
 
+  getBooleanParam(params: Params, name: string) {
+    if (params && params.hasOwnProperty(name)) {
+      if (Object.values(BooleanEnum).includes(params[name])) {
+        return params[name];
+      }
+      return BooleanEnum.undefined;
+    }
+    return BooleanEnum.undefined;
+  }
+  removeParamsFromUrl(query: {}) {
+    super.removeParamsFromUrl(query);
+    if (!query.hasOwnProperty('owned')) {
+      query[`owned`] = null;
+    }
+    if (!query.hasOwnProperty('wishes')) {
+      query[`wishes`] = null;
+    }
+    if (!query.hasOwnProperty('wishes')) {
+      query[`wishes`] = null;
+    }
+  }
   setHttpParameters(httpParams: HttpParams): HttpParams {
-
+    httpParams = super.setHttpParameters(httpParams);
+    if (this.owned !== BooleanEnum.undefined) {
+      httpParams = httpParams.append('owned', this.owned);
+    }
+    if (this.wishes !== BooleanEnum.undefined) {
+      httpParams = httpParams.append('wishes', this.wishes);
+    }
+    if (this.others !== BooleanEnum.undefined) {
+      httpParams = httpParams.append('others', this.others);
+    }
     return httpParams;
   }
 }

@@ -40,6 +40,7 @@ import { PaginationComponent } from './_helpers/pagination/pagination.component'
 import { FilterSwitchComponent } from './_helpers/filter-switch/filter-switch.component';
 import { ComboPaginateComponent } from './_helpers/combo-paginate/combo-paginate.component';
 import { CategoryFilterComponent } from './equipment/category/category-filter/category-filter.component';
+import { ValidationAndSearchComponent } from './_helpers/validation-and-search/validation-and-search.component';
 
 @NgModule({
   imports: [
@@ -78,7 +79,8 @@ import { CategoryFilterComponent } from './equipment/category/category-filter/ca
     PaginationComponent,
     FilterSwitchComponent,
     ComboPaginateComponent,
-    CategoryFilterComponent],
+    CategoryFilterComponent,
+    ValidationAndSearchComponent],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },

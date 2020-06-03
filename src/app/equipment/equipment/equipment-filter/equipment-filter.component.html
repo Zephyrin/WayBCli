@@ -1,105 +1,50 @@
-<nav class="navbar navbar-expand-md navbar-light bg-light"
-     *ngIf="currentUser">
-  <div class="navbar-collapse collapse"
-       id="filterEquipmentNavDropdown">
-    <ul class="navbar-nav mr-auto">
-      <li class="nav-item">
-        <button class="nav-link btn btn-light"
-                (click)="clearFilters()">
-          <mat-icon [inline]="true">filter_none</mat-icon>
-          Clear filters
-        </button>
-      </li>
-      <li class="nav-item dropdown multi-level">
-        <button class="nav-link dropdown-toggle btn btn-light"
-                id="dpEquipmentFilterCategory"
-                data-toggle="dropdown"
-                aria-haspopup="true"
-                aria-expanded="false">
-          <mat-icon [inline]="true">category</mat-icon>
-          Category
-        </button>
+<nav class="navbar navbar-expand-md">
+  <div class="navbar-collapse collapse filterDropdown">
+    <ul class="navbar-nav">
+      <li class="nav-item dropdown"
+          *ngFor="let cat of categoryService.values">
+        <a class="nav-link dropdown-toggle"
+           id="dpEquipmentFilterCategory_{{cat.id}}"
+           role="button"
+           data-toggle="dropdown"
+           aria-haspopup="true"
+           aria-expanded="false">
+          {{categoryService.displayName(cat)}}
+        </a>
         <ul class="dropdown-menu"
             role="menu"
             (click)="prevent($event)"
-            aria-labelledby="dpEquipmentFilterCategory">
-          <li class="dropdown-submenu"
-              *ngFor="let cat of categories">
-            <label id="dropCat_{{cat.id}}">
-              {{cat.name}}
-            </label>
-            <mat-icon class="right d-block d-sm-none">expand_more</mat-icon>
-            <mat-icon class="right d-none d-sm-block">chevron_right
-            </mat-icon>
-            <ul class="dropdown-menu"
-                attr.aria-labelledby="dropCat_{{cat.id}}">
-              <li class="form-check form-inline"
-                  *ngFor="let sub of cat.subCategories">
-                <input type="checkbox"
-                       checked
-                       (change)="applyFilterSubCategory(sub)"
-                       class="form-check-input pointer"
-                       id="dropSub_{{cat.id}}_{{sub.id}}">
-                <label class="form-check-label pointer"
-                       for="dropSub_{{cat.id}}_{{sub.id}}">
-                  {{sub.name}}
-                </label>
-              </li>
-            </ul>
+            attr.aria-labelledby="dpEquipmentFilterCategory_{{cat.id}}">
+          <li *ngFor="let sub of cat.subCategories">
+            {{sub.name}}
           </li>
         </ul>
       </li>
-      <li>
-        <div class="btn-group-toggle"
-             data-toggle="buttons">
-          <label class="nav-link btn btn-light active"
-                 (click)="filters(true)">
-            <input type="checkbox"
-                   checked
-                   autocomplete="off"
-                   #ownedBtn>Owned
-          </label>
-        </div>
+    </ul>
+  </div>
+</nav>
+
+<nav class="navbar navbar-expand-md">
+  <div class="navbar-collapse collapse filterDropdown">
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <app-filter-switch [disabled]="service.loading"
+                           [value]="service.owned"
+                           [text]="'Owned'"
+                           (check)="service.filterOwned()"></app-filter-switch>
       </li>
-      <li>
-        <div class="btn-group-toggle"
-             data-toggle="buttons">
-          <label class="nav-link btn btn-light active"
-                 (click)="filters(false, true)">
-            <input type="checkbox"
-                   checked
-                   autocomplete="off"
-                   #wishesBtn>Wishes
-          </label>
-        </div>
+      <li class="nav-item">
+        <app-filter-switch [disabled]="service.loading"
+                           [value]="service.wishes"
+                           [text]="'Wishes'"
+                           (check)="service.filterWishes()"></app-filter-switch>
       </li>
-      <li>
-        <div class="btn-group-toggle"
-             data-toggle="buttons">
-          <label class="nav-link btn btn-light"
-                 (click)="filters(false, false, true)">
-            <input type="checkbox"
-                   autocomplete="off"
-                   #othersBtn>Others
-          </label>
-        </div>
+      <li class="nav-item">
+        <app-filter-switch [disabled]="service.loading"
+                           [value]="service.others"
+                           [text]="'Others'"
+                           (check)="service.filterOthers()"></app-filter-switch>
       </li>
     </ul>
-    <form class="form-inline my-2 my-lg-0"
-          [formGroup]="searchForm">
-      <input class="form-control mr-sm-2"
-             formControlName="search"
-             id="searchText"
-             #searchText
-             type="search"
-             placeholder="Search"
-             aria-label="Search">
-      <button for="searchText"
-              class="btn btn-light my-2 my-sm-0"
-              type="submit"
-              (click)="filters()">
-        <mat-icon [inline]="true">search</mat-icon>Search
-      </button>
-    </form>
   </div>
 </nav>

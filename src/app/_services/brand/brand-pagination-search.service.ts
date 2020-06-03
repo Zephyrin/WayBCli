@@ -32,6 +32,18 @@ export class BrandPaginationSearchService extends PaginationAndParamsService<Bra
     this.changePage();
   }
 
+  removeParamsFromUrl(query: {}) {
+    if (!query.hasOwnProperty('search')) {
+      query[`search`] = null;
+    }
+    if (!query.hasOwnProperty('validate')) {
+      query[`validate`] = null;
+    }
+    if (!query.hasOwnProperty('askValidate')) {
+      query[`askValidate`] = null;
+    }
+  }
+
   filterValidate() {
     this.validate = this.booleanCycle(this.validate);
     this.changePage();

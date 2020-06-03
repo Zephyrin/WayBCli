@@ -109,7 +109,6 @@ export class EquipmentValidatorComponent implements OnInit {
 
   onDoneHave($event) {
     if ($event) {
-      this.equipmentFilter.filters();
     }
   }
 
@@ -143,7 +142,6 @@ export class EquipmentValidatorComponent implements OnInit {
           }
         }
       }
-      this.equipmentFilter.filters();
     }
   }
 
