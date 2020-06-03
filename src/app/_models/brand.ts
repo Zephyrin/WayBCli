@@ -1,24 +1,22 @@
 import { Equipment } from './equipment';
 import { User } from './user';
 import { Mediaobject } from './mediaobject';
+import { Validation } from './validation';
 
-export class Brand {
+export class Brand extends Validation {
   id: number;
   name: string;
-  validate: boolean;
-  askValidate: boolean;
   uri: string;
   equipments: Equipment[];
   createdBy: User;
   logo: Mediaobject;
 
   constructor(brand: Brand = null) {
+    super(brand);
     if (brand !== null && brand !== undefined) {
       this.id = brand.id;
       this.name = brand.name;
-      this.validate = brand.validate;
       this.uri = brand.uri;
-      this.askValidate = brand.askValidate;
       this.createdBy = brand.createdBy;
       this.logo = new Mediaobject(brand.logo);
     } else {

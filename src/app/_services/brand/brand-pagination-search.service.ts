@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpParams } from '@angular/common/http';
 import { Params } from '@angular/router';
 
-import { PaginationAndParamsService } from '../helpers/pagination-and-params.service';
 import { BrandService } from './brand.service';
 
 import { Brand } from '@app/_models';
@@ -10,49 +9,19 @@ import { SortEnum, SortByEnum } from '@app/_enums/brand.enum';
 import { BooleanEnum } from '@app/_enums/boolean.enum';
 
 import { environment } from '@environments/environment';
+import { ValidationAndSearchService } from '../helpers/validation-and-search.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class BrandPaginationSearchService extends PaginationAndParamsService<Brand> {
+export class BrandPaginationSearchService extends ValidationAndSearchService<Brand> {
 
   /* Search */
   public sort = SortEnum.asc;
   public sortBy = SortByEnum.name;
-  public validate = BooleanEnum.undefined;
-  public askValidate = BooleanEnum.undefined;
-  public search = '';
 
   constructor(private service: BrandService) {
     super(service);
-  }
-
-  setSearch(text: string) {
-    this.search = text.trim();
-    this.changePage();
-  }
-
-  removeParamsFromUrl(query: {}) {
-    if (!query.hasOwnProperty('search')) {
-      query[`search`] = null;
-    }
-    if (!query.hasOwnProperty('validate')) {
-      query[`validate`] = null;
-    }
-    if (!query.hasOwnProperty('askValidate')) {
-      query[`askValidate`] = null;
-    }
-  }
-
-  filterValidate() {
-    this.validate = this.booleanCycle(this.validate);
-    this.changePage();
-  }
-
-
-  filterAskValidate() {
-    this.askValidate = this.booleanCycle(this.askValidate);
-    this.changePage();
   }
 
   sortByOrOrient(sortByEnum: SortByEnum) {
@@ -84,25 +53,6 @@ export class BrandPaginationSearchService extends PaginationAndParamsService<Bra
         this.sortBy = params.sortBy;
       } else { this.sortBy = SortByEnum.name; }
     } else { this.sortBy = SortByEnum.name; }
-
-    if (params && params.hasOwnProperty('search')) {
-      this.search = params.search;
-    } else { this.search = ''; }
-
-    if (params && params.hasOwnProperty('validate')) {
-      if (Object.values(BooleanEnum).includes(params.validate)) {
-        this.validate = params.validate;
-      } else { this.validate = BooleanEnum.undefined; }
-    } else {
-      this.validate = BooleanEnum.undefined;
-    }
-    if (params && params.hasOwnProperty('askValidate')) {
-      if (Object.values(BooleanEnum).includes(params.askValidate)) {
-        this.askValidate = params.askValidate;
-      } else { this.askValidate = BooleanEnum.undefined; }
-    } else {
-      this.askValidate = BooleanEnum.undefined;
-    }
   }
 
   setHttpParameters(httpParams: HttpParams): HttpParams {
@@ -118,6 +68,11 @@ export class BrandPaginationSearchService extends PaginationAndParamsService<Bra
       httpParams = httpParams.append('search', this.search);
     }
     return httpParams;
+  }
+
+  removeParamsFromUrl(query: {}) {
+    this.removeParam(query, 'sort');
+    this.removeParam(query, 'sortBy');
   }
 
   newValue(x: any): Brand {

@@ -2,24 +2,21 @@ import { Injectable, SimpleChange } from '@angular/core';
 import { Params } from '@angular/router';
 import { HttpParams } from '@angular/common/http';
 
-import { PaginationAndParamsService } from '../helpers/pagination-and-params.service';
 import { CategoryService } from './category.service';
 
 import { Category } from '@app/_models';
 import { SortEnum, SortByEnum } from '@app/_enums/category.enum';
 import { BooleanEnum } from '@app/_enums/boolean.enum';
+import { ValidationAndSearchService } from '../helpers/validation-and-search.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class CategoryPaginationSearchService extends PaginationAndParamsService<Category> {
+export class CategoryPaginationSearchService extends ValidationAndSearchService<Category> {
 
   /* Search */
   public sort = SortEnum.asc;
   public sortBy = SortByEnum.name;
-  public validate = BooleanEnum.undefined;
-  public askValidate = BooleanEnum.undefined;
-  public search = '';
   public lower: string = undefined;
   public lowerOrEq: string = undefined;
   public eq: string = undefined;
@@ -29,34 +26,6 @@ export class CategoryPaginationSearchService extends PaginationAndParamsService<
   constructor(
     private service: CategoryService) {
     super(service);
-  }
-
-  setSearch(text: string) {
-    this.search = text.trim();
-    this.changePage();
-  }
-
-  filterValidate() {
-    this.validate = this.booleanCycle(this.validate);
-    this.changePage();
-  }
-
-
-  removeParamsFromUrl(query: {}) {
-    if (!query.hasOwnProperty('search')) {
-      query[`search`] = null;
-    }
-    if (!query.hasOwnProperty('validate')) {
-      query[`validate`] = null;
-    }
-    if (!query.hasOwnProperty('askValidate')) {
-      query[`askValidate`] = null;
-    }
-  }
-
-  filterAskValidate() {
-    this.askValidate = this.booleanCycle(this.askValidate);
-    this.changePage();
   }
 
   sortByOrOrient(sortByEnum: SortByEnum) {
@@ -88,24 +57,6 @@ export class CategoryPaginationSearchService extends PaginationAndParamsService<
         this.sortBy = params.sortBy;
       } else { this.sortBy = SortByEnum.name; }
     } else { this.sortBy = SortByEnum.name; }
-
-    if (params && params.hasOwnProperty('validate')) {
-      if (Object.values(BooleanEnum).includes(params.validate)) {
-        this.validate = params.validate;
-      } else { this.validate = BooleanEnum.undefined; }
-    } else {
-        this.validate = BooleanEnum.undefined;
-    }
-    if (params && params.hasOwnProperty('askValidate')) {
-      if (Object.values(BooleanEnum).includes(params.askValidate)) {
-        this.askValidate = params.askValidate;
-      } else { this.askValidate = BooleanEnum.undefined; }
-    } else {
-        this.askValidate = BooleanEnum.undefined;
-    }
-    if (params && params.hasOwnProperty('search')) {
-      this.search = params.search;
-    } else { this.search = ''; }
     this.lower = this.lowerOrEq = this.eq = this.greater = this.greaterOrEq = undefined;
     if (params && params.hasOwnProperty('subCategoryCount')) {
       const $subCategoryCount = params.subCategoryCount;
@@ -155,25 +106,22 @@ export class CategoryPaginationSearchService extends PaginationAndParamsService<
   setHttpParameters(httpParams: HttpParams): HttpParams {
     httpParams = httpParams.append('sort', this.sort);
     httpParams = httpParams.append('sortBy', this.sortBy);
-    if (this.validate !== BooleanEnum.undefined) {
-      httpParams = httpParams.append('validate', this.validate);
-    }
-    if (this.askValidate !== BooleanEnum.undefined) {
-      httpParams = httpParams.append('askValidate', this.askValidate);
-    }
-    if (this.search !== '') {
-      httpParams = httpParams.append('search', this.search);
-    }
     if (this.lower || this.lowerOrEq || this.eq || this.greater || this.greaterOrEq) {
       let val = '';
       if (this.lower) { val = 'l' + this.lower; }
-      if (this.lowerOrEq) { val = 'lE' + this.lowerOrEq; }
+      if (this.lowerOrEq) { val = 'le' + this.lowerOrEq; }
       if (this.eq) { val = 'e' + this.eq; }
       if (this.greater) { val = 'g' + this.greater; }
-      if (this.greaterOrEq) { val = 'gE' + this.greaterOrEq; }
+      if (this.greaterOrEq) { val = 'ge' + this.greaterOrEq; }
       httpParams = httpParams.append('subCategoryCount', val);
     }
     return httpParams;
+  }
+
+  removeParamsFromUrl(query: {}) {
+    this.removeParam(query, 'sort');
+    this.removeParam(query, 'sortBy');
+    this.removeParam(query, 'subCategoryCount');
   }
 
   newValue(x: any): Category {

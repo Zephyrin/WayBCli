@@ -44,21 +44,8 @@ export abstract class ValidationAndSearchService<T> extends PaginationAndParamsS
     if (params && params.hasOwnProperty('search')) {
       this.search = params.search;
     } else { this.search = ''; }
-
-    if (params && params.hasOwnProperty('validate')) {
-      if (Object.values(BooleanEnum).includes(params.validate)) {
-        this.validate = params.validate;
-      } else { this.validate = BooleanEnum.undefined; }
-    } else {
-      this.validate = BooleanEnum.undefined;
-    }
-    if (params && params.hasOwnProperty('askValidate')) {
-      if (Object.values(BooleanEnum).includes(params.askValidate)) {
-        this.askValidate = params.askValidate;
-      } else { this.askValidate = BooleanEnum.undefined; }
-    } else {
-      this.askValidate = BooleanEnum.undefined;
-    }
+    this.validate = this.getBooleanParam(params, 'validate');
+    this.askValidate = this.getBooleanParam(params, 'askValidate');
   }
 
   setHttpParameters(httpParams: HttpParams): HttpParams {
@@ -75,14 +62,8 @@ export abstract class ValidationAndSearchService<T> extends PaginationAndParamsS
   }
 
   removeParamsFromUrl(query: {}) {
-    if (!query.hasOwnProperty('search')) {
-      query[`search`] = null;
-    }
-    if (!query.hasOwnProperty('validate')) {
-      query[`validate`] = null;
-    }
-    if (!query.hasOwnProperty('askValidate')) {
-      query[`askValidate`] = null;
-    }
+    this.removeParam(query, 'search');
+    this.removeParam(query, 'validate');
+    this.removeParam(query, 'askValidate');
   }
 }

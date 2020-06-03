@@ -218,6 +218,19 @@ export abstract class PaginationAndParamsService<T> {
   }
 
   /**
+   * Helper to get BooleanEnum from param.
+   */
+  getBooleanParam(params: Params, name: string) {
+    if (params && params.hasOwnProperty(name)) {
+      if (Object.values(BooleanEnum).includes(params[name])) {
+        return params[name];
+      }
+      return BooleanEnum.undefined;
+    }
+    return BooleanEnum.undefined;
+  }
+
+  /**
    * Return httpParams set with pagination information.
    */
   getHttpParameters() {
@@ -255,11 +268,19 @@ export abstract class PaginationAndParamsService<T> {
   /**
    * To remove a parameter from the URL that has been already set, you should
    * set the param to null like this:
-   * if (!query.hasOwnProperty('validate')) {
-   *   query[`validate`] = null;
-   * }
+   * this.removeParam(query, 'name');
+   * @see removeParam
    */
   abstract removeParamsFromUrl(query: {}): void;
+
+  /**
+   * Helpers to remove a param from query.
+   */
+  removeParam(query: {}, name: string): void {
+    if (!query.hasOwnProperty(name)) {
+      query[name] = null;
+    }
+  }
   /**
    * Change navigator URL with information from httpParams.
    *

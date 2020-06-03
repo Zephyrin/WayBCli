@@ -88,15 +88,6 @@ export class EquipmentPaginationSearchService extends ValidationAndSearchService
     this.others = this.getBooleanParam(params, 'others');
   }
 
-  getBooleanParam(params: Params, name: string) {
-    if (params && params.hasOwnProperty(name)) {
-      if (Object.values(BooleanEnum).includes(params[name])) {
-        return params[name];
-      }
-      return BooleanEnum.undefined;
-    }
-    return BooleanEnum.undefined;
-  }
   removeParamsFromUrl(query: {}) {
     super.removeParamsFromUrl(query);
     if (!query.hasOwnProperty('owned')) {
