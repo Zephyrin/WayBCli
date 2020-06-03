@@ -4,7 +4,6 @@ import { Backpack } from '@app/_models/backpack';
 import { AuthenticationService } from '@app/_services';
 import { BackpackService } from '@app/_services/backpack.service';
 import { User } from '@app/_models';
-import { first } from 'rxjs/operators';
 import { BrandPaginationSearchService } from '@app/_services/brand/brand-pagination-search.service';
 
 @Component({
@@ -38,7 +37,7 @@ export class BackpackComponent implements OnInit {
             this.loading = false;
           });
       });
-    this.brandService.init(undefined, undefined, undefined, false);
+    this.brandService.init(undefined, undefined, undefined);
     this.brandServiceP.changePage();
   }
 

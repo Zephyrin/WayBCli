@@ -68,7 +68,7 @@
                     class="btn btn-light"
                     *ngIf="canEditOrDelete(equipment)"
                     (click)="equipmentUpdate.update(equipment)">
-              <mat-icon>edit</mat-icon>
+              <mat-icon [inline]="true">edit</mat-icon>
             </button>
           </div>
           <div class="btn-group"

@@ -40,14 +40,14 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
       this.positionFooter();
     });
 
-    $(document).on('hidden.bs.modal', '.modal', function() {
-      $('.modal:visible').length && $(document.body).addClass('modal-open');
+    $(document).on('hidden.bs.modal', '.modal', () => {
+      if($('.modal:visible').length) { $(document.body).addClass('modal-open'); }
     });
 
     $(document).on('show.bs.modal', '.modal', function() {
       const zIndex = 1040 + (10 * $('.modal:visible').length);
       $(this).css('z-index', zIndex);
-      setTimeout(function () {
+      setTimeout(() => {
         $('.modal-backdrop').not('.modal-stack').css('z-index', zIndex - 1).addClass('modal-stack');
       }, 0);
     });
@@ -61,13 +61,21 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   onResize(event) {
     this.positionFooter();
   }
+
   positionFooter() {
-    const height = $('footer').height();
+    const height = $('footer').height() + 10;
     const bdSidebarList = document.getElementsByClassName('bd-sidebar');
     Array.from(bdSidebarList).forEach(element => {
-      (element as HTMLElement).style.paddingBottom = height + 'px';
+      this.paddingBottomImportant(element as HTMLElement, height);
     });
-    $('main').css('padding-bottom', height);
+    const bdMainList = document.getElementsByTagName('main');
+    Array.from(bdMainList).forEach(element => {
+      this.paddingBottomImportant(element as HTMLElement, height);
+    });
+  }
+
+  private paddingBottomImportant(element: HTMLElement, height: number) {
+    (element as HTMLElement).style.setProperty('padding-bottom', height + 'px', 'important');
   }
 
   get pathname() {

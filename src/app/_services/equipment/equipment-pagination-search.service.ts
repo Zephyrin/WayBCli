@@ -1,20 +1,19 @@
 import { Injectable } from '@angular/core';
-import { HttpParams } from '@angular/common/http';
-import { Params } from '@angular/router';
+import { Params, Router, ActivatedRoute } from '@angular/router';
 
 import { PaginationAndParamsService } from '../helpers/pagination-and-params.service';
-import { BrandService } from './brand.service';
+import { EquipmentService } from './equipment.service';
 
-import { Brand } from '@app/_models';
-import { SortEnum, SortByEnum } from '@app/_enums/brand.enum';
+import { Equipment, User } from '@app/_models';
+import { SortEnum, SortByEnum } from '@app/_enums/equipment.enum';
 import { BooleanEnum } from '@app/_enums/boolean.enum';
-
-import { environment } from '@environments/environment';
+import { HttpParams } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
-export class BrandPaginationSearchService extends PaginationAndParamsService<Brand> {
+export class EquipmentPaginationSearchService extends PaginationAndParamsService<Equipment> {
+  public currentUser: User;
 
   /* Search */
   public sort = SortEnum.asc;
@@ -23,8 +22,17 @@ export class BrandPaginationSearchService extends PaginationAndParamsService<Bra
   public askValidate = BooleanEnum.undefined;
   public search = '';
 
-  constructor(private service: BrandService) {
+  constructor(private service: EquipmentService) {
     super(service);
+  }
+
+  newValue(x: any): Equipment {
+    const equipment = new Equipment(x);
+    if (this.currentUser.haves.some(
+      have => have.equipment.id === equipment.id)) {
+      equipment.has = true;
+    }
+    return equipment;
   }
 
   setSearch(text: string) {
@@ -94,33 +102,7 @@ export class BrandPaginationSearchService extends PaginationAndParamsService<Bra
   }
 
   setHttpParameters(httpParams: HttpParams): HttpParams {
-    httpParams = httpParams.append('sort', this.sort);
-    httpParams = httpParams.append('sortBy', this.sortBy);
-    if (this.validate !== BooleanEnum.undefined) {
-      httpParams = httpParams.append('validate', this.validate);
-    }
-    if (this.askValidate !== BooleanEnum.undefined) {
-      httpParams = httpParams.append('askValidate', this.askValidate);
-    }
-    if (this.search !== '') {
-      httpParams = httpParams.append('search', this.search);
-    }
+
     return httpParams;
-  }
-
-  newValue(x: any): Brand {
-    return new Brand(x);
-  }
-
-  getLogoUrl(brand: Brand) {
-    return `${environment.mediaUrl}/${brand.logo.filePath}`;
-  }
-
-  returnUrl(uri: string) {
-    return /^http(s)?:\/\//.test(uri) ? uri : 'https://' + uri;
-  }
-
-  canEditOrDelete(brand: Brand) {
-    return this.isValidator ? brand.askValidate : !brand.validate;
   }
 }

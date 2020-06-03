@@ -22,7 +22,7 @@
             <button class="btn btn-light btn-sm d-flex justify-content-center align-content-between"
                     *ngIf="!isValidator"
                     (click)="subCategoryModal.open()">
-              <mat-icon>add</mat-icon>Sub-category name
+              <mat-icon [inline]="true">add</mat-icon>Sub-category name
             </button>
             <p *ngIf="isValidator">Sub-category name</p>
           </th>
@@ -51,12 +51,12 @@
             <button type="button"
                     class="btn btn-light btn-sm d-flex justify-content-center align-content-between"
                     (click)="subCategoryModal.open(subCategory)">
-              <mat-icon>update</mat-icon>
+              <mat-icon [inline]="true">update</mat-icon>
             </button>
             <button type="button"
                     class="btn btn-light btn-sm d-flex justify-content-center align-content-between"
                     (click)="subCategoryModal.onDelete(subCategory)">
-              <mat-icon>delete</mat-icon>
+              <mat-icon [inline]="true">delete</mat-icon>
             </button>
             <app-switch [value]="subCategory.askValidate"
                         *ngIf="!isValidator"

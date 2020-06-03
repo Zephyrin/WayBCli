@@ -21,7 +21,7 @@ declare var $: any;
 export class ComboPaginateComponent<T> implements ControlValueAccessor {
   @ViewChild('combo', { static: false }) combo;
 
-  @Input() paginate: PaginationAndParamsService;
+  @Input() paginate: PaginationAndParamsService<T>;
   @Input() emptyText = 'Select...';
   @Input() comboId = '';
   @Input() filterEnum = FilterEnum.none;

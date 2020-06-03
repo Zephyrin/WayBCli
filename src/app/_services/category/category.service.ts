@@ -5,25 +5,27 @@ import { catchError } from 'rxjs/operators';
 
 import { environment } from '@environments/environment';
 import { Category } from '@app/_models';
+import { HttpService } from '../http.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class CategoryService {
+export class CategoryService extends HttpService<Category> {
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+    super();
+  }
 
   getAll(httpParams: HttpParams) {
     return this.http.get<Category[]>(
       `${environment.apiUrl}/category`
-      , { params: httpParams, observe: 'response'});
+      , { params: httpParams, observe: 'response' });
   }
 
   count() {
     return this.http.head(`${environment.apiUrl}/category`,
-    {
-      observe: 'response'}
-      );
+      { observe: 'response' }
+    );
   }
 
   create(category: Category): Observable<Category> {
@@ -51,23 +53,5 @@ export class CategoryService {
       .pipe(
         catchError(this.handleError)
       );
-  }
-
-  private handleError(error: any) {
-    if (error instanceof String
-      || typeof(error) === 'string') {
-      console.error(error);
-    } else if (error.error instanceof ErrorEvent) {
-      // A client-side or network error occurred. Handle it accordingly.
-      console.error('An error occurred:', error.error.message);
-    } else {
-      // The backend returned an unsuccessful response code.
-      // The response body may contain clues as to what went wrong,
-      console.error(
-        `Backend returned code ${error.status}, ` +
-        `body was: ${error.error}`);
-    }
-    // return an observable with a category-facing error message
-    return throwError(error);
   }
 }

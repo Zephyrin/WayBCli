@@ -1,22 +1,18 @@
-import { Injectable, SimpleChange, ChangeDetectorRef } from '@angular/core';
-import { Router, ActivatedRoute, Route, Params } from '@angular/router';
+import { Injectable, SimpleChange } from '@angular/core';
+import { Params } from '@angular/router';
+import { HttpParams } from '@angular/common/http';
 
 import { PaginationAndParamsService } from '../helpers/pagination-and-params.service';
 import { CategoryService } from './category.service';
 
 import { Category } from '@app/_models';
-import { FormErrors } from '@app/_errors';
 import { SortEnum, SortByEnum } from '@app/_enums/category.enum';
 import { BooleanEnum } from '@app/_enums/boolean.enum';
 
 @Injectable({
   providedIn: 'root'
 })
-export class CategoryPaginationSearchService extends PaginationAndParamsService {
-  public categories: Category[];
-  public selected: Category;
-  public errors: FormErrors;
-  public loading = false;
+export class CategoryPaginationSearchService extends PaginationAndParamsService<Category> {
 
   /* Search */
   public sort = SortEnum.asc;
@@ -30,31 +26,9 @@ export class CategoryPaginationSearchService extends PaginationAndParamsService 
   public greater: string = undefined;
   public greaterOrEq: string = undefined;
 
-  /* Route and router for URL */
-  private router: Router;
-  private route: ActivatedRoute;
-
   constructor(
     private service: CategoryService) {
-    super();
-  }
-
-  /* Part of PaginationAndParamsService */
-  displayName(elt: any): string {
-    if (elt instanceof Category) {
-      return elt.name;
-    }
-    return '';
-  }
-
-  getId(elt: any): number {
-    if (elt instanceof Category) {
-      return elt.id;
-    }
-    return -1;
-  }
-  list(): any[] {
-    return this.categories;
+    super(service);
   }
 
   setSearch(text: string) {
@@ -89,8 +63,8 @@ export class CategoryPaginationSearchService extends PaginationAndParamsService 
     this.changePage();
   }
 
-  setDefaultParamsFromUrl(params: Params, isValidator) {
-    super.setDefaultParamsFromUrl(params, isValidator);
+  setDefaultParamsFromUrl(params: Params) {
+    super.setDefaultParamsFromUrl(params);
     if (params && params.hasOwnProperty('sort')) {
       if (Object.values(SortEnum).includes(params.sort)) {
         this.sort = params.sort;
@@ -108,24 +82,14 @@ export class CategoryPaginationSearchService extends PaginationAndParamsService 
         this.validate = params.validate;
       } else { this.validate = BooleanEnum.undefined; }
     } else {
-      if (isValidator && !params.hasOwnProperty('page')) {
-        this.validate = BooleanEnum.false;
-      } else {
         this.validate = BooleanEnum.undefined;
-      }
     }
     if (params && params.hasOwnProperty('askValidate')) {
       if (Object.values(BooleanEnum).includes(params.askValidate)) {
         this.askValidate = params.askValidate;
       } else { this.askValidate = BooleanEnum.undefined; }
     } else {
-      // Look if param is empty, means it comes from router link. Otherwise
-      // it is the choice of the user.
-      if (isValidator && !params.hasOwnProperty('page')) {
-        this.askValidate = BooleanEnum.true;
-      } else {
         this.askValidate = BooleanEnum.undefined;
-      }
     }
     if (params && params.hasOwnProperty('search')) {
       this.search = params.search;
@@ -160,41 +124,23 @@ export class CategoryPaginationSearchService extends PaginationAndParamsService 
     }
   }
 
-  init(router: Router, route: ActivatedRoute, params: Params, isValidator: boolean, noPagination = false) {
-    this.route = route;
-    this.router = router;
-    this.errors = new FormErrors();
-    this.setDefaultParamsFromUrl(params === undefined ? params : params.params, isValidator);
-    this.changePage();
-  }
-
   initWithParams(
-    router: Router,
-    route: ActivatedRoute,
     params: Params,
-    isValidator: boolean,
-    noPagination: boolean,
     lower: string,
     lowerOrEq: string,
     eq: string,
     greater: string,
     greaterOrEq: string) {
-    this.route = route;
-    this.router = router;
-    this.errors = new FormErrors();
-    this.setDefaultParamsFromUrl(params === undefined ? params : params.params, isValidator);
+
     this.lower = lower;
     this.lowerOrEq = lowerOrEq;
     this.eq = eq;
     this.greater = greater;
     this.greaterOrEq = greaterOrEq;
-    this.changePage();
+    this.init(undefined, undefined, params);
   }
 
-  changePage(): void {
-    this.loading = true;
-    this.errors = new FormErrors();
-    let httpParams = this.getHttpParameters();
+  setHttpParameters(httpParams: HttpParams): HttpParams {
     httpParams = httpParams.append('sort', this.sort);
     httpParams = httpParams.append('sortBy', this.sortBy);
     if (this.validate !== BooleanEnum.undefined) {
@@ -215,51 +161,11 @@ export class CategoryPaginationSearchService extends PaginationAndParamsService 
       if (this.greaterOrEq) { val = 'gE' + this.greaterOrEq; }
       httpParams = httpParams.append('subCategoryCount', val);
     }
-    this.paramsIntoUrl(httpParams, this.router, this.route);
-    this.service.getAll(httpParams).subscribe(categories => {
-      this.loading = false;
-      this.setParametersFromResponse(categories.headers);
-      this.categories = categories.body.map(x => new Category(x));
-    });
+    return httpParams;
   }
 
-  setSelected(category: Category) {
-    if (!this.loading) {
-      if (this.selected !== category) {
-        this.selected = category;
-        this.errors = new FormErrors();
-      }
-    }
-  }
-
-  updateAskValidate(category: Category) {
-    this.errors = new FormErrors();
-    this.setSelected(category);
-    this.loading = true;
-    category.askValidate = !category.askValidate;
-    this.service.update(category)
-      .subscribe(returnValue => {
-        this.loading = false;
-      }, (error: any) => {
-        this.errors.formatError(error);
-        category.askValidate = !category.askValidate;
-        this.loading = false;
-      });
-  }
-
-  updateValidate(category: Category) {
-    this.errors = new FormErrors();
-    this.setSelected(category);
-    this.loading = true;
-    category.validate = !category.validate;
-    this.service.update(category)
-      .subscribe(returnValue => {
-        this.loading = false;
-      }, (error: any) => {
-        this.errors.formatError(error);
-        category.validate = !category.validate;
-        this.loading = false;
-      });
+  newValue(x: any): Category {
+    return new Category(x);
   }
 
   canEditOrDelete(category: Category) {
@@ -270,11 +176,11 @@ export class CategoryPaginationSearchService extends PaginationAndParamsService 
     setTimeout(() => {
       if (simple !== undefined && simple !== null) {
         if (simple.previousValue === null) {
-          this.categories.push(simple.currentValue);
+          this.values.push(simple.currentValue);
         } else if (simple.currentValue === null) {
-          const index = this.categories.indexOf(simple.previousValue);
+          const index = this.values.indexOf(simple.previousValue);
           if (index > 0) {
-            this.categories.splice(index, 1);
+            this.values.splice(index, 1);
           }
         } else {
           Object.assign(simple.previousValue, simple.currentValue);
@@ -285,14 +191,14 @@ export class CategoryPaginationSearchService extends PaginationAndParamsService 
   }
 
   addElement(category: Category) {
-    this.categories.push(category);
+    this.values.push(category);
     super.add();
   }
 
   deleteElement(category: Category) {
-    const index = this.categories.indexOf(category);
+    const index = this.values.indexOf(category);
     if (index >= 0) {
-      this.categories.splice(index, 1);
+      this.values.splice(index, 1);
       super.delete();
     }
   }

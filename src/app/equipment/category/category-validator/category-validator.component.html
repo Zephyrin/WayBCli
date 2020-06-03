@@ -44,7 +44,7 @@
               <button type="button"
                       class="btn btn-light"
                       (click)="categoryModal.open(category)">
-                <mat-icon>update</mat-icon>
+                <mat-icon [inline]="true">update</mat-icon>
               </button>
               <app-switch [value]="category.validate"
                           [disabled]="loading"

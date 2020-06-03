@@ -26,7 +26,7 @@
        aria-expanded="false"
        aria-label="Toggle filter"
        *ngIf="router && router.url === '/equipments'">
-      <mat-icon>search</mat-icon>
+      <mat-icon [inline]="true">search</mat-icon>
     </a>
     <!-- End Equipment filter for sm device -->
     <!-- Brand filter for sm device -->
@@ -38,7 +38,7 @@
        aria-expanded="false"
        aria-label="Toggle filter"
        *ngIf="pathname === '/brands' || pathname === '/brandsValidator'">
-      <mat-icon>search</mat-icon>
+      <mat-icon [inline]="true">search</mat-icon>
     </a>
     <!-- End Brand filter for sm device -->
     <button class="navbar-toggler"

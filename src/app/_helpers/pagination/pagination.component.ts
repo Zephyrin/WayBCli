@@ -7,9 +7,9 @@ import { PaginationAndParamsService } from '@app/_services/helpers/pagination-an
   templateUrl: './pagination.component.html',
   styleUrls: ['./pagination.component.scss']
 })
-export class PaginationComponent implements OnInit {
+export class PaginationComponent<T> implements OnInit {
 
-  @Input() pagination: PaginationAndParamsService;
+  @Input() pagination: PaginationAndParamsService<T>;
   constructor() { }
 
   ngOnInit(): void {

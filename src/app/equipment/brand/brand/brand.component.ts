@@ -36,7 +36,8 @@ export class BrandComponent implements OnInit {
   get service() { return this.serviceP; }
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
-      this.service.init(this.router, this.route, params, this.isValidator);
+      this.service.init(this.router, this.route, params);
+      this.service.isValidator = this.isValidator;
     });
   }
 

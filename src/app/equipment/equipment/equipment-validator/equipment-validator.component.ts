@@ -3,7 +3,7 @@ import { ViewChild } from '@angular/core';
 
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first, filter } from 'rxjs/operators';
-import { EquipmentService } from '@app/_services/equipment.service';
+import { EquipmentService } from '@app/_services/equipment/equipment.service';
 import { Equipment } from '@app/_models/equipment';
 
 import { CategoryService } from '@app/_services/category/category.service';
@@ -65,6 +65,7 @@ export class EquipmentValidatorComponent implements OnInit {
       x => this.currentUser = x);
   }
 
+  // TODO export into service.
   get isAmbassador() {
     const isAmbassador = this.currentUser
       && this.currentUser.roles
@@ -82,11 +83,11 @@ export class EquipmentValidatorComponent implements OnInit {
 
   ngOnInit() {
     this.loading = true;
-    this.service.getAll()
+    this.service.getAll(null)
       .pipe(first())
       .subscribe(equipments => {
         this.loading = false;
-        this.equipments = equipments.filter(x => x.askValidate || x.validate);
+        this.equipments = equipments.body.filter(x => x.askValidate || x.validate);
         this.equipments.forEach(equipment => {
           equipment.characteristics = equipment.characteristics.filter(x => x.askValidate || x.validate);
         });

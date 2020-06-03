@@ -3,14 +3,32 @@ import { HttpParams, HttpResponse, HttpHeaders } from '@angular/common/http';
 
 import { Pagination } from '@app/_models/helpers/pagination';
 import { BooleanEnum } from '@app/_enums/boolean.enum';
+import { FormErrors } from '@app/_errors';
+import { HttpService } from '../http.service';
+import { SimpleChange } from '@angular/core';
 
-export abstract class PaginationAndParamsService {
+export abstract class PaginationAndParamsService<T> {
+  public values: T[];
+  public selected: T;
+
+  public errors: FormErrors;
+  public loading = false;
 
   public pagination: Pagination;
   private isInit = false;
   public isValidator = false;
 
-  constructor(pagination: Pagination = null) {
+  /* HttpService */
+  public httpService: HttpService<T>;
+
+  /* Route and router for URL */
+  private router: Router;
+  private route: ActivatedRoute;
+
+  constructor(
+    httpService: HttpService<T>,
+    pagination: Pagination = null) {
+    this.httpService = httpService;
     if (pagination !== null) {
       this.pagination = pagination;
     } else {
@@ -19,39 +37,134 @@ export abstract class PaginationAndParamsService {
   }
 
   /**
+   * Create a value based on JSON response.
+   */
+  abstract newValue(x: any): T;
+  /**
+   * Set http parameters just before sending the request getAll().
+   */
+  abstract setHttpParameters(httpParams: HttpParams): HttpParams;
+
+  /**
    * Call to retrieve data when pagination change or filter.
    */
-  abstract changePage(): void;
+  changePage(): void {
+    this.loading = true;
+    this.errors = new FormErrors();
+    let httpParams = this.getHttpParameters();
+    httpParams = this.setHttpParameters(httpParams);
+    this.paramsIntoUrl(httpParams);
+    this.httpService.getAll(httpParams).subscribe(response => {
+      this.loading = false;
+      this.setParametersFromResponse(response.headers);
+      this.values = response.body.map(x => this.newValue(x));
+    });
+  }
 
   /**
    * Get the list of element.
    */
-  abstract list(): any[];
+  public list(): T[] { return this.values; }
 
   /**
    * Display the name of an element.
    */
-  abstract displayName(elt: any): string;
+  public displayName(elt: T): string {
+    const field = 'name';
+    if (elt.hasOwnProperty(field)) { return elt[field]; }
+    return '';
+  }
 
   /**
    * Return the id of elt.
    * @param elt the element.
    */
-  abstract getId(elt: any): number;
+  public getId(elt: T): number {
+    const field = 'id';
+    if (elt.hasOwnProperty(field)) { return elt[field]; }
+    return -1;
+  }
 
   /**
    * Add elt into the list. You have to call add() to update the pagination
    * system.
    * @param elt the element that has been added
    */
-  abstract addElement(elt: any): void;
+  addElement(elt: T): void {
+    this.values.push(this.newValue(elt));
+    this.add();
+  }
+
+  valueAdded(simpleChange: SimpleChange) {
+    setTimeout(() => {
+      if (simpleChange) {
+        if (simpleChange.previousValue === null) {
+          this.addElement(simpleChange.currentValue);
+        } else if (simpleChange.currentValue === null) {
+          this.deleteElement(simpleChange.previousValue);
+        } else {
+          Object.assign(simpleChange.previousValue, simpleChange.currentValue);
+        }
+      }
+    });
+  }
 
   /**
    * Delete elt from the list. You have to call delete() to update the
    *  pagination system.
    * @param elt the element that has been deleted
    */
-  abstract deleteElement(elt: any): void;
+  deleteElement(elt: T): void {
+    const index = this.values.indexOf(elt);
+    if (index >= 0) {
+      this.values.splice(index, 1);
+      this.delete();
+    }
+  }
+
+  public init(router: Router, route: ActivatedRoute, params: Params): void {
+    this.route = route;
+    this.router = router;
+    this.errors = new FormErrors();
+
+    this.setDefaultParamsFromUrl(params);
+    this.changePage();
+  }
+
+  setSelected(value: T) {
+    if (!this.loading) {
+      if (this.selected !== value) {
+        this.selected = value;
+        this.errors = new FormErrors();
+      }
+    }
+  }
+
+  updateAskValidate(value: T) {
+    this.updateBoolean(value, 'askValidate');
+  }
+
+  updateValidate(value: T) {
+    this.updateBoolean(value, 'validate');
+  }
+
+  updateBoolean(value: T, field: string) {
+    this.errors = new FormErrors();
+
+    if (value.hasOwnProperty(field) && this.httpService) {
+      this.setSelected(value);
+      this.loading = true;
+      value[field] = !value[field];
+      this.httpService.update(value)
+        .subscribe(returnValue => {
+          this.loading = false;
+        }, (error: any) => {
+          this.errors.formatError(error);
+          value[field] = !value[field];
+          this.loading = false;
+        });
+    }
+  }
 
   /**
    * Make the circle of boolean true -> false -> undefined -> true.
@@ -89,9 +202,8 @@ export abstract class PaginationAndParamsService {
    *
    * {Params} params is given via this.route.queryParams.subscribe(params) in ngOnInit
    */
-  setDefaultParamsFromUrl(params: Params, isValidator: boolean) {
+  setDefaultParamsFromUrl(params: Params) {
     this.isInit = true;
-    this.isValidator = isValidator;
     if (params && params.hasOwnProperty('page')) {
       this.goTo(parseInt(params.page ? params.page : '1', 10));
     } else {
@@ -144,13 +256,9 @@ export abstract class PaginationAndParamsService {
    * Change navigator URL with information from httpParams.
    *
    * @param httpParams Parameters use to call HTTP Get
-   * @param router intertface to update
-   * @param activatedRoute the current route
    */
   paramsIntoUrl(
-    httpParams: HttpParams,
-    router: Router,
-    activatedRoute: ActivatedRoute) {
+    httpParams: HttpParams) {
     const query = {};
     httpParams.keys().forEach(key => {
       const val = httpParams.get(key);
@@ -165,11 +273,11 @@ export abstract class PaginationAndParamsService {
     if (!query.hasOwnProperty('askValidate')) {
       query[`askValidate`] = null;
     }
-    if (router && activatedRoute) {
-      router.navigate(
+    if (this.router && this.route) {
+      this.router.navigate(
         [],
         {
-          relativeTo: activatedRoute,
+          relativeTo: this.route,
           queryParams: query,
           queryParamsHandling: 'merge'
         });

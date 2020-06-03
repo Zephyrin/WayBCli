@@ -21,7 +21,7 @@
               class="col-11">
             <button class="btn btn-light"
                     (click)="subCategoryModal.open()">
-              <mat-icon>add</mat-icon>Sub-category name
+              <mat-icon [inline]="true">add</mat-icon>Sub-category name
             </button>
           </th>
           <th class="col-1 action">Action</th>
@@ -43,12 +43,12 @@
             <button type="button"
                     class="btn btn-light"
                     (click)="subCategoryModal.open(subCategory)">
-              <mat-icon>update</mat-icon>
+              <mat-icon [inline]="true">update</mat-icon>
             </button>
             <button type="button"
                     class="btn btn-light"
                     (click)="subCategoryModal.onDelete(subCategory)">
-              <mat-icon>delete</mat-icon>
+              <mat-icon [inline]="true">delete</mat-icon>
             </button>
             <app-switch [value]="subCategory.validate"
                         [disabled]="loading"

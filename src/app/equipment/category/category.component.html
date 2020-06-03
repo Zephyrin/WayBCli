@@ -22,7 +22,7 @@
       <button class="btn btn-light btn-sm d-flex justify-content-center align-content-between"
               *ngIf="!isValidator"
               (click)="categoryModal.open()">
-        <mat-icon>add</mat-icon>
+        <mat-icon [inline]="true">add</mat-icon>
       </button>
       <app-category-filter
                            class="d-none d-sm-none d-md-none d-lg-none d-xl-block">
@@ -47,7 +47,7 @@
           </th>
         </tr>
       </thead>
-      <ng-container *ngFor="let category of service.categories">
+      <ng-container *ngFor="let category of service.values">
         <tr (click)="setSelected(category)"
             (dblclick)="dblClick(category)"
             [class.active]="category === service.selected"
@@ -68,12 +68,12 @@
               <button type="button"
                       class="btn btn-light btn-sm d-flex justify-content-center align-content-between"
                       (click)="categoryModal.open(category)">
-                <mat-icon>update</mat-icon>
+                <mat-icon [inline]="true">update</mat-icon>
               </button>
               <button type="button"
                       class="btn btn-light btn-sm d-flex justify-content-center align-content-between"
                       (click)="categoryModal.onDelete(category)">
-                <mat-icon>delete</mat-icon>
+                <mat-icon [inline]="true">delete</mat-icon>
               </button>
               <app-switch [value]="category.askValidate"
                           [disabled]="service.loading"
@@ -111,6 +111,6 @@
   </div>
 </div>
 <app-category-update #categoryModal
-                     (updateDone)="service.onUpdateDone($event)">
+                     (updateDone)="service.valueAdded($event)">
 </app-category-update>
 <app-sub-category-update #subCategoryModal></app-sub-category-update>

@@ -20,7 +20,7 @@
         <form class="form-inline"
               [formGroup]="searchForm">
           <div class="input-group row nowrap">
-            <input class="form-control"
+            <input class="form-control form-control-sm"
                    formControlName="search"
                    id="searchText"
                    #searchText
@@ -30,10 +30,10 @@
                    aria-label="Search">
             <div class="input-group-append">
               <button for="searchText"
-                      class="btn btn-outline-secondary d-flex justify-content-center align-content-between"
+                      class="btn btn-outline-secondary btn-sm d-flex justify-content-center align-content-between"
                       type="submit"
                       (click)="search()">
-                <mat-icon>search</mat-icon>Search
+                <mat-icon [inline]="true">search</mat-icon>Search
               </button>
             </div>
           </div>

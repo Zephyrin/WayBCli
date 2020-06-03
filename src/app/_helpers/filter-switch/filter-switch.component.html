@@ -1,11 +1,11 @@
 <div (click)="clickCmp()"
       #cmp
      class="pointer checkbox d-flex align-items-center">
-  <mat-icon *ngIf="value === booleanEnum.false">
+  <mat-icon *ngIf="value === booleanEnum.false" [inline]="true">
     check_box_outline_blank</mat-icon>
-  <mat-icon *ngIf="value === booleanEnum.true">check_box
+  <mat-icon *ngIf="value === booleanEnum.true" [inline]="true">check_box
   </mat-icon>
-  <mat-icon *ngIf="value === booleanEnum.undefined">
+  <mat-icon *ngIf="value === booleanEnum.undefined" [inline]="true">
     indeterminate_check_box</mat-icon>
   {{text}}
 </div>

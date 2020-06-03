@@ -4,7 +4,7 @@ import { EventEmitter, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first, filter } from 'rxjs/operators';
 
-import { EquipmentService } from '@app/_services/equipment.service';
+import { EquipmentService } from '@app/_services/equipment/equipment.service';
 import { Equipment } from '@app/_models/equipment';
 
 import { BrandService } from '@app/_services/brand/brand.service';
@@ -41,7 +41,7 @@ export class EquipmentUpdateComponent implements OnInit {
   }
   get equipments() { return this.equipmentsP; }
 
-  get categories() { return this.categoryService.categories; }
+  get categories() { return this.categoryService.values; }
   /*  @Input()
    set parentData(equipment: Equipment) {
      this.selected = equipment;
@@ -95,10 +95,10 @@ export class EquipmentUpdateComponent implements OnInit {
   ngOnInit(): void {
     this.deleteHasError = false;
     this.loading = true;
-    this.categoryService.initWithParams(undefined, undefined, undefined, false,
-      true, undefined, undefined, undefined, '0', undefined);
-    this.brandServiceP.init(undefined, undefined, undefined, false);
-
+    this.categoryService.initWithParams(undefined, undefined, undefined, undefined, '0', undefined);
+    this.categoryService.isValidator = false;
+    this.brandServiceP.init(undefined, undefined, undefined);
+    this.brandServiceP.isValidator = false;
     this.form = this.formBuilder.group({
       id: [''],
       name: ['', Validators.required],

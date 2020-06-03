@@ -28,7 +28,7 @@ export class CategoryComponent implements OnInit {
       this.router.navigate(['/login']);
     }
     if (window.location.pathname === '/categoriesValidator') {
-      this.isValidator = true;
+      this.serviceP.isValidator = true;
     }
   }
 
@@ -38,7 +38,8 @@ export class CategoryComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.queryParamMap.subscribe(params => {
-      this.service.init(this.router, this.route, params, this.isValidator);
+      this.service.init(this.router, this.route, params);
+      this.service.isValidator = this.isValidator;
     });
   }
 

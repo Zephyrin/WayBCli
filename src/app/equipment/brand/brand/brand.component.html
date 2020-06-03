@@ -21,7 +21,7 @@
       <button class="btn btn-light btn-sm d-flex justify-content-center align-content-between"
               *ngIf="!service.isValidator"
               (click)="brandModal.open()">
-        <mat-icon>add</mat-icon>
+        <mat-icon [inline]="true">add</mat-icon>
       </button>
       <app-brand-filter class="d-none d-sm-none d-md-none d-lg-none d-xl-block"></app-brand-filter>
       <app-pagination [pagination]="service"></app-pagination>
@@ -88,7 +88,7 @@
           </th>
         </tr>
       </thead>
-      <tr *ngFor="let brand of service.brands"
+      <tr *ngFor="let brand of service.values"
           (click)="service.setSelected(brand)"
           (dblclick)="dblClick(brand)"
           [class.active]="brand == service.selected && service.canEditOrDelete(brand)"
@@ -116,16 +116,16 @@
                    aria-label="Tools"
                    *ngIf="service.canEditOrDelete(brand)">
                 <button type="button"
-                        class="btn btn-light"
+                        class="btn btn-light btn-sm d-flex justify-content-center align-content-between"
                         data-toggle="modal"
                         data-target="#addEquipmentModal"
                         (click)="brandModal.open(brand)">
-                  <mat-icon>update</mat-icon>
+                  <mat-icon [inline]="true">update</mat-icon>
                 </button>
                 <button type="button"
-                        class="btn btn-light"
+                        class="btn btn-light btn-sm d-flex justify-content-center align-content-between"
                         (click)="brandModal.onDelete(brand)">
-                  <mat-icon>delete</mat-icon>
+                  <mat-icon [inline]="true">delete</mat-icon>
                 </button>
                 <app-switch [value]="brand.askValidate"
                             [disabled]="service.loading"

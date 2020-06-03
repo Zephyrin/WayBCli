@@ -6,7 +6,7 @@
       <li class="nav-item">
         <button class="nav-link btn btn-light"
                 (click)="clearFilters()">
-          <mat-icon>filter_none</mat-icon>
+          <mat-icon [inline]="true">filter_none</mat-icon>
           Clear filters
         </button>
       </li>
@@ -16,7 +16,7 @@
                 data-toggle="dropdown"
                 aria-haspopup="true"
                 aria-expanded="false">
-          <mat-icon>category</mat-icon>
+          <mat-icon [inline]="true">category</mat-icon>
           Category
         </button>
         <ul class="dropdown-menu"
@@ -98,7 +98,7 @@
               class="btn btn-light my-2 my-sm-0"
               type="submit"
               (click)="filters()">
-        <mat-icon>search</mat-icon>Search
+        <mat-icon [inline]="true">search</mat-icon>Search
       </button>
     </form>
   </div>

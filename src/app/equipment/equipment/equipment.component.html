@@ -1,129 +1,129 @@
-<app-equipment-filter [equipments]="equipments"
-                      [categories]="categoryService.categories"
-                      (filterDone)="filterDone($event)"
-                      #equipmentFilter></app-equipment-filter>
-
 <div
      class="table-responsive-sm table-responsive-md table-responsive-lg table-responsive-xl">
-  <div *ngIf="errors.hasFatalError"
+  <div *ngIf="service.errors.hasFatalError"
        class="alert alert-danger">
-    <div [innerHTML]="errors.fatalError"></div>
+    <div [innerHTML]="service.errors.fatalError"></div>
   </div>
-  <div *ngIf="errors.hasMessage"
+  <div *ngIf="service.errors.hasMessage"
        class="alert alert-warning">
-    <div>{{errors.message}}</div>
+    <div>{{service.errors.message}}</div>
   </div>
-  <div *ngIf="errors.hasErrors['validate']">
-    <div *ngFor="let child of errors.errors['name'].errors">
+  <div *ngIf="service.errors.hasErrors['validate']">
+    <div *ngFor="let child of service.errors.errors['validate'].errors">
       {{child}}
     </div>
   </div>
-  <table class="table">
-    <thead>
-      <tr>
-        <th scope="col"
-            class="col-md-2 col-sm-9 col-xs-9">
-          <div *ngIf="loading"
-               class="spinner-border spinner-border-sm"></div>
-          <button type="button"
-                  class="btn btn-light"
-                  role="button"
-                  (click)="equipmentUpdate.create()">
-            <mat-icon>add</mat-icon>Name
-          </button>
-        </th>
-        <th scope="col"
-            class="col-md-4 d-none d-sm-table-cell">Description</th>
-        <th scope="col"
-            class="col-md-1 d-none d-sm-table-cell d-md-table-cell">Brand</th>
-        <th scope="col"
-            class="col-md-2 d-none d-sm-table-cell d-md-table-cell">Category
-        </th>
-        <th scope="col"
-            class="col-1 col-sm-1 col-xs-1">Weight</th>
-        <th scope="col"
-            class="col-1 col-sm-1 col-xs-1">Price</th>
-        <th scope="col"
-            class="col-1 col-sm-1 col-xs-1">Own<br />Whishes</th>
-      </tr>
-    </thead>
-    <ng-container *ngFor="let equipment of equipmentsFilter">
-      <tr (click)="setSelected(equipment)"
-          (dblclick)="updateDblClick(equipment)"
-          [class.active]="equipment == selected"
-          class="pointer">
-        <td class=""><b>{{equipment.name}}</b>
-        </td>
-        <td class="d-none d-sm-table-cell">
-          <p>
-            {{equipment.description | slice:0:75}}{{equipment.description.length > 75 ? '...' : ''}}
-          </p>
-        </td>
-        <td class="d-none d-sm-table-cell d-md-table-cell">
-          <img [src]="equipment.brand?.logo.url()"
-            *ngIf="equipment.brand?.logo.hasUrl() || false"
-            class="img-thumbnail rounded mx-auto d-block" />
-          <p *ngIf="!equipment.brand?.logo.hasUrl() || false">{{equipment.brand?.name || ''}}</p>
-        </td>
-        <td class="d-none d-sm-table-cell d-md-table-cell">
-          {{equipment.subCategory.name}}</td>
-        <td class="">{{equipment.compute('weight')}}g</td>
-        <td class="">{{equipment.compute('price')}}</td>
-        <td class="">
-          <div class="btn-group"
-               role="group"
-               aria-label="Tools">
+  <fieldset [disabled]="service.loading">
+    <app-equipment-filter #equipmentFilter></app-equipment-filter>
+
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col"
+              class="col-md-2 col-sm-9 col-xs-9">
+            <div *ngIf="service.loading"
+                 class="spinner-border spinner-border-sm"></div>
             <button type="button"
-                    class="btn btn-light"
-                    *ngIf="canEditOrDelete(equipment)"
-                    (click)="equipmentUpdate.update(equipment)">
-              <mat-icon>update</mat-icon>
+                    class="btn btn-light btn-sm d-flex justify-content-center align-content-between"
+                    role="button"
+                    (click)="equipmentUpdate.create()">
+              <mat-icon [inline]="true">add</mat-icon>Name
             </button>
-            <button type="button"
-                    class="btn btn-light"
-                    *ngIf="canEditOrDelete(equipment)"
-                    (click)="equipmentUpdate.onDelete(equipment)">
-              <mat-icon>delete</mat-icon>
-            </button>
-          </div>
-          <div class="btn-group"
-               role="group">
-            <app-switch [value]="equipment.askValidate"
-                        [disabled]="loading"
-                        *ngIf="!equipment.validate"
-                        (isChecked)="updateAskValidate(equipment)">
-            </app-switch>
-            <button class="btn btn-light"
-                    (click)="haveOwnedModal.open(equipment)">
-              <mat-icon (click)="haveOwnedModal.open(equipment)"
-                        *ngIf="!equipment.has">add</mat-icon>
-              <mat-icon (click)="haveOwnedModal.open(equipment)"
-                        *ngIf="equipment.has">add_shopping_cart</mat-icon>
-            </button>
-          </div>
-        </td>
-      </tr>
-      <tr *ngIf="selected === equipment">
-        <td colspan="7">
-          <app-characteristic [parentData]="equipment"
-                              (create)="characteristicModal.create(equipment)"
-                              (update)="characteristicModal.update(equipment, $event)"
-                              (delete)="characteristicModal.delete(equipment, $event)">
-          </app-characteristic>
-        </td>
-      </tr>
-    </ng-container>
-  </table>
-  <div *ngIf="errors.hasFatalError"
+          </th>
+          <th scope="col"
+              class="col-md-4 d-none d-sm-table-cell">Description</th>
+          <th scope="col"
+              class="col-md-1 d-none d-sm-table-cell d-md-table-cell">Brand</th>
+          <th scope="col"
+              class="col-md-2 d-none d-sm-table-cell d-md-table-cell">Category
+          </th>
+          <th scope="col"
+              class="col-1 col-sm-1 col-xs-1">Weight</th>
+          <th scope="col"
+              class="col-1 col-sm-1 col-xs-1">Price</th>
+          <th scope="col"
+              class="col-1 col-sm-1 col-xs-1">Own<br />Whishes</th>
+        </tr>
+      </thead>
+      <ng-container *ngFor="let equipment of service.values">
+        <tr (click)="service.setSelected(equipment)"
+            (dblclick)="updateDblClick(equipment)"
+            [class.active]="equipment == service.selected"
+            class="pointer">
+          <td class=""><b>{{equipment.name}}</b>
+          </td>
+          <td class="d-none d-sm-table-cell">
+            <p>
+              {{equipment.description | slice:0:75}}{{equipment.description.length > 75 ? '...' : ''}}
+            </p>
+          </td>
+          <td class="d-none d-sm-table-cell d-md-table-cell">
+            <img [src]="equipment.brand?.logo.url()"
+                 *ngIf="equipment.brand?.logo.hasUrl() || false"
+                 class="img-thumbnail rounded mx-auto d-block" />
+            <p *ngIf="!equipment.brand?.logo.hasUrl() || false">
+              {{equipment.brand?.name || ''}}</p>
+          </td>
+          <td class="d-none d-sm-table-cell d-md-table-cell">
+            {{equipment.subCategory.name}}</td>
+          <td class="">{{equipment.compute('weight')}}g</td>
+          <td class="">{{equipment.compute('price')}}</td>
+          <td class="">
+            <div class="btn-group"
+                 role="group"
+                 aria-label="Tools">
+              <button type="button"
+                      class="btn btn-light btn-sm d-flex justify-content-center align-content-between"
+                      *ngIf="canEditOrDelete(equipment)"
+                      (click)="equipmentUpdate.update(equipment)">
+                <mat-icon [inline]="true">update</mat-icon>
+              </button>
+              <button type="button"
+                      class="btn btn-light btn-sm d-flex justify-content-center align-content-between"
+                      *ngIf="canEditOrDelete(equipment)"
+                      (click)="equipmentUpdate.onDelete(equipment)">
+                <mat-icon [inline]="true">delete</mat-icon>
+              </button>
+            </div>
+            <div class="btn-group"
+                 role="group">
+              <app-switch [value]="equipment.askValidate"
+                          [disabled]="service.loading"
+                          *ngIf="!equipment.validate"
+                          (isChecked)="service.updateAskValidate(equipment)">
+              </app-switch>
+              <button class="btn btn-light btn-sm d-flex justify-content-center align-content-between"
+                      (click)="haveOwnedModal.open(equipment)">
+                <mat-icon (click)="haveOwnedModal.open(equipment)"
+                          *ngIf="!equipment.has">add</mat-icon>
+                <mat-icon (click)="haveOwnedModal.open(equipment)"
+                          *ngIf="equipment.has">add_shopping_cart</mat-icon>
+              </button>
+            </div>
+          </td>
+        </tr>
+        <tr *ngIf="service.selected === equipment">
+          <td colspan="7">
+            <app-characteristic [parentData]="equipment"
+                                (create)="characteristicModal.create(equipment)"
+                                (update)="characteristicModal.update(equipment, $event)"
+                                (delete)="characteristicModal.delete(equipment, $event)">
+            </app-characteristic>
+          </td>
+        </tr>
+      </ng-container>
+    </table>
+  </fieldset>
+  <div *ngIf="service.errors.hasFatalError"
        class="alert alert-danger">
-    <div [innerHTML]="errors.fatalError"></div>
+    <div [innerHTML]="service.errors.fatalError"></div>
   </div>
-  <div *ngIf="errors.hasMessage"
+  <div *ngIf="service.errors.hasMessage"
        class="alert alert-warning">
-    <div>{{errors.message}}</div>
+    <div>{{service.errors.message}}</div>
   </div>
-  <div *ngIf="errors.hasErrors['validate']">
-    <div *ngFor="let child of errors.errors['name'].errors">
+  <div *ngIf="service.errors.hasErrors['validate']">
+    <div *ngFor="let child of service.errors.errors['validate'].errors">
       {{child}}
     </div>
   </div>
@@ -132,9 +132,9 @@
                        (done)="onDoneHave($event)"></app-user-owned-update>
 
 <app-equipment-update #equipmentUpdate
-                      [equipments]="equipments"
+                      [equipments]="service.values"
                       [characteristicModal]="characteristicModal"
-                      (updateDone)="equipmentAdded($event)">
+                      (updateDone)="service.valueAdded($event)">
 </app-equipment-update>
 
 <app-characteristic-update #characteristicModal>

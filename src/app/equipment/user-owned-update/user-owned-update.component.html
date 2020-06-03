@@ -60,7 +60,7 @@
                               (mouseup)="doneTimer()"
                               (touchend)="doneTimer()"
                               (click)="plus('own_', i)">
-                        <mat-icon>add</mat-icon>
+                        <mat-icon [inline]="true">add</mat-icon>
                       </button>
                       <button class="btn btn-light btn-sm"
                               type="button"
@@ -70,7 +70,7 @@
                               (touchstart)="startTimer('own_', i, '-')"
                               (click)="minus('own_', i)"
                               *ngIf="sup0('own_', i)">
-                              <mat-icon>remove</mat-icon>
+                              <mat-icon [inline]="true">remove</mat-icon>
                       </button>
                     </div>
                   </div>
@@ -98,7 +98,7 @@
                               (touchstart)="startTimer('want_', i, '+')"
                               (mousedown)="startTimer('want_', i, '+')"
                               (click)="plus('want_', i)">
-                        <mat-icon>add</mat-icon>
+                        <mat-icon [inline]="true">add</mat-icon>
                       </button>
                       <button class="btn btn-light btn-sm"
                               type="button"
@@ -108,7 +108,7 @@
                               (mousedown)="startTimer('want_', i, '-')"
                               (click)="minus('want_', i)"
                               *ngIf="sup0('want_', i)">
-                        <mat-icon>remove</mat-icon>
+                        <mat-icon [inline]="true">remove</mat-icon>
                       </button>
                     </div>
                   </div>

@@ -11,11 +11,11 @@
               role="link"
               type="button"
               (click)="pagination.goToFirst()">
-        <mat-icon>first_page</mat-icon>
+        <mat-icon [inline]="true">first_page</mat-icon>
       </button>
     </li>
     <li class="page-item">
-      <button class="page-link btn-sm"
+      <button class="page-link"
               role="link"
               type="button"
               *ngIf="pagination.hasPreviousPage()"
@@ -29,11 +29,11 @@
               type="button"
               (click)="pagination.goToPrevious()"
               >
-        <mat-icon>navigate_before</mat-icon>
+        <mat-icon [inline]="true">navigate_before</mat-icon>
       </button>
     </li>
     <li class="page-item">
-      <button class="page-link btn-sm d-flex justify-content-center align-content-between"
+      <button class="page-link d-flex justify-content-center align-content-between"
               type="button"
               role="link"
               (click)="pagination.changePage()">{{pagination.page()}}</button>
@@ -43,7 +43,7 @@
               type="button"
               role="link"
               (click)="pagination.goToNext()">
-        <mat-icon>navigate_next</mat-icon>
+        <mat-icon [inline]="true">navigate_next</mat-icon>
       </button>
     </li>
     <li class="page-item">
@@ -60,7 +60,7 @@
               type="button"
               role="link"
               (click)="pagination.goToLast()">
-        <mat-icon>last_page</mat-icon>
+        <mat-icon [inline]="true">last_page</mat-icon>
       </button>
     </li>
   </ul>
