@@ -4,7 +4,7 @@
   <a class="navbar-brand d-none d-sm-block"
      routerLink="/">
     <img src="favicon.png"
-         alt="walker"
+         alt="Hey Walker, What About Your Backpack?"
          class="img-fluid"
          width="50" /> Hey {{currentUser.username | titlecase}}, what about your
     backpack ?
@@ -12,7 +12,7 @@
   <a class="navbar-brand d-block d-sm-none"
      routerLink="/">
     <img src="favicon.png"
-         alt="walker"
+         alt="Hey Walker, Way B?"
          class="img-fluid"
          width="50" /> Hey {{currentUser.username | titlecase}}, Way.B ?
   </a>
@@ -24,22 +24,10 @@
        data-target=".filterDropdown"
        aria-expanded="false"
        aria-label="Toggle filter"
-       *ngIf="pathname === '/equipments' || pathname === '/equipmentsValidator'">
+       *ngIf="hasFilters()">
       <mat-icon [inline]="true">search</mat-icon>
     </a>
     <!-- End filter for sm device -->
-    <!-- Brand filter for sm device -->
-    <a class="navbar-toggler topright d-block d-sm-none"
-       type="button"
-       data-toggle="collapse"
-       data-target="#filterBrandNavDropdown"
-       aria-controls="filterBrandNavDropdown"
-       aria-expanded="false"
-       aria-label="Toggle filter"
-       *ngIf="pathname === '/brands' || pathname === '/brandsValidator'">
-      <mat-icon [inline]="true">search</mat-icon>
-    </a>
-    <!-- End Brand filter for sm device -->
     <button class="navbar-toggler"
             type="button"
             data-toggle="collapse"
@@ -47,8 +35,10 @@
             aria-controls="navbarNavDropdown"
             aria-expanded="false"
             aria-label="Toggle navigation">
-      <mat-icon class="fa-menu-close">menu</mat-icon>
-      <mat-icon class="fa-menu-open">drag_handle</mat-icon>
+      <mat-icon class="fa-menu-close"
+                [inline]="true">more_vert</mat-icon>
+      <mat-icon class="fa-menu-open"
+                [inline]="true">more_horiz</mat-icon>
     </button>
   </span>
   <div id="navbarNavDropdown"
@@ -62,6 +52,8 @@
       </li>
       <div class="dropdown d-lg-none">
         <a class="nav-link"
+           data-toggle="collapse"
+           data-target="#navbarNavDropdown"
            routerLinkActive="active-link"
            routerLink="">Backpacks</a>
         <a class="nav-link dropdown-toggle"
@@ -74,22 +66,31 @@
         <div class="dropdown-menu"
              aria-labelledby="dropdownInfo">
           <a class="dropdown-item"
+             data-toggle="collapse"
+             data-target="#navbarNavDropdown"
              routerLinkActive="active-link"
              routerLink="equipments"
              [queryParams]="{page:'1', limit: '10', sort: 'asc', sortBy: 'name'}">Equipments</a>
           <a class="dropdown-item"
+             data-toggle="collapse"
+             data-target="#navbarNavDropdown"
              routerLinkActive="active-link"
              routerLink="brands"
-             [queryParams]="{page:'1', limit: '10', sort: 'asc', sortBy: 'name'}"
-             >Brands</a>
+             [queryParams]="{page:'1', limit: '10', sort: 'asc', sortBy: 'name'}">Brands</a>
           <a class="dropdown-item"
+             data-toggle="collapse"
+             data-target="#navbarNavDropdown"
              routerLinkActive="active-link"
              routerLink="categories"
              [queryParams]="{page:'1', limit: '10', sort: 'asc', sortBy: 'name'}">Categories</a>
           <a class="dropdown-item"
+             data-toggle="collapse"
+             data-target="#navbarNavDropdown"
              routerLinkActive="active-link"
              routerLink="trips">Trips</a>
           <a class="dropdown-item"
+             data-toggle="collapse"
+             data-target="#navbarNavDropdown"
              routerLinkActive="active-link"
              routerLink="profil">Profil</a>
         </div>
@@ -107,17 +108,26 @@
              routerLinkActive="active-link"
              aria-labelledby="dropdownInfo">
           <a class="dropdown-item nav-link"
+             data-toggle="collapse"
+             data-target="#navbarNavDropdown"
              routerLinkActive="active-link"
              routerLink="equipmentsValidator"
-             [queryParams]="{page:'1', limit: '10', sort: 'asc', sortBy: 'name', validate: 'false', askValidate: 'true'}">Equipments' validator</a>
+             [queryParams]="{page:'1', limit: '10', sort: 'asc', sortBy: 'name', validate: 'false', askValidate: 'true'}">Equipments'
+            validator</a>
           <a class="dropdown-item nav-link"
+             data-toggle="collapse"
+             data-target="#navbarNavDropdown"
              routerLinkActive="active-link"
              routerLink="brandsValidator"
-             [queryParams]="{page:'1', limit: '10', sort: 'asc', sortBy: 'name', validate: 'false', askValidate: 'true'}">Brands' validator</a>
+             [queryParams]="{page:'1', limit: '10', sort: 'asc', sortBy: 'name', validate: 'false', askValidate: 'true'}">Brands'
+            validator</a>
           <a class="nav-link"
+             data-toggle="collapse"
+             data-target="#navbarNavDropdown"
              routerLinkActive="active-link"
              routerLink="categoriesValidator"
-             [queryParams]="{page:'1', limit: '10', sort: 'asc', sortBy: 'name', validate: 'false', askValidate: 'true'}">Categories' validator</a>
+             [queryParams]="{page:'1', limit: '10', sort: 'asc', sortBy: 'name', validate: 'false', askValidate: 'true'}">Categories'
+            validator</a>
         </div>
       </div>
       <li class="separator"

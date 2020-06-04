@@ -49,6 +49,9 @@ export class EquipmentComponent implements OnInit {
     }
     this.authenticationService.currentUser.subscribe(
       x => this.service.currentUser = x);
+    /* if (!this.authenticationService.currentUserValue) {
+      this.router.navigate(['/login'], { queryParams: { returnUrl: route.}});
+    } */
     if (window.location.pathname === '/equipmentsValidator') {
       this.isValidator = true;
     }
@@ -74,7 +77,7 @@ export class EquipmentComponent implements OnInit {
       && ((!this.isValidator && (equipment.validate === false
         || (equipment.validate === true && this.isAmbassador))) ||
         (this.isValidator && (equipment.validate === true || equipment.askValidate)
-         && this.isAmbassador ));
+          && this.isAmbassador));
   }
 
   ngOnInit() {

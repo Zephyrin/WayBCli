@@ -33,7 +33,6 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     this.resizeSubscription$.unsubscribe();
   }
 
-
   ngOnInit() {
     this.resizeObservable$ = fromEvent(window, 'resize');
     this.resizeSubscription$ = this.resizeObservable$.subscribe(evt => {
@@ -76,6 +75,10 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private paddingBottomImportant(element: HTMLElement, height: number) {
     (element as HTMLElement).style.setProperty('padding-bottom', height + 'px', 'important');
+  }
+
+  hasFilters() {
+    return document.getElementsByClassName('filterDropdown').length > 0;
   }
 
   get pathname() {

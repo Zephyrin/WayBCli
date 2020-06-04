@@ -8,6 +8,7 @@ import { AuthenticationService } from './authentication.service';
 
 import { Backpack } from '@app/_models/backpack.ts';
 import { User } from '@app/_models/';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +17,12 @@ export class BackpackService {
 
   constructor(
     private http: HttpClient,
-    private authenticationService: AuthenticationService) { }
+    private router: Router,
+    private authenticationService: AuthenticationService) {
+      if (!this.authenticationService.currentUserValue) {
+        this.router.navigate(['/login']);
+      }
+     }
 
   getAll(user: User) {
     return this.http.get<Backpack[]>(`${environment.apiUrl}/user/${user.id}/backpack`);

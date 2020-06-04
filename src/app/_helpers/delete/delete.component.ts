@@ -1,8 +1,6 @@
 import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core';
 import { ViewChild } from '@angular/core';
 
-import { Router } from '@angular/router';
-import { AuthenticationService } from '@app/_services';
 import { FormErrors } from '@app/_errors';
 
 declare var $: any;
@@ -20,12 +18,8 @@ export class DeleteComponent implements OnInit {
   @Input() loading: boolean;
   @Input() errors: FormErrors;
   @Output() done = new EventEmitter<boolean>();
-  constructor(
-    private router: Router,
-    private authenticationService: AuthenticationService) {
-    if (!this.authenticationService.currentUserValue) {
-      this.router.navigate(['/login']);
-    } }
+  constructor() {
+  }
 
   ngOnInit(): void {
   }
