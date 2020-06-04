@@ -24,23 +24,12 @@ export class EquipmentFilterComponent implements OnInit {
   currentUser: User;
 
   constructor(
-    private serviceP: EquipmentPaginationSearchService,
-    private categoryServiceP: CategoryPaginationSearchService) { }
+    private serviceP: EquipmentPaginationSearchService) { }
 
   get service() { return this.serviceP; }
-  get categoryService() { return this.categoryServiceP; }
   get booleanEnum() { return BooleanEnum; }
 
   ngOnInit(): void {
-    // TODO Use Observable to init this array.
-    this.categoryService.initWithParams(undefined, undefined, undefined, undefined, '0', undefined)
-      .subscribe(
-        response => {
-          this.serviceP.categories = response.body.map(x => new Category(x));
-          this.serviceP.initBelongToSub(undefined);
-        }
-      );
-    this.categoryService.isValidator = false;
   }
 
   prevent(event) {

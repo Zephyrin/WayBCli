@@ -2,14 +2,14 @@
   <div class="navbar-collapse collapse filterDropdown">
     <ul class="navbar-nav">
       <li class="nav-item dropdown"
-          *ngFor="let cat of service.categories">
+          *ngFor="let cat of service.categoryService.values">
         <a class="nav-link dropdown-toggle"
            id="dpEquipmentFilterCategory_{{cat.id}}"
            role="button"
            data-toggle="dropdown"
            aria-haspopup="true"
            aria-expanded="false">
-          {{categoryService.displayName(cat)}}
+          {{service.categoryService.displayName(cat)}}
         </a>
         <ul class="dropdown-menu"
             role="menu"
@@ -40,32 +40,48 @@
     <ul class="navbar-nav align-items-md-center">
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle"
-          id="dpEquipmentFilterBrand"
-          role="button"
-          data-toggle="dropdown"
-          aria-haspopup="ture"
-          aria-expanded="false">
+           id="dpEquipmentFilterBrand"
+           role="button"
+           data-toggle="dropdown"
+           aria-haspopup="true"
+           aria-expanded="false">
           Brands
         </a>
         <ul class="dropdown-menu"
             role="menu"
             (click)="prevent($event)"
             aria-labelledby="dpEquipmentFilterBrand">
-            <li *ngFor="let brand of service.brandService.values">
-              <app-filter-switch [disabled]="service.loading"
-                                 [value]="brand.inFilter"
-                                 [text]="brand.name"
-                                 (check)="service.checkBrand(brand)">
-              </app-filter-switch>
-            </li>
-            <li>
-              <app-filter-switch [disabled]="service.loading"
+          <li>
+            <app-pagination [pagination]="service.brandService"
+                            (click)="prevent($event)"></app-pagination>
+          </li>
+          <li class="dropdown-divider"></li>
+          <li *ngFor="let brand of service.brandService.values">
+            <app-filter-switch [disabled]="service.loading"
+                               [value]="brand.inFilter"
+                               [text]="brand.name"
+                               (check)="service.checkBrand(brand)">
+            </app-filter-switch>
+          </li>
+          <li>
+            <app-filter-switch [disabled]="service.loading"
                                [value]="service.brandAreAllChecked()"
-                               [text]="'All'"
+                               [text]="'Select All'"
                                (check)="service.checkAllBrands()">
             </app-filter-switch>
-            </li>
-          </ul>
+          </li>
+          <li class="dropdown-divider"></li>
+          <li>
+            <app-validation-and-search [service]="service.brandService"
+                                       [isCombo]="true">
+            </app-validation-and-search>
+          </li>
+          <li class="dropdown-divider"></li>
+          <li>
+            <app-pagination [pagination]="service.brandService"
+                            (click)="prevent($event)"></app-pagination>
+          </li>
+        </ul>
       </li>
       <li class="nav-item">
         <app-filter-switch [disabled]="service.loading"

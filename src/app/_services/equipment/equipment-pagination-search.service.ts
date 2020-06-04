@@ -9,6 +9,7 @@ import { SortEnum, SortByEnum } from '@app/_enums/equipment.enum';
 import { BooleanEnum } from '@app/_enums/boolean.enum';
 import { HttpParams } from '@angular/common/http';
 import { BrandPaginationSearchService } from '../brand/brand-pagination-search.service';
+import { CategoryPaginationSearchService } from '../category/category-pagination-search.service';
 
 @Injectable({
   providedIn: 'root'
@@ -25,17 +26,23 @@ export class EquipmentPaginationSearchService extends ValidationAndSearchService
   public owned = BooleanEnum.undefined;
   public wishes = BooleanEnum.undefined;
   public others = BooleanEnum.undefined;
-  public categories: Category[];
   private arraySubCategories = null;
   private arrayBrands = null;
 
   constructor(
     private service: EquipmentService,
-    public brandService: BrandPaginationSearchService) {
+    public brandService: BrandPaginationSearchService,
+    public categoryService: CategoryPaginationSearchService) {
     super(service);
+    brandService.isValidator = false;
+    categoryService.isValidator = false;
     brandService.initDone.subscribe(x => {
       this.initBelongToBrand(undefined);
     });
+    categoryService.initDone.subscribe(x => {
+      this.initBelongToSub(undefined);
+    });
+    brandService.init(undefined, undefined, undefined);
   }
 
   newValue(x: any): Equipment {
@@ -140,10 +147,10 @@ export class EquipmentPaginationSearchService extends ValidationAndSearchService
     if (str) {
       this.arraySubCategories = JSON.parse(str);
     }
-    if (this.categories !== undefined && this.arraySubCategories) {
+    if (this.categoryService.values !== undefined && this.arraySubCategories) {
       if (this.arraySubCategories.length > 0) {
         this.arraySubCategories.forEach(x => {
-          this.categories.forEach(cat => {
+          this.categoryService.values.forEach(cat => {
             cat.subCategories.forEach(sub => {
               if (sub.id === x) {
                 sub.inFilter = BooleanEnum.true;
@@ -151,7 +158,7 @@ export class EquipmentPaginationSearchService extends ValidationAndSearchService
             });
           });
         });
-        this.categories.forEach(cat => {
+        this.categoryService.values.forEach(cat => {
           cat.subCategories.forEach(sub => {
             if (sub.inFilter === BooleanEnum.undefined) {
               sub.inFilter = BooleanEnum.false;
@@ -159,7 +166,7 @@ export class EquipmentPaginationSearchService extends ValidationAndSearchService
           });
         });
       } else {
-        this.categories.forEach(cat => {
+        this.categoryService.values.forEach(cat => {
           cat.subCategories.forEach(sub => {
             if (sub.inFilter === BooleanEnum.undefined) {
               sub.inFilter = BooleanEnum.true;
@@ -190,11 +197,11 @@ export class EquipmentPaginationSearchService extends ValidationAndSearchService
     if (this.others !== BooleanEnum.undefined) {
       httpParams = httpParams.append('others', this.others);
     }
-    if (this.categories !== undefined) {
+    if (this.categoryService.values !== undefined) {
       let str = '[';
       let allInclude = true;
       let noneInclude = true;
-      this.categories.forEach(cat => {
+      this.categoryService.values.forEach(cat => {
         cat.subCategories.forEach(sub => {
           if (sub.inFilter === BooleanEnum.true) {
             str += sub.id + ',';
@@ -252,7 +259,9 @@ export class EquipmentPaginationSearchService extends ValidationAndSearchService
     this.brandService.values.forEach(brand => {
       brand.inFilter = val;
     });
-    this.changePage();
+    if (val === BooleanEnum.true) {
+      this.changePage();
+    }
   }
 
   checkBrand(brand: Brand) {

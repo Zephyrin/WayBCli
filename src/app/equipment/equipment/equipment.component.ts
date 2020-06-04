@@ -4,7 +4,7 @@ import { ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Equipment } from '@app/_models/equipment';
 
-import { User, Role } from '@app/_models';
+import { Role } from '@app/_models';
 
 import { AuthenticationService } from '@app/_services';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -13,7 +13,6 @@ import { UserOwnedUpdateComponent } from '../user-owned-update/user-owned-update
 import { BrandUpdateComponent } from '@app/equipment/brand/brand-update/brand-update.component';
 import { EquipmentFilterComponent } from './equipment-filter/equipment-filter.component';
 import { EquipmentUpdateComponent } from './equipment-update/equipment-update.component';
-import { CategoryPaginationSearchService } from '@app/_services/category/category-pagination-search.service';
 import { EquipmentPaginationSearchService } from '@app/_services/equipment/equipment-pagination-search.service';
 import { SortByEnum, SortEnum } from '@app/_enums/equipment.enum';
 
@@ -44,7 +43,6 @@ export class EquipmentComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private serviceP: EquipmentPaginationSearchService,
-    private categoryServiceP: CategoryPaginationSearchService,
     private authenticationService: AuthenticationService) {
     if (!this.authenticationService.currentUserValue) {
       this.router.navigate(['/login']);
@@ -67,8 +65,6 @@ export class EquipmentComponent implements OnInit {
     return isAmbassador;
   }
 
-  get categoryService() { return this.categoryServiceP; }
-
   get sortByEnum() { return SortByEnum; }
   get sortEnum() { return SortEnum; }
 
@@ -83,12 +79,9 @@ export class EquipmentComponent implements OnInit {
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
-      this.service.init(this.router, this.route, params);
       this.service.isValidator = this.isValidator;
+      this.service.init(this.router, this.route, params);
     });
-
-    this.categoryService.init(undefined, undefined, undefined);
-    this.categoryService.isValidator = false;
 
     this.haveForm = this.formBuilder.group({
       wantQuantity: [0, Validators.required],
