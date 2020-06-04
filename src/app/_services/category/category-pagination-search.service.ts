@@ -1,6 +1,6 @@
 import { Injectable, SimpleChange } from '@angular/core';
 import { Params } from '@angular/router';
-import { HttpParams } from '@angular/common/http';
+import { HttpParams, HttpResponse } from '@angular/common/http';
 
 import { CategoryService } from './category.service';
 
@@ -8,6 +8,7 @@ import { Category } from '@app/_models';
 import { SortEnum, SortByEnum } from '@app/_enums/category.enum';
 import { BooleanEnum } from '@app/_enums/boolean.enum';
 import { ValidationAndSearchService } from '../helpers/validation-and-search.service';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -93,14 +94,14 @@ export class CategoryPaginationSearchService extends ValidationAndSearchService<
     lowerOrEq: string,
     eq: string,
     greater: string,
-    greaterOrEq: string) {
+    greaterOrEq: string): Observable<HttpResponse<Category[]>> {
 
     this.lower = lower;
     this.lowerOrEq = lowerOrEq;
     this.eq = eq;
     this.greater = greater;
     this.greaterOrEq = greaterOrEq;
-    this.init(undefined, undefined, params);
+    return this.init(undefined, undefined, params);
   }
 
   setHttpParameters(httpParams: HttpParams): HttpParams {

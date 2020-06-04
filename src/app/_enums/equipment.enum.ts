@@ -11,5 +11,7 @@ export enum SortByEnum {
   brand = 'brand',
   own = 'own',
   whish = 'whish',
-  subCategory = 'subCategory'
+  subCategory = 'subCategory',
+  price = 'price',
+  weight = 'weight'
 }

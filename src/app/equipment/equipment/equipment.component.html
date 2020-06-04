@@ -33,27 +33,77 @@
       <thead>
         <tr>
           <th scope="col"
-              class="col-md-2 col-sm-9 col-xs-9">
-            <div *ngIf="service.loading"
-                 class="spinner-border spinner-border-sm"></div>
-            <button type="button"
-                    class="btn btn-light btn-sm d-flex justify-content-center align-content-between"
-                    role="button"
-                    (click)="equipmentUpdate.create()">
-              <mat-icon [inline]="true">add</mat-icon>Name
-            </button>
+              class="col-md-2 col-sm-9 col-xs-9 pointer"
+              (click)="service.sortByOrOrient(sortByEnum.name)">
+            <div class="d-flex">Name
+              <div *ngIf="service.sortBy === sortByEnum.name">
+                <mat-icon *ngIf="service.sort === sortEnum.asc">arrow_drop_down
+                </mat-icon>
+                <mat-icon *ngIf="service.sort === sortEnum.desc">arrow_drop_up
+                </mat-icon>
+              </div>
+            </div>
           </th>
           <th scope="col"
-              class="col-md-4 d-none d-sm-table-cell">Description</th>
-          <th scope="col"
-              class="col-md-1 d-none d-sm-table-cell d-md-table-cell">Brand</th>
-          <th scope="col"
-              class="col-md-2 d-none d-sm-table-cell d-md-table-cell">Category
+              class="col-md-4 d-none d-sm-table-cell pointer"
+              (click)="service.sortByOrOrient(sortByEnum.description)">
+            <div class="d-flex">Description
+              <div *ngIf="service.sortBy === sortByEnum.description">
+                <mat-icon *ngIf="service.sort === sortEnum.asc">arrow_drop_down
+                </mat-icon>
+                <mat-icon *ngIf="service.sort === sortEnum.desc">arrow_drop_up
+                </mat-icon>
+              </div>
+            </div>
           </th>
           <th scope="col"
-              class="col-1 col-sm-1 col-xs-1">Weight</th>
+              class="col-md-1 d-none d-sm-table-cell d-md-table-cell pointer"
+              (click)="service.sortByOrOrient(sortByEnum.brand)">
+            <div class="d-flex">Brand
+              <div *ngIf="service.sortBy === sortByEnum.brand">
+                <mat-icon *ngIf="service.sort === sortEnum.asc">arrow_drop_down
+                </mat-icon>
+                <mat-icon *ngIf="service.sort === sortEnum.desc">arrow_drop_up
+                </mat-icon>
+              </div>
+            </div>
+          </th>
           <th scope="col"
-              class="col-1 col-sm-1 col-xs-1">Price</th>
+              class="col-md-2 d-none d-sm-table-cell d-md-table-cell pointer"
+              (click)="service.sortByOrOrient(sortByEnum.subCategory)">
+            <div class="d-flex">Sub-category
+              <div *ngIf="service.sortBy === sortByEnum.subCategory">
+                <mat-icon *ngIf="service.sort === sortEnum.asc">arrow_drop_down
+                </mat-icon>
+                <mat-icon *ngIf="service.sort === sortEnum.desc">arrow_drop_up
+                </mat-icon>
+              </div>
+            </div>
+          </th>
+          <th scope="col"
+              class="col-1 col-sm-1 col-xs-1 pointer"
+              (click)="service.sortByOrOrient(sortByEnum.weight)">
+            <div class="d-flex">Weight
+              <div *ngIf="service.sortBy === sortByEnum.weight">
+                <mat-icon *ngIf="service.sort === sortEnum.asc">arrow_drop_down
+                </mat-icon>
+                <mat-icon *ngIf="service.sort === sortEnum.desc">arrow_drop_up
+                </mat-icon>
+              </div>
+            </div>
+          </th>
+          <th scope="col"
+              class="col-1 col-sm-1 col-xs-1 pointer"
+              (click)="service.sortByOrOrient(sortByEnum.price)">
+            <div class="d-flex">Price
+              <div *ngIf="service.sortBy === sortByEnum.price">
+                <mat-icon *ngIf="service.sort === sortEnum.asc">arrow_drop_down
+                </mat-icon>
+                <mat-icon *ngIf="service.sort === sortEnum.desc">arrow_drop_up
+                </mat-icon>
+              </div>
+            </div>
+          </th>
           <th scope="col"
               class="col-1 col-sm-1 col-xs-1">Own<br />Whishes</th>
         </tr>

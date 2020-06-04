@@ -1,4 +1,5 @@
 import { User } from './user';
+import { BooleanEnum } from '@app/_enums/boolean.enum';
 
 export class SubCategory {
   id = 0;
@@ -6,6 +7,7 @@ export class SubCategory {
   validate = false;
   askValidate = false;
   createdBy: User;
+  inFilter = BooleanEnum.undefined;
   constructor(sub: SubCategory = null) {
     if (sub !== null && sub !== undefined) {
       this.id = sub.id;

@@ -1,11 +1,12 @@
 import { Params, Router, ActivatedRoute } from '@angular/router';
-import { HttpParams, HttpHeaders } from '@angular/common/http';
+import { HttpParams, HttpHeaders, HttpResponse } from '@angular/common/http';
 
 import { Pagination } from '@app/_models/helpers/pagination';
 import { BooleanEnum } from '@app/_enums/boolean.enum';
 import { FormErrors } from '@app/_errors';
 import { HttpService } from '../http.service';
-import { SimpleChange } from '@angular/core';
+import { SimpleChange, EventEmitter } from '@angular/core';
+import { Observable } from 'rxjs';
 
 export abstract class PaginationAndParamsService<T> {
   public values: T[];
@@ -17,6 +18,9 @@ export abstract class PaginationAndParamsService<T> {
   public pagination: Pagination;
   private isInit = false;
   public isValidator = false;
+
+  /* Event to inform end of init */
+  public initDone: EventEmitter<any> = new EventEmitter();
 
   /* HttpService */
   public httpService: HttpService<T>;
@@ -48,17 +52,21 @@ export abstract class PaginationAndParamsService<T> {
   /**
    * Call to retrieve data when pagination change or filter.
    */
-  changePage(): void {
+  changePage(): Observable<HttpResponse<T[]>> {
     this.loading = true;
     this.errors = new FormErrors();
     let httpParams = this.getHttpParameters();
     httpParams = this.setHttpParameters(httpParams);
     this.paramsIntoUrl(httpParams);
-    this.httpService.getAll(httpParams).subscribe(response => {
+    const obs = this.httpService.getAll(httpParams);
+    obs.subscribe(response => {
       this.loading = false;
       this.setParametersFromResponse(response.headers);
       this.values = response.body.map(x => this.newValue(x));
+      this.initDone.emit(null);
+      return response;
     });
+    return obs;
   }
 
   /**
@@ -122,13 +130,13 @@ export abstract class PaginationAndParamsService<T> {
     }
   }
 
-  public init(router: Router, route: ActivatedRoute, params: Params): void {
+  public init(router: Router, route: ActivatedRoute, params: Params): Observable<HttpResponse<T[]>> {
     this.route = route;
     this.router = router;
     this.errors = new FormErrors();
 
     this.setDefaultParamsFromUrl(params);
-    this.changePage();
+    return this.changePage();
   }
 
   setSelected(value: T) {
@@ -171,7 +179,7 @@ export abstract class PaginationAndParamsService<T> {
    *
    * @param bool previous state of the boolean
    */
-  protected booleanCycle(bool: BooleanEnum) {
+  public booleanCycle(bool: BooleanEnum) {
     switch (bool) {
       case BooleanEnum.false:
         return BooleanEnum.undefined;
@@ -181,6 +189,7 @@ export abstract class PaginationAndParamsService<T> {
         return BooleanEnum.false;
     }
   }
+
   /**
    * Add something to the list
    */

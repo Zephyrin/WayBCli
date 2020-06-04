@@ -4,19 +4,19 @@
   <div [ngClass]="{'navbar-collapse': !isCombo, 'collapse': !isCombo}"
       class="filterDropdown">
     <ul class="navbar-nav align-items-sm-center">
-      <li class="nav-item nav-link">
+      <li class="nav-item">
         <app-filter-switch [disabled]="service.loading"
                            [value]="service.validate"
                            [text]="'Validate'"
                            (check)="changeValidate()"></app-filter-switch>
       </li>
-      <li class="nav-item nav-link">
+      <li class="nav-item">
         <app-filter-switch [disabled]="service.loading"
                            [value]="service.askValidate"
                            [text]="'Ask Validation'"
                            (check)="changeAskValidation()"></app-filter-switch>
       </li>
-      <li class="nav-item nav-link align-items-center">
+      <li class="nav-item align-items-center">
         <form class="form-inline"
               [formGroup]="searchForm">
           <div class="input-group row nowrap">

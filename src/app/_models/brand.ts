@@ -2,6 +2,7 @@ import { Equipment } from './equipment';
 import { User } from './user';
 import { Mediaobject } from './mediaobject';
 import { Validation } from './validation';
+import { BooleanEnum } from '@app/_enums/boolean.enum';
 
 export class Brand extends Validation {
   id: number;
@@ -10,6 +11,7 @@ export class Brand extends Validation {
   equipments: Equipment[];
   createdBy: User;
   logo: Mediaobject;
+  inFilter = BooleanEnum.undefined;
 
   constructor(brand: Brand = null) {
     super(brand);

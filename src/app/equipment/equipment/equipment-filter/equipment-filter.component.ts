@@ -1,14 +1,11 @@
 import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
-import { EventEmitter, Output } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
 
 import { Equipment, User } from '@app/_models';
 import { Category, SubCategory } from '@app/_models';
 
-import { AuthenticationService } from '@app/_services';
-import { Router } from '@angular/router';
 import { CategoryPaginationSearchService } from '@app/_services/category/category-pagination-search.service';
 import { EquipmentPaginationSearchService } from '@app/_services/equipment/equipment-pagination-search.service';
+import { BooleanEnum } from '@app/_enums/boolean.enum';
 
 @Component({
   selector: 'app-equipment-filter',
@@ -32,21 +29,21 @@ export class EquipmentFilterComponent implements OnInit {
 
   get service() { return this.serviceP; }
   get categoryService() { return this.categoryServiceP; }
+  get booleanEnum() { return BooleanEnum; }
 
   ngOnInit(): void {
-
-    this.categoryService.initWithParams(undefined, undefined, undefined, undefined, '0', undefined);
+    // TODO Use Observable to init this array.
+    this.categoryService.initWithParams(undefined, undefined, undefined, undefined, '0', undefined)
+      .subscribe(
+        response => {
+          this.serviceP.categories = response.body.map(x => new Category(x));
+          this.serviceP.initBelongToSub(undefined);
+        }
+      );
     this.categoryService.isValidator = false;
   }
 
   prevent(event) {
     event.stopPropagation();
-  }
-
-  compareByID(itemOne, itemTwo) {
-    if (itemOne === null && itemTwo === null) {
-      return true;
-    }
-    return itemOne && itemTwo && itemOne.id === itemTwo.id;
   }
 }
