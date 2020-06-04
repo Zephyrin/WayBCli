@@ -105,6 +105,7 @@ export class CategoryPaginationSearchService extends ValidationAndSearchService<
   }
 
   setHttpParameters(httpParams: HttpParams): HttpParams {
+    httpParams = super.setHttpParameters(httpParams);
     httpParams = httpParams.append('sort', this.sort);
     httpParams = httpParams.append('sortBy', this.sortBy);
     if (this.lower || this.lowerOrEq || this.eq || this.greater || this.greaterOrEq) {
@@ -120,6 +121,7 @@ export class CategoryPaginationSearchService extends ValidationAndSearchService<
   }
 
   removeParamsFromUrl(query: {}) {
+    super.removeParamsFromUrl(query);
     this.removeParam(query, 'sort');
     this.removeParam(query, 'sortBy');
     this.removeParam(query, 'subCategoryCount');
@@ -134,34 +136,7 @@ export class CategoryPaginationSearchService extends ValidationAndSearchService<
   }
 
   onUpdateDone(simple: SimpleChange) {
-    setTimeout(() => {
-      if (simple !== undefined && simple !== null) {
-        if (simple.previousValue === null) {
-          this.values.push(simple.currentValue);
-        } else if (simple.currentValue === null) {
-          const index = this.values.indexOf(simple.previousValue);
-          if (index > 0) {
-            this.values.splice(index, 1);
-          }
-        } else {
-          Object.assign(simple.previousValue, simple.currentValue);
-        }
-        /* this.cd.detectChanges(); */
-      }
-    });
-  }
-
-  addElement(category: Category) {
-    this.values.push(category);
-    super.add();
-  }
-
-  deleteElement(category: Category) {
-    const index = this.values.indexOf(category);
-    if (index >= 0) {
-      this.values.splice(index, 1);
-      super.delete();
-    }
+    this.valueAdded(simple);
   }
 
 }

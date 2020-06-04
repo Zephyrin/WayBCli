@@ -20,9 +20,6 @@ export class EquipmentPaginationSearchService extends ValidationAndSearchService
   /* Search */
   public sort = SortEnum.asc;
   public sortBy = SortByEnum.name;
-  public validate = BooleanEnum.undefined;
-  public askValidate = BooleanEnum.undefined;
-  public search = '';
   public owned = BooleanEnum.undefined;
   public wishes = BooleanEnum.undefined;
   public others = BooleanEnum.undefined;
@@ -179,6 +176,8 @@ export class EquipmentPaginationSearchService extends ValidationAndSearchService
 
   removeParamsFromUrl(query: {}) {
     super.removeParamsFromUrl(query);
+    this.removeParam(query, 'sort');
+    this.removeParam(query, 'sortBy');
     this.removeParam(query, 'owned');
     this.removeParam(query, 'wishes');
     this.removeParam(query, 'others');
@@ -188,6 +187,8 @@ export class EquipmentPaginationSearchService extends ValidationAndSearchService
 
   setHttpParameters(httpParams: HttpParams): HttpParams {
     httpParams = super.setHttpParameters(httpParams);
+    httpParams = httpParams.append('sort', this.sort);
+    httpParams = httpParams.append('sortBy', this.sortBy);
     if (this.owned !== BooleanEnum.undefined) {
       httpParams = httpParams.append('owned', this.owned);
     }

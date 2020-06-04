@@ -37,9 +37,9 @@ export class CategoryComponent implements OnInit {
   get service() { return this.serviceP; }
 
   ngOnInit(): void {
-    this.route.queryParamMap.subscribe(params => {
-      this.service.init(this.router, this.route, params);
+    this.route.queryParams.subscribe(params => {
       this.service.isValidator = this.isValidator;
+      this.service.init(this.router, this.route, params);
     });
   }
 
