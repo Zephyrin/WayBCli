@@ -31,9 +31,9 @@
     </div>
     <table class="table">
       <thead>
-        <tr>
+        <tr class="align-items-center">
           <th scope="col"
-              class="col-md-2 col-sm-9 col-xs-9 pointer"
+              class="col-md-2 col-sm-9 col-xs-9 pointer align-middle"
               (click)="service.sortByOrOrient(sortByEnum.name)">
             <div class="d-flex">Name
               <div *ngIf="service.sortBy === sortByEnum.name">
@@ -45,7 +45,7 @@
             </div>
           </th>
           <th scope="col"
-              class="col-md-4 d-none d-sm-table-cell pointer"
+              class="col-md-4 d-none d-sm-table-cell pointer align-middle"
               (click)="service.sortByOrOrient(sortByEnum.description)">
             <div class="d-flex">Description
               <div *ngIf="service.sortBy === sortByEnum.description">
@@ -57,7 +57,7 @@
             </div>
           </th>
           <th scope="col"
-              class="col-md-1 d-none d-sm-table-cell d-md-table-cell pointer"
+              class="col-md-1 d-none d-sm-table-cell d-md-table-cell pointer align-middle"
               (click)="service.sortByOrOrient(sortByEnum.brand)">
             <div class="d-flex">Brand
               <div *ngIf="service.sortBy === sortByEnum.brand">
@@ -69,7 +69,7 @@
             </div>
           </th>
           <th scope="col"
-              class="col-md-2 d-none d-sm-table-cell d-md-table-cell pointer"
+              class="col-md-2 d-none d-sm-table-cell d-md-table-cell pointer align-middle"
               (click)="service.sortByOrOrient(sortByEnum.subCategory)">
             <div class="d-flex">Sub-category
               <div *ngIf="service.sortBy === sortByEnum.subCategory">
@@ -81,7 +81,7 @@
             </div>
           </th>
           <th scope="col"
-              class="col-1 col-sm-1 col-xs-1 pointer"
+              class="col-1 col-sm-1 col-xs-1 pointer align-middle"
               (click)="service.sortByOrOrient(sortByEnum.weight)">
             <div class="d-flex">Weight
               <div *ngIf="service.sortBy === sortByEnum.weight">
@@ -93,7 +93,7 @@
             </div>
           </th>
           <th scope="col"
-              class="col-1 col-sm-1 col-xs-1 pointer"
+              class="col-1 col-sm-1 col-xs-1 pointer align-middle"
               (click)="service.sortByOrOrient(sortByEnum.price)">
             <div class="d-flex">Price
               <div *ngIf="service.sortBy === sortByEnum.price">
@@ -105,7 +105,7 @@
             </div>
           </th>
           <th scope="col"
-              class="col-1 col-sm-1 col-xs-1">Own<br />Whishes</th>
+              class="col-1 col-sm-1 col-xs-1 align-middle">Own<br />Whishes</th>
         </tr>
       </thead>
       <ng-container *ngFor="let equipment of service.values">
@@ -113,25 +113,25 @@
             (dblclick)="updateDblClick(equipment)"
             [class.active]="equipment == service.selected"
             class="pointer">
-          <td class=""><b>{{equipment.name}}</b>
+          <td class="align-middle"><b>{{equipment.name}}</b>
           </td>
-          <td class="d-none d-sm-table-cell">
-            <p>
+          <td class="d-none d-sm-table-cell align-middle">
               {{equipment.description | slice:0:75}}{{equipment.description.length > 75 ? '...' : ''}}
-            </p>
           </td>
-          <td class="d-none d-sm-table-cell d-md-table-cell">
+          <td class="d-none d-sm-table-cell d-md-table-cell align-middle"
+              *ngIf="equipment.brand?.logo.hasUrl() || false">
             <img [src]="equipment.brand?.logo.url()"
-                 *ngIf="equipment.brand?.logo.hasUrl() || false"
                  class="img-thumbnail rounded mx-auto d-block" />
-            <p *ngIf="!equipment.brand?.logo.hasUrl() || false">
-              {{equipment.brand?.name || ''}}</p>
           </td>
-          <td class="d-none d-sm-table-cell d-md-table-cell">
+          <td class="d-none d-sm-table-cell d-md-table-cell align-middle"
+              *ngIf="!equipment.brand?.logo.hasUrl() || false">
+              {{equipment.brand?.name || ''}}
+          </td>
+          <td class="d-none d-sm-table-cell d-md-table-cell align-middle">
             {{equipment.subCategory.name}}</td>
-          <td class="">{{equipment.compute('weight')}}g</td>
-          <td class="">{{equipment.compute('price')}}</td>
-          <td class="">
+          <td class="align-middle">{{equipment.compute('weight')}}g</td>
+          <td class="align-middle">{{equipment.compute('price')}}</td>
+          <td class="align-middle">
             <div class="btn-group"
                  role="group"
                  aria-label="Tools">
@@ -152,8 +152,13 @@
                  role="group">
               <app-switch [value]="equipment.askValidate"
                           [disabled]="service.loading"
-                          *ngIf="!equipment.validate"
+                          *ngIf="!equipment.validate && !service.isValidator"
                           (isChecked)="service.updateAskValidate(equipment)">
+              </app-switch>
+              <app-switch [value]="equipment.validate"
+                          [disabled]="service.loading"
+                          *ngIf="equipment.askValidate && service.isValidator"
+                          (isChecked)="service.updateValidate(equipment)">
               </app-switch>
               <button class="btn btn-light btn-sm d-flex justify-content-center align-content-between"
                       (click)="haveOwnedModal.open(equipment)">

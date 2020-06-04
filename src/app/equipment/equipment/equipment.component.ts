@@ -75,8 +75,10 @@ export class EquipmentComponent implements OnInit {
   canEditOrDelete(equipment) {
     return equipment
       && equipment.id !== undefined
-      && (equipment.validate === false
-        || (equipment.validate === true && this.isAmbassador));
+      && ((!this.isValidator && (equipment.validate === false
+        || (equipment.validate === true && this.isAmbassador))) ||
+        (this.isValidator && (equipment.validate === true || equipment.askValidate)
+         && this.isAmbassador ));
   }
 
   ngOnInit() {

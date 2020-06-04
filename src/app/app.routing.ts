@@ -7,7 +7,6 @@ import { EquipmentComponent } from './equipment/equipment/equipment.component';
 import { UserComponent } from './equipment/_admin/user/user.component';
 import { CategoryComponent } from './equipment/category/category.component';
 import { BrandComponent } from './equipment/brand/brand/brand.component';
-import { EquipmentValidatorComponent } from './equipment/equipment/equipment-validator/equipment-validator.component';
 import { BackpackComponent } from './backpack/backpack/backpack.component';
 
 const routes: Routes = [
@@ -20,7 +19,7 @@ const routes: Routes = [
     { path: 'brands', component: BrandComponent },
     { path: 'brandsValidator', component: BrandComponent},
     { path: 'categoriesValidator', component: CategoryComponent},
-    { path: 'equipmentsValidator', component: EquipmentValidatorComponent},
+    { path: 'equipmentsValidator', component: EquipmentComponent},
 
     // otherwise redirect to home
     { path: '**', redirectTo: '' }
