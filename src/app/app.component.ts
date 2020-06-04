@@ -41,10 +41,10 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     });
 
     $(document).on('hidden.bs.modal', '.modal', () => {
-      if($('.modal:visible').length) { $(document.body).addClass('modal-open'); }
+      if ($('.modal:visible').length) { $(document.body).addClass('modal-open'); }
     });
 
-    $(document).on('show.bs.modal', '.modal', function() {
+    $(document).on('show.bs.modal', '.modal', function () {
       const zIndex = 1040 + (10 * $('.modal:visible').length);
       $(this).css('z-index', zIndex);
       setTimeout(() => {

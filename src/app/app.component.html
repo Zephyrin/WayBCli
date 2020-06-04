@@ -75,7 +75,8 @@
              aria-labelledby="dropdownInfo">
           <a class="dropdown-item"
              routerLinkActive="active-link"
-             routerLink="equipments">Equipments</a>
+             routerLink="equipments"
+             [queryParams]="{page:'1', limit: '10', sort: 'asc', sortBy: 'name'}">Equipments</a>
           <a class="dropdown-item"
              routerLinkActive="active-link"
              routerLink="brands"
@@ -107,7 +108,8 @@
              aria-labelledby="dropdownInfo">
           <a class="dropdown-item nav-link"
              routerLinkActive="active-link"
-             routerLink="equipmentsValidator">Equipments' validator</a>
+             routerLink="equipmentsValidator"
+             [queryParams]="{page:'1', limit: '10', sort: 'asc', sortBy: 'name', validate: 'false', askValidate: 'true'}">Equipments' validator</a>
           <a class="dropdown-item nav-link"
              routerLinkActive="active-link"
              routerLink="brandsValidator"
@@ -193,7 +195,8 @@
              routerLink="">Backpacks</a>
           <a class="nav-link"
              routerLinkActive="active-link"
-             routerLink="equipments">Equipments</a>
+             routerLink="equipments"
+             [queryParams]="{page:'1', limit: '10', sort: 'asc', sortBy: 'name'}">Equipments</a>
           <a class="nav-link"
              routerLinkActive="active-link"
              routerLink="brands"
@@ -218,7 +221,8 @@
         <div class="card-body">
           <a class="nav-link"
              routerLinkActive="active-link"
-             routerLink="equipmentsValidator">
+             routerLink="equipmentsValidator"
+             [queryParams]="{page:'1', limit: '10', sort: 'asc', sortBy: 'name', validate: 'false', askValidate: 'true'}">
             Equipments' validator
           </a>
           <a class="nav-link"
