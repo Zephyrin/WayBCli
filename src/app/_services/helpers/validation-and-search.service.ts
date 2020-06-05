@@ -4,15 +4,14 @@ import { Params } from '@angular/router';
 
 import { HttpService } from '@app/_services/http.service';
 
-import { PaginationAndParamsService } from '@app/_services/helpers/pagination-and-params.service';
-
 import { BooleanEnum } from '@app/_enums/boolean.enum';
+import { SortService } from './sort.service';
 
 
 @Injectable({
   providedIn: 'root'
 })
-export abstract class ValidationAndSearchService<T> extends PaginationAndParamsService<T> {
+export abstract class ValidationAndSearchService<T> extends SortService<T> {
 
   public validate = BooleanEnum.undefined;
   public askValidate = BooleanEnum.undefined;
@@ -49,6 +48,7 @@ export abstract class ValidationAndSearchService<T> extends PaginationAndParamsS
   }
 
   setHttpParameters(httpParams: HttpParams): HttpParams {
+    httpParams = super.setHttpParameters(httpParams);
     if (this.validate !== BooleanEnum.undefined) {
       httpParams = httpParams.append('validate', this.validate);
     }
@@ -62,6 +62,7 @@ export abstract class ValidationAndSearchService<T> extends PaginationAndParamsS
   }
 
   removeParamsFromUrl(query: {}) {
+    super.removeParamsFromUrl(query);
     this.removeParam(query, 'search');
     this.removeParam(query, 'validate');
     this.removeParam(query, 'askValidate');

@@ -5,8 +5,7 @@ import { HttpParams, HttpResponse } from '@angular/common/http';
 import { CategoryService } from './category.service';
 
 import { Category } from '@app/_models';
-import { SortEnum, SortByEnum } from '@app/_enums/category.enum';
-import { BooleanEnum } from '@app/_enums/boolean.enum';
+import { SortByEnum } from '@app/_enums/category.enum';
 import { ValidationAndSearchService } from '../helpers/validation-and-search.service';
 import { Observable } from 'rxjs';
 
@@ -16,8 +15,6 @@ import { Observable } from 'rxjs';
 export class CategoryPaginationSearchService extends ValidationAndSearchService<Category> {
 
   /* Search */
-  public sort = SortEnum.asc;
-  public sortBy = SortByEnum.name;
   public lower: string = undefined;
   public lowerOrEq: string = undefined;
   public eq: string = undefined;
@@ -29,35 +26,17 @@ export class CategoryPaginationSearchService extends ValidationAndSearchService<
     super(service);
   }
 
-  sortByOrOrient(sortByEnum: SortByEnum) {
-    if (this.sortBy === sortByEnum) {
-      switch (this.sort) {
-        case SortEnum.asc:
-          this.sort = SortEnum.desc;
-          break;
-        case SortEnum.desc:
-          this.sort = SortEnum.asc;
-          break;
-      }
-    } else {
-      this.sortBy = sortByEnum;
-    }
-    this.changePage();
+  getSortByEnum() {
+    return SortByEnum;
+  }
+
+  getDefaultSortByEnum() {
+    return SortByEnum.name;
   }
 
   setDefaultParamsFromUrl(params: Params) {
     super.setDefaultParamsFromUrl(params);
-    if (params && params.hasOwnProperty('sort')) {
-      if (Object.values(SortEnum).includes(params.sort)) {
-        this.sort = params.sort;
-      } else { this.sort = SortEnum.asc; }
-    } else { this.sort = SortEnum.asc; }
 
-    if (params && params.hasOwnProperty('sortBy')) {
-      if (Object.values(SortByEnum).includes(params.sortBy)) {
-        this.sortBy = params.sortBy;
-      } else { this.sortBy = SortByEnum.name; }
-    } else { this.sortBy = SortByEnum.name; }
     this.lower = this.lowerOrEq = this.eq = this.greater = this.greaterOrEq = undefined;
     if (params && params.hasOwnProperty('subCategoryCount')) {
       const $subCategoryCount = params.subCategoryCount;
@@ -106,8 +85,7 @@ export class CategoryPaginationSearchService extends ValidationAndSearchService<
 
   setHttpParameters(httpParams: HttpParams): HttpParams {
     httpParams = super.setHttpParameters(httpParams);
-    httpParams = httpParams.append('sort', this.sort);
-    httpParams = httpParams.append('sortBy', this.sortBy);
+
     if (this.lower || this.lowerOrEq || this.eq || this.greater || this.greaterOrEq) {
       let val = '';
       if (this.lower) { val = 'l' + this.lower; }
@@ -122,8 +100,6 @@ export class CategoryPaginationSearchService extends ValidationAndSearchService<
 
   removeParamsFromUrl(query: {}) {
     super.removeParamsFromUrl(query);
-    this.removeParam(query, 'sort');
-    this.removeParam(query, 'sortBy');
     this.removeParam(query, 'subCategoryCount');
   }
 

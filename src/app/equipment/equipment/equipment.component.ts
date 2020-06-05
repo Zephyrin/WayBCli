@@ -14,7 +14,7 @@ import { BrandUpdateComponent } from '@app/equipment/brand/brand-update/brand-up
 import { EquipmentFilterComponent } from './equipment-filter/equipment-filter.component';
 import { EquipmentUpdateComponent } from './equipment-update/equipment-update.component';
 import { EquipmentPaginationSearchService } from '@app/_services/equipment/equipment-pagination-search.service';
-import { SortByEnum, SortEnum } from '@app/_enums/equipment.enum';
+import { SortByEnum } from '@app/_enums/equipment.enum';
 
 declare var $: any;
 
@@ -69,7 +69,6 @@ export class EquipmentComponent implements OnInit {
   }
 
   get sortByEnum() { return SortByEnum; }
-  get sortEnum() { return SortEnum; }
 
   canEditOrDelete(equipment) {
     return equipment

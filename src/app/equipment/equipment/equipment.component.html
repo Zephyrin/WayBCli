@@ -22,76 +22,40 @@
       <thead>
         <tr class="align-items-center">
           <th scope="col"
-              class="col-md-2 col-sm-9 col-xs-9 pointer align-middle"
-              (click)="service.sortByOrOrient(sortByEnum.name)">
-            <div class="d-flex">Name
-              <div *ngIf="service.sortBy === sortByEnum.name">
-                <mat-icon *ngIf="service.sort === sortEnum.asc">arrow_drop_down
-                </mat-icon>
-                <mat-icon *ngIf="service.sort === sortEnum.desc">arrow_drop_up
-                </mat-icon>
-              </div>
-            </div>
+              class="col-md-2 col-sm-9 col-xs-9 align-middle">
+            <app-thead [service]="service"
+                       [text]="'Name'"
+                       [sortBy]="sortByEnum.name"></app-thead>
           </th>
           <th scope="col"
-              class="col-md-4 d-none d-sm-table-cell pointer align-middle"
-              (click)="service.sortByOrOrient(sortByEnum.description)">
-            <div class="d-flex">Description
-              <div *ngIf="service.sortBy === sortByEnum.description">
-                <mat-icon *ngIf="service.sort === sortEnum.asc">arrow_drop_down
-                </mat-icon>
-                <mat-icon *ngIf="service.sort === sortEnum.desc">arrow_drop_up
-                </mat-icon>
-              </div>
-            </div>
+              class="col-md-4 d-none d-sm-table-cell align-middle">
+            <app-thead [service]="service"
+                       [text]="'Description'"
+                       [sortBy]="sortByEnum.description"></app-thead>
           </th>
           <th scope="col"
-              class="col-md-1 d-none d-sm-table-cell d-md-table-cell pointer align-middle"
-              (click)="service.sortByOrOrient(sortByEnum.brand)">
-            <div class="d-flex">Brand
-              <div *ngIf="service.sortBy === sortByEnum.brand">
-                <mat-icon *ngIf="service.sort === sortEnum.asc">arrow_drop_down
-                </mat-icon>
-                <mat-icon *ngIf="service.sort === sortEnum.desc">arrow_drop_up
-                </mat-icon>
-              </div>
-            </div>
+              class="col-md-1 d-none d-sm-table-cell d-md-table-cell align-middle">
+            <app-thead [service]="service"
+                       [text]="'Brand'"
+                       [sortBy]="sortByEnum.brand"></app-thead>
           </th>
           <th scope="col"
-              class="col-md-2 d-none d-sm-table-cell d-md-table-cell pointer align-middle"
-              (click)="service.sortByOrOrient(sortByEnum.subCategory)">
-            <div class="d-flex">Sub-category
-              <div *ngIf="service.sortBy === sortByEnum.subCategory">
-                <mat-icon *ngIf="service.sort === sortEnum.asc">arrow_drop_down
-                </mat-icon>
-                <mat-icon *ngIf="service.sort === sortEnum.desc">arrow_drop_up
-                </mat-icon>
-              </div>
-            </div>
+              class="col-md-2 d-none d-sm-table-cell d-md-table-cell align-middle">
+              <app-thead [service]="service"
+                       [text]="'Sub-Category'"
+                       [sortBy]="sortByEnum.subCategory"></app-thead>
           </th>
           <th scope="col"
-              class="col-1 col-sm-1 col-xs-1 pointer align-middle"
-              (click)="service.sortByOrOrient(sortByEnum.weight)">
-            <div class="d-flex">Weight
-              <div *ngIf="service.sortBy === sortByEnum.weight">
-                <mat-icon *ngIf="service.sort === sortEnum.asc">arrow_drop_down
-                </mat-icon>
-                <mat-icon *ngIf="service.sort === sortEnum.desc">arrow_drop_up
-                </mat-icon>
-              </div>
-            </div>
+              class="col-1 col-sm-1 col-xs-1 align-middle">
+              <app-thead [service]="service"
+                       [text]="'Weight'"
+                       [sortBy]="sortByEnum.weight"></app-thead>
           </th>
           <th scope="col"
-              class="col-1 col-sm-1 col-xs-1 pointer align-middle"
-              (click)="service.sortByOrOrient(sortByEnum.price)">
-            <div class="d-flex">Price
-              <div *ngIf="service.sortBy === sortByEnum.price">
-                <mat-icon *ngIf="service.sort === sortEnum.asc">arrow_drop_down
-                </mat-icon>
-                <mat-icon *ngIf="service.sort === sortEnum.desc">arrow_drop_up
-                </mat-icon>
-              </div>
-            </div>
+              class="col-1 col-sm-1 col-xs-1 align-middle">
+              <app-thead [service]="service"
+                       [text]="'Price'"
+                       [sortBy]="sortByEnum.price"></app-thead>
           </th>
           <th scope="col"
               class="col-1 col-sm-1 col-xs-1 align-middle">Own<br />Whishes</th>

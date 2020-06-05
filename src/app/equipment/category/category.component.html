@@ -22,55 +22,29 @@
       <thead>
         <tr>
           <th scope="col"
-              class="col-8 align-middle pointer"
-              (click)="service.sortByOrOrient(sortByEnum.name)">
-            <div class="d-flex">Category name
-              <div *ngIf="service.sortBy === sortByEnum.name">
-                <mat-icon *ngIf="service.sort === sortEnum.asc">arrow_drop_down
-                </mat-icon>
-                <mat-icon *ngIf="service.sort === sortEnum.desc">arrow_drop_up
-                </mat-icon>
-              </div>
-            </div>
+              class="col-8 align-middle">
+            <app-thead [service]="service"
+                       [text]="'Name'"
+                       [sortBy]="sortByEnum.name"></app-thead>
           </th>
           <th scope="col"
-              class="col-2 align-middle pointer"
-              (click)="service.sortByOrOrient(sortByEnum.subCategoryCount)">
-            <div class="d-flex">Sub-categories count
-              <div *ngIf="service.sortBy === sortByEnum.subCategoryCount">
-                <mat-icon *ngIf="service.sort === sortEnum.asc">arrow_drop_down
-                </mat-icon>
-                <mat-icon *ngIf="service.sort === sortEnum.desc">arrow_drop_up
-                </mat-icon>
-              </div>
-            </div>
+              class="col-2 align-middle">
+            <app-thead [service]="service"
+                       [text]="'Sub-categories count'"
+                       [sortBy]="sortByEnum.subCategoryCount"></app-thead>
           </th>
           <th scope="col"
-              class="col-1 align-middle pointer"
-              (click)="service.sortByOrOrient(sortByEnum.askValidate)"
+              class="col-1 align-middle"
               *ngIf="isValidator">
-            <div class="d-flex">Ask Validation
-              <div *ngIf="service.sortBy === sortByEnum.askValidate">
-                <mat-icon *ngIf="service.sort === sortEnum.asc">arrow_drop_down
-                </mat-icon>
-                <mat-icon *ngIf="service.sort === sortEnum.desc">arrow_drop_up
-                </mat-icon>
-              </div>
-            </div>
+            <app-thead [service]="service"
+                       [text]="'Ask Validation'"
+                       [sortBy]="sortByEnum.askValidate"></app-thead>
           </th>
           <th scope="col align-middle"
-              class="col-1 action align-middle pointer"
-              (click)="service.sortByOrOrient(isValidator ? sortByEnum.askValidate : sortByEnum.validate)">
-            <div class="d-flex">Action
-              <div
-                   *ngIf="(isValidator && service.sortBy === sortByEnum.askValidate)
-                          || (!isValidator && service.sortBy === sortByEnum.validate)">
-                <mat-icon *ngIf="service.sort === sortEnum.asc">arrow_drop_down
-                </mat-icon>
-                <mat-icon *ngIf="service.sort === sortEnum.desc">arrow_drop_up
-                </mat-icon>
-              </div>
-            </div>
+              class="col-1 action align-middle">
+            <app-thead [service]="service"
+                       [text]="'Action'"
+                       [sortBy]="isValidator ? sortByEnum.validate : sortByEnum.askValidate"></app-thead>
           </th>
         </tr>
       </thead>

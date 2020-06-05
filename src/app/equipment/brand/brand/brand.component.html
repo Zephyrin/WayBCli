@@ -4,7 +4,7 @@
   <fieldset [disabled]="service.loading">
 
     <app-validation-and-search class="d-block d-sm-block d-md-block d-lg-block d-xl-none"
-    [service]="service"></app-validation-and-search>
+                               [service]="service"></app-validation-and-search>
 
     <div class="d-flex justify-content-between align-items-center">
       <button class="btn btn-light btn-sm d-flex justify-content-center align-content-between"
@@ -13,68 +13,38 @@
         <mat-icon [inline]="true">add</mat-icon>
       </button>
       <app-validation-and-search class="d-none d-sm-none d-md-none d-lg-none d-xl-block"
-      [service]="service"></app-validation-and-search>
+                                 [service]="service">
+      </app-validation-and-search>
       <app-pagination [pagination]="service"></app-pagination>
     </div>
     <table class="table">
       <thead>
         <tr>
           <th scope="col"
-              class="col-md-5 pointer align-middle"
-              (click)="service.sortByOrOrient(sortByEnum.name)">
-            <div class="d-flex">Name
-              <div *ngIf="service.sortBy === sortByEnum.name">
-                <mat-icon *ngIf="service.sort === sortEnum.asc">arrow_drop_down
-                </mat-icon>
-                <mat-icon *ngIf="service.sort === sortEnum.desc">arrow_drop_up
-                </mat-icon>
-              </div>
-            </div>
+              class="col-md-5 align-middle">
+            <app-thead [service]="service"
+                       [text]="'Name'"
+                       [sortBy]="sortByEnum.name"></app-thead>
           </th>
           <th scope="col"
-              class="col-md-5 pointer align-middle"
-              (click)="service.sortByOrOrient(sortByEnum.uri)">
-            <div class="d-flex">URL
-              <div *ngIf="service.sortBy === sortByEnum.uri">
-                <mat-icon *ngIf="service.sort === sortEnum.asc">arrow_drop_down
-                </mat-icon>
-                <mat-icon *ngIf="service.sort === sortEnum.desc">arrow_drop_up
-                </mat-icon>
-              </div>
-            </div>
+              class="col-md-5 align-middle">
+            <app-thead [service]="service"
+                       [text]="'URI'"
+                       [sortBy]="sortByEnum.uri"></app-thead>
           </th>
           <th scope="col"
-              class="col-md-1 pointer align-middle"
-              *ngIf="isValidator"
-              (click)="service.sortByOrOrient(sortByEnum.askValidate)">
-            <div class="d-flex justify-content-center">Ask validation
-              <div *ngIf="service.sortBy === sortByEnum.askValidate">
-                <mat-icon *ngIf="service.sort === sortEnum.asc">arrow_drop_down
-                </mat-icon>
-                <mat-icon *ngIf="service.sort === sortEnum.desc">arrow_drop_up
-                </mat-icon>
-              </div>
-            </div>
+              class="col-md-1 align-middle"
+              *ngIf="isValidator">
+            <app-thead [service]="service"
+                       [text]="'Ask Validation'"
+                       [sortBy]="sortByEnum.askValidate"></app-thead>
           </th>
           <th scope="col"
-              class="col-md-1 pointer align-middle"
-              (click)="service.sortByOrOrient(isValidator ? sortByEnum.validate : sortByEnum.askValidate)">
-            <div class="d-flex justify-content-center">Action
-              <div
-                   *ngIf="!isValidator && service.sortBy === sortByEnum.askValidate">
-                <mat-icon *ngIf="service.sort === sortEnum.asc">arrow_drop_down
-                </mat-icon>
-                <mat-icon *ngIf="service.sort === sortEnum.desc">arrow_drop_up
-                </mat-icon>
-              </div>
-              <div
-                   *ngIf="isValidator && service.sortBy === sortByEnum.validate">
-                <mat-icon *ngIf="service.sort === sortEnum.asc">arrow_drop_down
-                </mat-icon>
-                <mat-icon *ngIf="service.sort === sortEnum.desc">arrow_drop_up
-                </mat-icon>
-              </div>
-            </div>
+              class="col-md-1 align-middle">
+            <app-thead [service]="service"
+                       [text]="'Action'"
+                       [sortBy]="isValidator ? sortByEnum.validate : sortByEnum.askValidate">
+            </app-thead>
           </th>
         </tr>
       </thead>
@@ -94,7 +64,8 @@
              target="_blank"
              rel="noopener noreferrer">{{brand.uri}}</a>
         </td>
-        <td *ngIf="isValidator" class="align-middle">
+        <td *ngIf="isValidator"
+            class="align-middle">
           <app-switch [value]="brand.askValidate"
                       [disabled]="true">
           </app-switch>

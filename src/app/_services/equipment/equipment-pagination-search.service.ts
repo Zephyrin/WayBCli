@@ -5,7 +5,7 @@ import { ValidationAndSearchService } from '../helpers/validation-and-search.ser
 import { EquipmentService } from './equipment.service';
 
 import { Equipment, User, Category, SubCategory, Brand } from '@app/_models';
-import { SortEnum, SortByEnum } from '@app/_enums/equipment.enum';
+import { SortByEnum } from '@app/_enums/equipment.enum';
 import { BooleanEnum } from '@app/_enums/boolean.enum';
 import { HttpParams } from '@angular/common/http';
 import { BrandPaginationSearchService } from '../brand/brand-pagination-search.service';
@@ -18,8 +18,6 @@ export class EquipmentPaginationSearchService extends ValidationAndSearchService
   public currentUser: User;
 
   /* Search */
-  public sort = SortEnum.asc;
-  public sortBy = SortByEnum.name;
   public owned = BooleanEnum.undefined;
   public wishes = BooleanEnum.undefined;
   public others = BooleanEnum.undefined;
@@ -40,6 +38,14 @@ export class EquipmentPaginationSearchService extends ValidationAndSearchService
       this.initBelongToSub(undefined);
     });
     brandService.init(undefined, undefined, undefined);
+  }
+
+  getSortByEnum() {
+    return SortByEnum;
+  }
+
+  getDefaultSortByEnum() {
+    return SortByEnum.name;
   }
 
   newValue(x: any): Equipment {
@@ -66,35 +72,8 @@ export class EquipmentPaginationSearchService extends ValidationAndSearchService
     this.changePage();
   }
 
-  sortByOrOrient(sortByEnum: SortByEnum) {
-    if (this.sortBy === sortByEnum) {
-      switch (this.sort) {
-        case SortEnum.asc:
-          this.sort = SortEnum.desc;
-          break;
-        case SortEnum.desc:
-          this.sort = SortEnum.asc;
-          break;
-      }
-    } else {
-      this.sortBy = sortByEnum;
-    }
-    this.changePage();
-  }
-
   setDefaultParamsFromUrl(params: Params) {
     super.setDefaultParamsFromUrl(params);
-    if (params && params.hasOwnProperty('sort')) {
-      if (Object.values(SortEnum).includes(params.sort)) {
-        this.sort = params.sort;
-      } else { this.sort = SortEnum.asc; }
-    } else { this.sort = SortEnum.asc; }
-
-    if (params && params.hasOwnProperty('sortBy')) {
-      if (Object.values(SortByEnum).includes(params.sortBy)) {
-        this.sortBy = params.sortBy;
-      } else { this.sortBy = SortByEnum.name; }
-    } else { this.sortBy = SortByEnum.name; }
 
     this.owned = this.getBooleanParam(params, 'owned');
     this.wishes = this.getBooleanParam(params, 'wishes');
@@ -176,8 +155,6 @@ export class EquipmentPaginationSearchService extends ValidationAndSearchService
 
   removeParamsFromUrl(query: {}) {
     super.removeParamsFromUrl(query);
-    this.removeParam(query, 'sort');
-    this.removeParam(query, 'sortBy');
     this.removeParam(query, 'owned');
     this.removeParam(query, 'wishes');
     this.removeParam(query, 'others');
@@ -187,8 +164,6 @@ export class EquipmentPaginationSearchService extends ValidationAndSearchService
 
   setHttpParameters(httpParams: HttpParams): HttpParams {
     httpParams = super.setHttpParameters(httpParams);
-    httpParams = httpParams.append('sort', this.sort);
-    httpParams = httpParams.append('sortBy', this.sortBy);
     if (this.owned !== BooleanEnum.undefined) {
       httpParams = httpParams.append('owned', this.owned);
     }

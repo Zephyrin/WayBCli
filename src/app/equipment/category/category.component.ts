@@ -6,7 +6,7 @@ import { Category } from '@app/_models/';
 import { AuthenticationService } from '@app/_services';
 import { CategoryPaginationSearchService } from '@app/_services/category/category-pagination-search.service';
 import { Router, ActivatedRoute } from '@angular/router';
-import { SortEnum, SortByEnum } from '@app/_enums/category.enum';
+import { SortByEnum } from '@app/_enums/category.enum';
 
 @Component({
   selector: 'app-category',
@@ -32,7 +32,6 @@ export class CategoryComponent implements OnInit {
     }
   }
 
-  get sortEnum() { return SortEnum; }
   get sortByEnum() { return SortByEnum; }
   get service() { return this.serviceP; }
 
