@@ -44,7 +44,7 @@ import { ValidationAndSearchComponent } from './_helpers/validation-and-search/v
 import { UserManagementComponent } from './_admins/user-management/user-management.component';
 import { TopErrorsComponent } from './_helpers/errors/top-errors/top-errors.component';
 import { TheadComponent } from './_helpers/tables/thead/thead.component';
-
+import { ActionComponent } from './_helpers/action/action.component';
 
 @NgModule({
   imports: [
@@ -88,7 +88,7 @@ import { TheadComponent } from './_helpers/tables/thead/thead.component';
     UserManagementComponent,
     TopErrorsComponent,
     TheadComponent,
-
+    ActionComponent,
     ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },

@@ -57,6 +57,13 @@ export class EquipmentPaginationSearchService extends ValidationAndSearchService
     return equipment;
   }
 
+  canEditOrDelete(equipment: Equipment): boolean {
+    if (this.isValidator) {
+      return equipment.askValidate;
+    }
+    return !equipment.validate;
+  }
+
   filterOwned() {
     this.owned = this.booleanCycle(this.owned);
     this.changePage();

@@ -7,7 +7,7 @@
     </li>
     <li class="page-item"
         [ngClass]="{'disabled': pagination.isFirst()}">
-      <button class="page-link btn-sm d-flex justify-content-center align-content-between"
+      <button class="page-link d-flex justify-content-center align-content-between"
               role="link"
               type="button"
               (click)="pagination.goToFirst()">
@@ -24,7 +24,7 @@
       </button>
     </li>
     <li class="page-item" [ngClass]="{'disabled': pagination.isFirst()}">
-      <button class="page-link btn-sm d-flex justify-content-center align-content-between"
+      <button class="page-link d-flex justify-content-center align-content-between"
               role="link"
               type="button"
               (click)="pagination.goToPrevious()"
@@ -39,7 +39,7 @@
               (click)="pagination.changePage()">{{pagination.page()}}</button>
     </li>
     <li class="page-item" [ngClass]="{'disabled': pagination.isLast()}">
-      <button class="page-link btn-sm d-flex justify-content-center align-content-between"
+      <button class="page-link d-flex justify-content-center align-content-between"
               type="button"
               role="link"
               (click)="pagination.goToNext()">
@@ -47,7 +47,7 @@
       </button>
     </li>
     <li class="page-item">
-      <button class="page-link btn-sm"
+      <button class="page-link "
               type="button"
               role="link"
               *ngIf="pagination.hasNextPage()"
@@ -56,7 +56,7 @@
       </button>
     </li>
     <li class="page-item" [ngClass]="{'disabled': pagination.isLast()}">
-      <button class="page-link btn-sm d-flex justify-content-center align-content-between"
+      <button class="page-link d-flex justify-content-center align-content-between"
               type="button"
               role="link"
               (click)="pagination.goToLast()">

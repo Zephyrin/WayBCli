@@ -49,7 +49,7 @@ export class FilterSwitchComponent implements ControlValueAccessor {
   get value() {
     return this.valueP;
   }
-  valueP = BooleanEnum.false;
+  valueP: any;
 
   @Input() text;
 

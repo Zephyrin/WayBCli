@@ -1,0 +1,64 @@
+<a class="btn btn-ligth dropdown-toggle d-block d-sm-none"
+   id="action_{{service.getId(value)}}"
+   role="button"
+   data-toggle="dropdown"
+   aria-haspopup="true"
+   aria-expanded="false"
+   *ngIf="service.canEditOrDelete(value)">
+  <mat-icon [inline]="true">settings</mat-icon>
+</a>
+<ul class="dropdown-menu"
+    role="menu"
+    attr.aria-labelledby="action_{{service.getId(value)}}"
+    *ngIf="service.canEditOrDelete(value)">
+  <li (click)="updateClick()">
+    <mat-icon [inline]="true">update</mat-icon>Update
+  </li>
+  <li (click)="deleteClick()">
+    <mat-icon [inline]="true">delete</mat-icon>Delete
+  </li>
+  <li *ngIf="!service.isValidator">
+    <app-filter-switch [disabled]="service.loading"
+                       [value]="value.askValidate"
+                       [text]="'Ask Validation'"
+                       (check)="service.updateAskValidate(value)">
+    </app-filter-switch>
+  </li>
+  <li *ngIf="service.isValidator">
+    <app-filter-switch [disabled]="service.loading"
+                       [value]="value.validate"
+                       [text]="'Validate'"
+                       (check)="service.updateValidate(value)">
+    </app-filter-switch>
+  </li>
+</ul>
+<div class="col d-none d-md-none d-lg-block"
+     *ngIf="service.canEditOrDelete(value)">
+  <div class="btn-group"
+       role="group"
+       aria-label="Tools">
+    <button type="button"
+            class="btn btn-light d-flex justify-content-center align-content-between"
+            data-toggle="modal"
+            data-target="#addEquipmentModal"
+            (click)="updateClick()">
+      <mat-icon [inline]="true">update</mat-icon>
+    </button>
+    <button type="button"
+            class="btn btn-light d-flex justify-content-center align-content-between"
+            (click)="deleteClick()">
+      <mat-icon [inline]="true">delete</mat-icon>
+    </button>
+    <app-switch [value]="value.askValidate"
+                [disabled]="service.loading"
+                (isChecked)="service.updateAskValidate(value)"
+                *ngIf="!service.isValidator">
+    </app-switch>
+    <app-switch [value]="value.validate"
+                [disabled]="service.loading"
+                (isChecked)="service.updateValidate(value)"
+                *ngIf="service.isValidator"></app-switch>
+  </div>
+</div>
+<span *ngIf="service.loading && service.selected === value"
+      class="spinner-border spinner-border-sm mr-1"></span>

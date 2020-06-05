@@ -53,7 +53,7 @@
                              class="form-control col-lg-8 col-xl-8"
                              formControlName="ownQuantity"
                              [ngClass]="{ 'is-invalid': hasError('ownQuantity', have) }" />
-                      <button class="btn btn-light btn-sm"
+                      <button class="btn btn-light "
                               type="button"
                               (mousedown)="startTimer('own_', i, '+')"
                               (touchstart)="startTimer('own_', i, '+')"
@@ -62,7 +62,7 @@
                               (click)="plus('own_', i)">
                         <mat-icon [inline]="true">add</mat-icon>
                       </button>
-                      <button class="btn btn-light btn-sm"
+                      <button class="btn btn-light "
                               type="button"
                               (mouseup)="doneTimer()"
                               (touchend)="doneTimer()"
@@ -91,7 +91,7 @@
                              id="want_{{i}}"
                              class="form-control col-lg-8 col-xl-8"
                              [ngClass]="{ 'is-invalid': hasError('wantQuantity', have) }" />
-                      <button class="btn btn-light btn-sm"
+                      <button class="btn btn-light "
                               type="button"
                               (mouseup)="doneTimer()"
                               (touchend)="doneTimer()"
@@ -100,7 +100,7 @@
                               (click)="plus('want_', i)">
                         <mat-icon [inline]="true">add</mat-icon>
                       </button>
-                      <button class="btn btn-light btn-sm"
+                      <button class="btn btn-light "
                               type="button"
                               (mouseup)="doneTimer()"
                               (touchend)="doneTimer()"

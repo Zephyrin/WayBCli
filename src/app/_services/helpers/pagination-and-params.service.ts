@@ -51,6 +51,11 @@ export abstract class PaginationAndParamsService<T> {
   abstract setHttpParameters(httpParams: HttpParams): HttpParams;
 
   /**
+   * Inform if the user can edit or delete.
+   */
+  abstract canEditOrDelete(x: T): boolean;
+
+  /**
    * Call to retrieve data when pagination change or filter.
    */
   changePage(): Observable<HttpResponse<T[]>> {

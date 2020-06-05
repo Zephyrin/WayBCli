@@ -19,7 +19,7 @@
         <tr>
           <th scope="col"
               class="col-10">
-            <button class="btn btn-light btn-sm d-flex justify-content-center align-content-between"
+            <button class="btn btn-light d-flex justify-content-center align-content-between"
                     *ngIf="!isValidator"
                     (click)="subCategoryModal.open()">
               <mat-icon [inline]="true">add</mat-icon>Sub-category name
@@ -41,34 +41,75 @@
           <b>{{subCategory.name}}</b>
         </td>
         <td class="col-1"
-            *ngIf="isValidator"><app-switch [value]="subCategory.askValidate"
-            [disabled]="true"></app-switch></td>
+            *ngIf="isValidator">
+          <app-switch [value]="subCategory.askValidate"
+                      [disabled]="true"></app-switch>
+        </td>
         <td class="col-1 action">
-          <div class="btn-group"
-               role="group"
-               *ngIf="canEditOrDelete(subCategory)"
-               aria-label="Tools">
-            <button type="button"
-                    class="btn btn-light btn-sm d-flex justify-content-center align-content-between"
-                    (click)="subCategoryModal.open(subCategory)">
-              <mat-icon [inline]="true">update</mat-icon>
-            </button>
-            <button type="button"
-                    class="btn btn-light btn-sm d-flex justify-content-center align-content-between"
-                    (click)="subCategoryModal.onDelete(subCategory)">
-              <mat-icon [inline]="true">delete</mat-icon>
-            </button>
-            <app-switch [value]="subCategory.askValidate"
-                        *ngIf="!isValidator"
-                        [disabled]="loading"
-                        (isChecked)="updateAskValidate(subCategory)">
-            </app-switch>
-            <app-switch [value]="subCategory.askValidate"
-                        *ngIf="isValidator"
-                        [disabled]="loading"
-                        (isChecked)="updateValidate(subCategory)">
-            </app-switch>
+          <a class="btn btn-ligth dropdown-toggle d-block d-sm-none"
+             id="action_sub_{{subCategory.id}}"
+             role="button"
+             data-toggle="dropdown"
+             aria-haspopup="true"
+             aria-expanded="false"
+             *ngIf="canEditOrDelete(subCategory)">
+            <mat-icon [inline]="true">settings</mat-icon>
+          </a>
+          <ul class="dropdown-menu"
+              role="menu"
+              attr.aria-labelledby="action_sub_{{subCategory.id}}"
+              *ngIf="canEditOrDelete(subCategory)">
+            <li (click)="subCategoryModal.open(subCategory)">
+              <mat-icon [inline]="true">update</mat-icon>Update
+            </li>
+            <li (click)="subCategoryModal.onDelete(subCategory)">
+              <mat-icon [inline]="true">delete</mat-icon>Delete
+            </li>
+            <li *ngIf="!isValidator">
+              <app-filter-switch [disabled]="loading"
+                                 [value]="subCategory.askValidate"
+                                 [text]="'Ask Validation'"
+                                 (check)="updateAskValidate(subCategory)">
+              </app-filter-switch>
+            </li>
+            <li *ngIf="isValidator">
+              <app-filter-switch [disabled]="loading"
+                                 [value]="subCategory.validate"
+                                 [text]="'Validate'"
+                                 (check)="updateValidate(subCategory)">
+              </app-filter-switch>
+            </li>
+          </ul>
+          <div class="col d-none d-md-none d-lg-block"
+               *ngIf="canEditOrDelete(subCategory)">
+            <div class="btn-group"
+                 role="group"
+                 aria-label="Tools">
+              <button type="button"
+                      class="btn btn-light d-flex justify-content-center align-content-between"
+                      data-toggle="modal"
+                      data-target="#addEquipmentModal"
+                      (click)="subCategoryModal.open(subCategory)">
+                <mat-icon [inline]="true">update</mat-icon>
+              </button>
+              <button type="button"
+                      class="btn btn-light d-flex justify-content-center align-content-between"
+                      (click)="subCategoryModal.onDelete(subCategory)">
+                <mat-icon [inline]="true">delete</mat-icon>
+              </button>
+              <app-switch [value]="subCategory.askValidate"
+                          [disabled]="loading"
+                          (isChecked)="updateAskValidate(subCategory)"
+                          *ngIf="!isValidator">
+              </app-switch>
+              <app-switch [value]="subCategory.validate"
+                          [disabled]="loading"
+                          (isChecked)="updateValidate(subCategory)"
+                          *ngIf="isValidator"></app-switch>
+            </div>
           </div>
+          <span *ngIf="loading && selected === subCategory"
+                class="spinner-border spinner-border-sm mr-1"></span>
         </td>
       </tr>
     </table>
