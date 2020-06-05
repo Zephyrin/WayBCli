@@ -1,8 +1,8 @@
+<app-pagination [pagination]="service"></app-pagination>
 <div
      class="table-responsive-sm table-responsive-md table-responsive-lg table-responsive-xl">
   <app-top-errors [service]="service"></app-top-errors>
   <fieldset [disabled]="service.loading">
-    <app-pagination [pagination]="service"></app-pagination>
     <table class="table">
       <thead>
         <tr>
@@ -71,7 +71,8 @@
         <td class="align-middle">{{user.lastLogin}}</td>
       </tr>
     </table>
-    <app-pagination [pagination]="service"></app-pagination>
+
   </fieldset>
-  <app-top-errors [service]="service"></app-top-errors>
 </div>
+<app-pagination [pagination]="service"></app-pagination>
+<app-top-errors [service]="service"></app-top-errors>
