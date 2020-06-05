@@ -1,18 +1,7 @@
 <div
      class="table-responsive-sm table-responsive-md table-responsive-lg table-responsive-xl">
-  <div *ngIf="service.errors.hasFatalError"
-       class="alert alert-danger">
-    <div [innerHTML]="service.errors.fatalError"></div>
-  </div>
-  <div *ngIf="service.errors.hasMessage"
-       class="alert alert-warning">
-    <div>{{service.errors.message}}</div>
-  </div>
-  <div *ngIf="service.errors.hasErrors['validate']">
-    <div *ngFor="let child of service.errors.errors['name'].errors">
-      {{child}}
-    </div>
-  </div>
+  <app-top-errors [service]="service"></app-top-errors>
+
   <fieldset [disabled]="service.loading">
     <app-validation-and-search [service]="service"
                                class="d-block d-sm-block d-md-block d-lg-block d-xl-none">
@@ -135,19 +124,7 @@
     </table>
     <app-pagination [pagination]="service"></app-pagination>
   </fieldset>
-  <div *ngIf="service.errors.hasFatalError"
-       class="alert alert-danger">
-    <div [innerHTML]="service.errors.fatalError"></div>
-  </div>
-  <div *ngIf="service.errors.hasMessage"
-       class="alert alert-warning">
-    <div>{{service.errors.message}}</div>
-  </div>
-  <div *ngIf="service.errors.hasErrors['validate']">
-    <div *ngFor="let child of service.errors.errors['name'].errors">
-      {{child}}
-    </div>
-  </div>
+  <app-top-errors [service]="service"></app-top-errors>
 </div>
 <app-category-update #categoryModal
                      (updateDone)="service.valueAdded($event)">

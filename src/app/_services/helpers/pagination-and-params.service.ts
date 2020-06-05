@@ -16,6 +16,7 @@ export abstract class PaginationAndParamsService<T> {
   public loading = false;
 
   public pagination: Pagination;
+
   private isInit = false;
   public isValidator = false;
 

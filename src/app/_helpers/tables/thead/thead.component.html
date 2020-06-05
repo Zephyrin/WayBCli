@@ -1,0 +1,9 @@
+<div class="d-flex pointer"
+     (click)="service.sortByOrOrient(sortBy)">{{text}}
+  <div *ngIf="service.sortBy === sortBy">
+    <mat-icon *ngIf="service.sort === sortEnum.asc" [inline]="true">arrow_drop_down
+    </mat-icon>
+    <mat-icon *ngIf="service.sort === sortEnum.desc" [inline]="true">arrow_drop_up
+    </mat-icon>
+  </div>
+</div>
