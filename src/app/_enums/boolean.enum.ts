@@ -3,3 +3,8 @@ export enum BooleanEnum {
   false = 'false',
   undefined = 'undefined'
 }
+
+export enum SortEnum {
+  asc = 'asc',
+  desc = 'desc'
+}

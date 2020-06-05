@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
 
-import { AuthenticationService } from '@app/_services';
+import { AuthenticationService } from '@app/_services/authentication.service';
 import { RegisterService } from '@app/_services';
 import { EnumGender } from '@app/_enums';
 import { isUndefined } from 'util';

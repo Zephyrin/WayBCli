@@ -4,7 +4,7 @@ import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
 import { environment } from '@environments/environment';
-import { AuthenticationService } from './authentication.service';
+import { AuthenticationService } from '@app/_services/authentication.service';
 
 import { Backpack } from '@app/_models/backpack.ts';
 import { User } from '@app/_models/';

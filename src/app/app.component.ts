@@ -1,7 +1,7 @@
 ﻿import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { fromEvent, Observable, Subscription } from 'rxjs';
-import { AuthenticationService } from './_services';
+import { AuthenticationService } from '@app/_services/authentication.service';
 import { User, Role } from './_models';
 
 declare var $: any;
@@ -88,7 +88,8 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   get isAdmin() {
     return this.currentUser
       && this.currentUser.roles
-      && this.currentUser.roles.indexOf(Role.Admin) !== -1;
+      && (this.currentUser.roles.indexOf(Role.Admin) !== -1
+      || this.currentUser.roles.indexOf(Role.SuperAdmin) !== -1);
   }
 
   get isAmbassador() {

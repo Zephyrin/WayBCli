@@ -5,7 +5,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
 import { UserService } from '@app/_services/user.service';
 import { User } from '@app/_models/user';
-import { AuthenticationService } from '@app/_services';
+import { AuthenticationService } from '@app/_services/authentication.service';
 import { Router } from '@angular/router';
 
 declare var $: any;
@@ -55,11 +55,11 @@ export class UserComponent implements OnInit {
   ngOnInit() {
     this.loading = true;
     this.deleteHasError = false;
-    this.userService.getAll()
+    this.userService.getAll(null)
       .pipe(first())
       .subscribe(users => {
         this.loading = false;
-        this.users = users;
+        this.users = users.body;
     });
     this.userForm = this.formBuilder.group({
       id: ['', Validators.required],

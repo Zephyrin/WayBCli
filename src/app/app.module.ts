@@ -41,6 +41,9 @@ import { FilterSwitchComponent } from './_helpers/filter-switch/filter-switch.co
 import { ComboPaginateComponent } from './_helpers/combo-paginate/combo-paginate.component';
 import { CategoryFilterComponent } from './equipment/category/category-filter/category-filter.component';
 import { ValidationAndSearchComponent } from './_helpers/validation-and-search/validation-and-search.component';
+import { UserManagementComponent } from './_admins/user-management/user-management.component';
+import { TopErrorsComponent } from './_helpers/errors/top-errors/top-errors.component';
+import { TheadComponent } from './_helpers/tables/thead/thead.component';
 
 @NgModule({
   imports: [
@@ -80,7 +83,10 @@ import { ValidationAndSearchComponent } from './_helpers/validation-and-search/v
     FilterSwitchComponent,
     ComboPaginateComponent,
     CategoryFilterComponent,
-    ValidationAndSearchComponent],
+    ValidationAndSearchComponent,
+    UserManagementComponent,
+    TopErrorsComponent,
+    TheadComponent],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },

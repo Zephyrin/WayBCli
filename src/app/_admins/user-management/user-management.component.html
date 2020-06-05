@@ -1,0 +1,104 @@
+<div
+     class="table-responsive-sm table-responsive-md table-responsive-lg table-responsive-xl">
+  <app-top-errors [service]="service"></app-top-errors>
+  <fieldset [disabled]="service.loading">
+    <app-pagination [pagination]="service"></app-pagination>
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col"
+              class="pointer align-middle"
+              (click)="service.sortByOrOrient(sortByEnum.username)">
+            <div class="d-flex">Username
+              <div *ngIf="service.sortBy === sortByEnum.username">
+                <mat-icon *ngIf="service.sort === sortEnum.asc">arrow_drop_down
+                </mat-icon>
+                <mat-icon *ngIf="service.sort === sortEnum.desc">arrow_drop_up
+                </mat-icon>
+              </div>
+            </div>
+          </th>
+          <th scope="col"
+              class="pointer align-middle"
+              (click)="service.sortByOrOrient(sortByEnum.email)">
+            <div class="d-flex">Email
+              <div *ngIf="service.sortBy === sortByEnum.email">
+                <mat-icon *ngIf="service.sort === sortEnum.asc">arrow_drop_down
+                </mat-icon>
+                <mat-icon *ngIf="service.sort === sortEnum.desc">arrow_drop_up
+                </mat-icon>
+              </div>
+            </div>
+          </th>
+          <th scope="col"
+              class="pointer align-middle"
+              (click)="service.sortByOrOrient(sortByEnum.gender)">
+            <div class="d-flex">Gender
+              <div *ngIf="service.sortBy === sortByEnum.gender">
+                <mat-icon *ngIf="service.sort === sortEnum.asc">arrow_drop_down
+                </mat-icon>
+                <mat-icon *ngIf="service.sort === sortEnum.desc">arrow_drop_up
+                </mat-icon>
+              </div>
+            </div>
+          </th>
+          <th scope="col"
+              class="pointer align-middle"
+              (click)="service.sortByOrOrient(sortByEnum.roles)">
+            <div class="d-flex">Roles
+              <div *ngIf="service.sortBy === sortByEnum.roles">
+                <mat-icon *ngIf="service.sort === sortEnum.asc">arrow_drop_down
+                </mat-icon>
+                <mat-icon *ngIf="service.sort === sortEnum.desc">arrow_drop_up
+                </mat-icon>
+              </div>
+            </div>
+          </th>
+          <th scope="col"
+              class="pointer align-middle"
+              (click)="service.sortByOrOrient(sortByEnum.lastLogin)">
+            <div class="d-flex">Last Login
+              <div *ngIf="service.sortBy === sortByEnum.lastLogin">
+                <mat-icon *ngIf="service.sort === sortEnum.asc">arrow_drop_down
+                </mat-icon>
+                <mat-icon *ngIf="service.sort === sortEnum.desc">arrow_drop_up
+                </mat-icon>
+              </div>
+            </div>
+          </th>
+        </tr>
+      </thead>
+      <tr *ngFor="let user of service.values"
+          (click)="service.setSelected(user)"
+          class="pointer"
+          [class.active]="user == service.selected"
+          [class.pointer]="service.canEdit(user)">
+        <td class="align-middle">{{user.username}}</td>
+        <td class="align-middle">{{user.email}}</td>
+        <td class="align-middle">{{user.gender}}</td>
+        <td class="align-middle"
+            *ngIf="!service.canEdit(user)">{{user.roles}}</td>
+        <td class="align-middle"
+            *ngIf="service.canEdit(user)">
+            <a class="nav-link dropdown-toggle"
+             id="dpUserRolesUpdate_{{user.id}}"
+             role="button"
+             data-toggle="dropdown"
+             aria-haspopup="true"
+             aria-expanded="false">
+            {{user.roles}}
+          </a>
+          <ul class="dropdown-menu"
+              role="menu"
+              attr.aria-labelledby="dpUserRolesUpdate_{{user.id}}">
+            <li (click)="service.updateUser(user, role.User)">{{role.User}}</li>
+            <li (click)="service.updateUser(user, role.Ambassador)">{{role.Ambassador}}</li>
+            <li (click)="service.updateUser(user, role.Admin)">{{role.Admin}}</li>
+          </ul>
+        </td>
+        <td class="align-middle">{{user.lastLogin}}</td>
+      </tr>
+    </table>
+    <app-pagination [pagination]="service"></app-pagination>
+  </fieldset>
+</div>

@@ -6,7 +6,7 @@ export abstract class HttpService<T> {
 
   abstract getAll(httpParams: HttpParams): Observable<HttpResponse<T[]>>;
 
-  abstract update(brand: T): Observable<T>;
+  abstract update(elt: T): Observable<T>;
 
   handleError(error: any) {
     if (error instanceof String

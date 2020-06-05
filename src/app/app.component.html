@@ -124,6 +124,26 @@
             validator</a>
         </div>
       </div>
+      <div class="nav-item dropdown d-lg-none"
+           *ngIf="isAdmin">
+        <a class="nav-link dropdown-toggle"
+           href="#"
+           id="dropdownAdmin"
+           role="button"
+           data-toggle="dropdown"
+           aria-haspopup="true"
+           aria-expanded="false">Admin</a>
+        <div class="dropdown-menu"
+             aria-labelledby="dropdownAdmin">
+          <a class="nav-link"
+             data-toggle="collapse"
+             data-target="#navbarNavDropdown"
+             routerLinkActive="active-link"
+             routerLink="usersManagement">
+            User management
+          </a>
+        </div>
+      </div>
     </ul>
     <ul class="navbar-nav">
       <li class="nav-item">
@@ -225,6 +245,17 @@
              routerLink="categoriesValidator"
              [queryParams]="{page:'1', limit: '10', sort: 'asc', sortBy: 'name', validate: 'false', askValidate: 'true'}">
             Categories' validator
+          </a>
+        </div>
+      </div>
+      <div class="card mt-4"
+           *ngIf="isAdmin">
+        <h4 class="card-header">Admin</h4>
+        <div class="card-body">
+          <a class="nav-link"
+             routerLinkActive="active-link"
+             routerLink="usersManagement">
+            User management
           </a>
         </div>
       </div>

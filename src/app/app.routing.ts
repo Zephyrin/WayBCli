@@ -8,6 +8,7 @@ import { UserComponent } from './equipment/_admin/user/user.component';
 import { CategoryComponent } from './equipment/category/category.component';
 import { BrandComponent } from './equipment/brand/brand/brand.component';
 import { BackpackComponent } from './backpack/backpack/backpack.component';
+import { UserManagementComponent } from './_admins/user-management/user-management.component';
 
 const routes: Routes = [
     { path: '', component: BackpackComponent, canActivate: [AuthGuard] },
@@ -20,6 +21,7 @@ const routes: Routes = [
     { path: 'brandsValidator', component: BrandComponent},
     { path: 'categoriesValidator', component: CategoryComponent},
     { path: 'equipmentsValidator', component: EquipmentComponent},
+    { path: 'usersManagement', component: UserManagementComponent},
 
     // otherwise redirect to home
     { path: '**', redirectTo: '' }
