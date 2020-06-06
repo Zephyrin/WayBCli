@@ -4,13 +4,15 @@
   <div [ngClass]="{'navbar-collapse': !isCombo, 'collapse': !isCombo}"
       class="filterDropdown">
     <ul class="navbar-nav align-items-sm-center">
-      <li class="nav-item">
+      <li class="nav-item"
+          *ngIf="displayValidate">
         <app-filter-switch [disabled]="service.loading"
                            [value]="service.validate"
                            [text]="'Validate'"
                            (check)="changeValidate()"></app-filter-switch>
       </li>
-      <li class="nav-item">
+      <li class="nav-item"
+          *ngIf="displayAskValidate">
         <app-filter-switch [disabled]="service.loading"
                            [value]="service.askValidate"
                            [text]="'Ask Validation'"

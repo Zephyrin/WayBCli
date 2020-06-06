@@ -18,10 +18,10 @@ export class ActionComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  updateClick(value: Validation) {
+  updateClick() {
     this.update.emit();
   }
-  deleteClick(value: Validation) {
+  deleteClick() {
     this.delete.emit();
   }
 }

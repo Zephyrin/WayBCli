@@ -45,6 +45,7 @@ import { UserManagementComponent } from './_admins/user-management/user-manageme
 import { TopErrorsComponent } from './_helpers/errors/top-errors/top-errors.component';
 import { TheadComponent } from './_helpers/tables/thead/thead.component';
 import { ActionComponent } from './_helpers/action/action.component';
+import { BackpackModalComponent } from './backpack/backpack-modal/backpack-modal.component';
 
 @NgModule({
   imports: [
@@ -89,6 +90,7 @@ import { ActionComponent } from './_helpers/action/action.component';
     TopErrorsComponent,
     TheadComponent,
     ActionComponent,
+    BackpackModalComponent,
     ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },

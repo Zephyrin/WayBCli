@@ -90,6 +90,6 @@
   <app-top-errors [service]="service"></app-top-errors>
 </fieldset>
 <app-category-update #categoryModal
-                     (updateDone)="service.valueAdded($event)">
+                     (updateDone)="service.createUpdateDelete($event)">
 </app-category-update>
 <app-sub-category-update #subCategoryModal></app-sub-category-update>

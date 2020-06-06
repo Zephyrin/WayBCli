@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 
-import { Backpack } from '@app/_models/backpack';
 import { AuthenticationService } from '@app/_services';
-import { BackpackService } from '@app/_services/backpack.service';
+import { BackpackPaginationSearchService } from '@app/_services/backpack/backpack-pagination-search.service';
 import { User } from '@app/_models';
-import { BrandPaginationSearchService } from '@app/_services/brand/brand-pagination-search.service';
+import { Router, ActivatedRoute, Params } from '@angular/router';
 
 @Component({
   selector: 'app-backpack',
@@ -12,33 +11,56 @@ import { BrandPaginationSearchService } from '@app/_services/brand/brand-paginat
   styleUrls: ['./backpack.component.scss']
 })
 export class BackpackComponent implements OnInit {
-  loading = false;
-  currentUser: User;
-  backpacks: Backpack[];
-  constructor(
-    private authenticationService: AuthenticationService,
-    private backpackService: BackpackService,
-    private brandServiceP: BrandPaginationSearchService
-  ) {
-
+  set userId(user: number) {
+    this.userId$ = user;
+    this.service.userId = this.userId$;
+    this.init();
   }
+  get userId(): number {
+    return this.userId$;
+  }
+  private userId$: number;
 
-  get brandService() { return this.brandServiceP; }
+  set params(params: Params) {
+    this.paramsP = params;
+    if (this.paramsP.hasOwnProperty('userId')) {
+      this.userId$ = this.paramsP[`userId`];
+    }
+    this.init();
+  }
+  get params(): Params {
+    return this.paramsP;
+  }
+  private paramsP: Params;
 
-  ngOnInit(): void {
+  private currentUser: User;
 
-    this.loading = false;
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+    private authenticationService: AuthenticationService,
+    public service: BackpackPaginationSearchService
+  ) {
+    if (!this.authenticationService.currentUserValue) {
+      this.router.navigate(['/login?returnUrl=backpack']);
+    }
     this.authenticationService.currentUser.subscribe(
       x => {
         this.currentUser = x;
-        this.backpackService.getAll(this.currentUser)
-          .subscribe(backpacks => {
-            this.backpacks = backpacks;
-            this.loading = false;
-          });
+        if (this.userId === undefined) { this.userId = x.id; }
       });
-    this.brandService.init(undefined, undefined, undefined);
-    this.brandServiceP.changePage();
+  }
+
+  ngOnInit(): void {
+    this.route.queryParams.subscribe(params => {
+      this.params = params;
+    });
+  }
+
+  init() {
+    if (this.userId && this.params) {
+      this.service.init(this.router, this.route, this.params);
+    }
   }
 
 }

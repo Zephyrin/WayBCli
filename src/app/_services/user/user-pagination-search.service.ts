@@ -20,6 +20,10 @@ export class UserPaginationSearchService extends SortService<User> {
     super(service);
   }
 
+  canEditOrDelete(x: User): boolean {
+    return false;
+  }
+
   getSortByEnum() {
     return SortByEnum;
   }

@@ -1,0 +1,97 @@
+<app-delete [titleName]="service.selected?.name || ''"
+            [contentName]="service.selected?.name || ''"
+            [btnName]="service.selected?.name || ''"
+            [errors]="service.errors"
+            (done)="onDeleteDone($event)"
+            #deleteModal></app-delete>
+
+<div class="modal"
+     tabindex="-1"
+     role="dialog"
+     id="backpackModal"
+     #modal
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered"
+       role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title"
+            *ngIf="isCreateForm">Add {{service.selected?.name||'a new backpack'}}</h5>
+        <h5 class="modal-title"
+            *ngIf="!isCreateForm">Update {{service.selected?.name||''}}</h5>
+        <button type="button"
+                class="close"
+                data-dismiss="modal"
+                aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div *ngIf="submitted && service.errors.hasMessage"
+             class="alert alert-warning">
+          <div>{{service.errors.message}}</div>
+        </div>
+        <div *ngIf="submitted && service.errors.hasFatalError"
+             class="alert alert-danger">
+          <div [innerHTML]="service.errors.fatalError"></div>
+        </div>
+        <form [formGroup]="form"
+              id="backpackUpdateForm"
+              (ngSubmit)="onSubmit()">
+          <div *ngIf="submitted && f.message"
+               class="invalid-feedback">
+            <div *ngIf="f.message">{{f.message}}</div>
+          </div>
+          <!-- Form Nane -->
+          <div class="form-group row">
+            <label for="backpack_name"
+                   class="col-sm-2 col-form-label pointer">
+              Name
+            </label>
+            <div class="col-sm-10">
+              <input type="text"
+                     id="backpack_name"
+                     formControlName="name"
+                     (ngModelChange)="service.clearError('name')"
+                     class="form-control"
+                     [ngClass]="{ 'is-invalid': isSubmittedAndHasError('name') }" />
+              <div *ngIf="submitted && f.name.errors"
+                   class="invalid-feedback">
+                <div *ngIf="f.name.errors.required">
+                  Name is required
+                </div>
+              </div>
+              <div *ngIf="submitted && service.errors.hasErrors['name']">
+                <div *ngFor="let child of service.errors.errors['name'].errors">
+                  {{child}}
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- End Form Name -->
+        </form>
+      </div>
+      <!-- Form Buttons -->
+      <div class="modal-footer form-group">
+        <button [disabled]="service.loading"
+                type="submit"
+                form="backpackUpdateForm"
+                value="submit"
+                class="btn btn-primary">
+          <span *ngIf="service.loading"
+                class="spinner-border spinner-border-sm mr-1"></span>
+          <span *ngIf="isCreateForm">Add</span>
+          <span *ngIf="!isCreateForm">Update</span>
+        </button>
+        <button [disabled]="service.loading"
+                type="button"
+                class="btn btn-secondary"
+                data-dismiss="modal"
+                (click)="onCancel()">
+          Cancel
+        </button>
+      </div>
+      <!-- End Form Buttons -->
+    </div>
+  </div>
+</div>

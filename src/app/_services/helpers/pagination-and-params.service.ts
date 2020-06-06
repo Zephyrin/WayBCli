@@ -12,7 +12,7 @@ export abstract class PaginationAndParamsService<T> {
   public values: T[];
   public selected: T;
 
-  public errors: FormErrors;
+  public errors: FormErrors = new FormErrors();
   public loading = false;
 
   public pagination: Pagination;
@@ -22,6 +22,9 @@ export abstract class PaginationAndParamsService<T> {
 
   /* Event to inform end of init */
   public initDone: EventEmitter<any> = new EventEmitter();
+
+  /* Event to inform create, update or delete is done */
+  public createUpdateDeleteDone = new EventEmitter<SimpleChange>();
 
   /* HttpService */
   public httpService: HttpService<T>;
@@ -109,7 +112,10 @@ export abstract class PaginationAndParamsService<T> {
     this.add();
   }
 
-  valueAdded(simpleChange: SimpleChange) {
+  /**
+   * At the end should be private.
+   */
+  createUpdateDelete(simpleChange: SimpleChange) {
     setTimeout(() => {
       if (simpleChange) {
         if (simpleChange.previousValue === null) {
@@ -132,7 +138,7 @@ export abstract class PaginationAndParamsService<T> {
     const index = this.values.indexOf(elt);
     if (index >= 0) {
       this.values.splice(index, 1);
-      this.delete();
+      this.deletePagination();
     }
   }
 
@@ -180,6 +186,45 @@ export abstract class PaginationAndParamsService<T> {
     }
   }
 
+  delete(simpleChange: SimpleChange) {
+    this.loading = true;
+    this.endTransactionError(undefined);
+    this.httpService.delete(simpleChange.previousValue).subscribe(next => {
+      this._delete(simpleChange);
+    }, error => {
+      if (error.status === 404) {
+        this._delete(simpleChange);
+      } else {
+        this.endTransactionError(error);
+      }
+    });
+  }
+
+  private _delete(simpleChange: SimpleChange) {
+    if (simpleChange.previousValue === this.selected) {
+      this.selected = null;
+    }
+    this.endTransaction(simpleChange);
+  }
+
+  endTransaction(simpleChange: SimpleChange) {
+    this.createUpdateDelete(simpleChange);
+    this.loading = false;
+    this.createUpdateDeleteDone.emit(simpleChange);
+  }
+
+  endTransactionError(error) {
+    this.loading = false;
+    if (error) {
+      this.errors.formatError(error);
+    } else {
+      this.errors = new FormErrors();
+    }
+  }
+
+  clearError(key) {
+    this.errors.clearError(key);
+  }
   /**
    * Make the circle of boolean true -> false -> undefined -> true.
    *
@@ -207,7 +252,7 @@ export abstract class PaginationAndParamsService<T> {
   /**
    * Delete something to the list.
    */
-  protected delete() {
+  protected deletePagination() {
     this.pagination.paginationCount--;
     this.pagination.totalCount--;
   }
@@ -406,6 +451,7 @@ export abstract class PaginationAndParamsService<T> {
    * page 3 with a limit of 10, then you already got 20 records.
    */
   posBeginCount() {
+    if (this.page() === 0) { return 0; }
     return (this.page() - 1) * this.limit() + 1;
   }
 

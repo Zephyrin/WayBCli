@@ -112,7 +112,7 @@ export class CategoryPaginationSearchService extends ValidationAndSearchService<
   }
 
   onUpdateDone(simple: SimpleChange) {
-    this.valueAdded(simple);
+    this.createUpdateDelete(simple);
   }
 
 }

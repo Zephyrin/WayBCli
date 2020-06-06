@@ -1,8 +1,6 @@
 ﻿import { Component, OnInit } from '@angular/core';
 
-import { Backpack } from '@app/_models/backpack';
 import { AuthenticationService } from '@app/_services';
-import { BackpackService } from '@app/_services/backpack.service';
 import { User } from '@app/_models';
 import { first } from 'rxjs/operators';
 
@@ -10,23 +8,14 @@ import { first } from 'rxjs/operators';
   templateUrl: 'home.component.html'
 })
 export class HomeComponent implements OnInit {
-  loading = false;
   currentUser: User;
-  backpacks: Backpack[];
   constructor(
-    private authenticationService: AuthenticationService,
-    private backpackService: BackpackService
+    private authenticationService: AuthenticationService
   ) {
     this.authenticationService.currentUser.pipe(first()).subscribe(
       x => this.currentUser = x);
    }
 
   ngOnInit() {
-    this.loading = false;
-    this.backpackService.getAll(this.currentUser)
-      .subscribe(backpacks => {
-        this.backpacks = backpacks;
-        this.loading = false;
-      });
   }
 }

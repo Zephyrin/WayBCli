@@ -8,6 +8,10 @@ export abstract class HttpService<T> {
 
   abstract update(elt: T): Observable<T>;
 
+  abstract delete(elt: T): Observable<{}>;
+
+  abstract create(elt: T): Observable<T>;
+
   handleError(error: any) {
     if (error instanceof String
       || typeof (error) === 'string') {

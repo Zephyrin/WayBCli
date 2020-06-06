@@ -131,7 +131,7 @@
 <app-equipment-update #equipmentUpdate
                       [equipments]="service.values"
                       [characteristicModal]="characteristicModal"
-                      (updateDone)="service.valueAdded($event)">
+                      (updateDone)="service.createUpdateDelete($event)">
 </app-equipment-update>
 
 <app-characteristic-update #characteristicModal>

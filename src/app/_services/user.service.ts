@@ -31,4 +31,8 @@ export class UserService extends HttpService<User> {
         catchError(this.handleError)
       );
   }
+
+  create(user: User): Observable<User> {
+    return null;
+  }
 }

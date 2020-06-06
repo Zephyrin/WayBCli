@@ -10,11 +10,12 @@ import { Validation } from '@app/_models/validation';
   templateUrl: './validation-and-search.component.html',
   styleUrls: ['./validation-and-search.component.scss']
 })
-export class ValidationAndSearchComponent implements OnInit {
+export class ValidationAndSearchComponent<T> implements OnInit {
   @ViewChild('searchText', { static: false }) searchText: ElementRef;
-  @ViewChild('askValidationBtn', { static: false }) askValidationBtn: ElementRef;
   @Input() isCombo = false;
-  @Input() service: ValidationAndSearchService<Validation>;
+  @Input() service: ValidationAndSearchService<T>;
+  @Input() displayValidate = true;
+  @Input() displayAskValidate = true;
   searchForm: FormGroup;
 
   constructor(private formBuilder: FormBuilder) { }
