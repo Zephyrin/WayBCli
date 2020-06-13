@@ -31,8 +31,8 @@ export class BackpackService extends HttpService<Backpack> {
     return this.http.post<Backpack>(`${environment.apiUrl}/user/${this.userId}/backpack`, backpack);
   }
 
-  get(user: User, id: number): Observable<Backpack> {
-    return this.http.get<Backpack>(`${environment.apiUrl}/user/${user.id}/backpack/${id}`);
+  get(id: number): Observable<Backpack> {
+    return this.http.get<Backpack>(`${environment.apiUrl}/user/${this.userId}/backpack/${id}`);
   }
 
   update(backpack: Backpack): Observable<Backpack> {

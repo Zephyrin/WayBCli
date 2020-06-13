@@ -4,7 +4,7 @@
 </div>
 <div *ngIf="service.errors.hasMessage"
      class="alert alert-warning">
-  <div>{{service.errors.message}}</div>
+  <div [innerHTML]="service.errors.message"></div>
 </div>
 <div *ngIf="service.errors.hasErrors['validate']">
   <div *ngFor="let child of service.errors.errors['validate'].errors">

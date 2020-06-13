@@ -1,0 +1,6 @@
+button[aria-expanded=true] .fa-menu-close {
+  display: none;
+}
+button[aria-expanded=false] .fa-menu-open {
+  display: none;
+}

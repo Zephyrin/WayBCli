@@ -28,8 +28,8 @@ export class Equipment extends Validation {
       if (eq.brand !== undefined && eq.brand !== null) {
         this.brand = new Brand(eq.brand);
       }
-      this.characteristics = [];
       this.subCategory = new SubCategory(eq.subCategory);
+      this.characteristics = [];
       eq.characteristics.forEach(car => {
         this.characteristics.push(new Characteristic(car));
       });

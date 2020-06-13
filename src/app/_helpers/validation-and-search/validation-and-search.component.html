@@ -1,6 +1,7 @@
 <nav aria-label="Filter"
      class="navbar"
-     [ngClass]="{'navbar-expand-md': !isCombo}">
+     [ngClass]="{'navbar-expand-md': !isCombo}"
+     *ngIf="service.values?.length > 0 || false">
   <div [ngClass]="{'navbar-collapse': !isCombo, 'collapse': !isCombo}"
       class="filterDropdown">
     <ul class="navbar-nav align-items-sm-center">

@@ -34,7 +34,7 @@ import { SubCategoryValidatorComponent } from './equipment/sub-category/sub-cate
 import { BrandComponent } from './equipment/brand/brand/brand.component';
 import { EquipmentValidatorComponent } from './equipment/equipment/equipment-validator/equipment-validator.component';
 import { CharacteristicValidatorComponent } from './equipment/characteristic/characteristic-validator/characteristic-validator.component';
-import { BackpackComponent } from './backpack/backpack/backpack.component';
+import { BackpacksComponent } from './backpack/backpacks/backpacks.component';
 import { BrandFilterComponent } from './equipment/brand/brand-filter/brand-filter.component';
 import { PaginationComponent } from './_helpers/pagination/pagination.component';
 import { FilterSwitchComponent } from './_helpers/filter-switch/filter-switch.component';
@@ -46,6 +46,7 @@ import { TopErrorsComponent } from './_helpers/errors/top-errors/top-errors.comp
 import { TheadComponent } from './_helpers/tables/thead/thead.component';
 import { ActionComponent } from './_helpers/action/action.component';
 import { BackpackModalComponent } from './backpack/backpack-modal/backpack-modal.component';
+import { BackpackComponent } from './backpack/backpack/backpack.component';
 
 @NgModule({
   imports: [
@@ -79,7 +80,7 @@ import { BackpackModalComponent } from './backpack/backpack-modal/backpack-modal
     BrandComponent,
     EquipmentValidatorComponent,
     CharacteristicValidatorComponent,
-    BackpackComponent,
+    BackpacksComponent,
     BrandFilterComponent,
     PaginationComponent,
     FilterSwitchComponent,
@@ -91,6 +92,7 @@ import { BackpackModalComponent } from './backpack/backpack-modal/backpack-modal
     TheadComponent,
     ActionComponent,
     BackpackModalComponent,
+    BackpackComponent,
     ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },

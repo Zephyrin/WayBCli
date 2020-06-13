@@ -1,0 +1,12 @@
+.flex-row {
+  display: flex;
+  justify-content: center;
+}
+
+button[aria-expanded=false] .expand_less{
+  display: none;
+}
+
+button[aria-expanded=true] .expand_more{
+  display: none;
+}

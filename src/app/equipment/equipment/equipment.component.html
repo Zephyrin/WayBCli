@@ -76,6 +76,7 @@
           <td class="d-none d-sm-table-cell d-md-table-cell align-middle"
               *ngIf="equipment.brand?.logo.hasUrl() || false">
             <img [src]="equipment.brand?.logo.url()"
+                  [alt]="equipment.brand?.logo.description"
                  class="img-thumbnail rounded mx-auto d-block" />
           </td>
           <td class="d-none d-sm-table-cell d-md-table-cell align-middle"

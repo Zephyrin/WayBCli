@@ -1,4 +1,5 @@
-<nav aria-label="Pagination navigation">
+<nav aria-label="Pagination navigation"
+    *ngIf="pagination.values?.length > 0 || false">
   <ul
       class="pagination pagination-sm align-items-center justify-content-end d-flex">
     <li class="page-item">

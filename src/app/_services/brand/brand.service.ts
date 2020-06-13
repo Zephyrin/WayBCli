@@ -45,4 +45,8 @@ export class BrandService extends HttpService<Brand> {
         catchError(this.handleError)
       );
   }
+
+  get(id: number): Observable<Brand> {
+    return this.http.get<Brand>(`${environment.apiUrl}/brand/${id}`);
+  }
 }

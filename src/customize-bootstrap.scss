@@ -102,3 +102,15 @@ tbody tr td:last-child {
   white-space: nowrap;
   width: 1%
 }
+
+.helpers {
+  animation: blinker 1s linear infinite;
+  outline: 0;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+@keyframes blinker {
+  50% {
+    opacity: 0;
+  }
+}

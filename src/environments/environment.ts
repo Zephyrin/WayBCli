@@ -3,7 +3,7 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-    production: true
+    production: false
 /*     apiUrl: 'https://wayb.herokuapp.com/api' */
     /*, apiUrl: 'http://127.0.0.1:8000/api'
     , mediaUrl: 'http://127.0.0.1:8000/media'

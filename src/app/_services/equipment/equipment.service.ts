@@ -41,4 +41,8 @@ export class EquipmentService extends HttpService<Equipment> {
       `${environment.apiUrl}/equipment/${equipment.id}`, equipment)
       ;
   }
+
+  get(id: number): Observable<Equipment> {
+    return this.http.get<Equipment>(`${environment.apiUrl}/equipment/${id}`);
+  }
 }

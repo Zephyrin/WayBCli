@@ -35,4 +35,8 @@ export class UserService extends HttpService<User> {
   create(user: User): Observable<User> {
     return null;
   }
+
+  get(id: number): Observable<User> {
+    return this.http.get<User>(`${environment.apiUrl}/user/${id}`);
+  }
 }

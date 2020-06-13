@@ -11,10 +11,10 @@
     role="menu"
     attr.aria-labelledby="action_{{service.getId(value)}}"
     *ngIf="service.canEditOrDelete(value)">
-  <li (click)="updateClick()">
+  <li (click)="updateClick()" class="pointer">
     <mat-icon [inline]="true">update</mat-icon>Update
   </li>
-  <li (click)="deleteClick()">
+  <li (click)="deleteClick()" class="pointer">
     <mat-icon [inline]="true">delete</mat-icon>Delete
   </li>
   <li *ngIf="!service.isValidator">

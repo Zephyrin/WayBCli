@@ -12,6 +12,8 @@ export abstract class HttpService<T> {
 
   abstract create(elt: T): Observable<T>;
 
+  abstract get(id: number): Observable<T>;
+
   handleError(error: any) {
     if (error instanceof String
       || typeof (error) === 'string') {

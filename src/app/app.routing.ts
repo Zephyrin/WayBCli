@@ -7,11 +7,12 @@ import { EquipmentComponent } from './equipment/equipment/equipment.component';
 import { UserComponent } from './equipment/_admin/user/user.component';
 import { CategoryComponent } from './equipment/category/category.component';
 import { BrandComponent } from './equipment/brand/brand/brand.component';
-import { BackpackComponent } from './backpack/backpack/backpack.component';
+import { BackpacksComponent } from './backpack/backpacks/backpacks.component';
 import { UserManagementComponent } from './_admins/user-management/user-management.component';
+import { BackpackComponent } from './backpack/backpack/backpack.component';
 
 const routes: Routes = [
-    { path: '', component: BackpackComponent, canActivate: [AuthGuard] },
+    { path: '', component: BackpacksComponent, canActivate: [AuthGuard] },
     { path: 'login', component: LoginComponent },
     { path: 'register', component: RegisterComponent },
     { path: 'equipments', component: EquipmentComponent},
@@ -22,7 +23,7 @@ const routes: Routes = [
     { path: 'categoriesValidator', component: CategoryComponent},
     { path: 'equipmentsValidator', component: EquipmentComponent},
     { path: 'usersManagement', component: UserManagementComponent},
-
+    { path: 'backpack', component: BackpackComponent },
     // otherwise redirect to home
     { path: '**', redirectTo: '' }
 ];

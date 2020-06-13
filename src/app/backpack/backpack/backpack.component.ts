@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-
+import { Component, OnInit, Input } from '@angular/core';
+import { Router, ActivatedRoute, Params } from '@angular/router';
 import { AuthenticationService } from '@app/_services';
 import { BackpackPaginationSearchService } from '@app/_services/backpack/backpack-pagination-search.service';
-import { User } from '@app/_models';
-import { Router, ActivatedRoute, Params } from '@angular/router';
+import { User, Have } from '@app/_models';
+import { UserService } from '@app/_services/user.service';
 
 @Component({
   selector: 'app-backpack',
@@ -11,9 +11,10 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
   styleUrls: ['./backpack.component.scss']
 })
 export class BackpackComponent implements OnInit {
-  set userId(user: number) {
-    this.userId$ = user;
-    this.service.userId = this.userId$;
+  @Input()
+  set userId(id: number) {
+    this.service.userId = id;
+    this.userId$ = id;
     this.init();
   }
   get userId(): number {
@@ -21,32 +22,46 @@ export class BackpackComponent implements OnInit {
   }
   private userId$: number;
 
+  @Input()
+  set backpackId(backpackId: number) {
+    this.backpackId$ = backpackId;
+    this.init();
+  }
+  get backpackId(): number {
+    return this.backpackId$;
+  }
+  private backpackId$: number;
+
   set params(params: Params) {
-    this.paramsP = params;
-    if (this.paramsP.hasOwnProperty('userId')) {
-      this.userId$ = this.paramsP[`userId`];
+    this.params$ = params;
+
+    if (this.params$.hasOwnProperty('userId')) {
+      this.userId$ = this.params$[`userId`];
+    }
+    if (this.params$.hasOwnProperty('backpackId')) {
+      this.backpackId$ = this.params$[`backpackId`];
     }
     this.init();
   }
   get params(): Params {
-    return this.paramsP;
+    return this.params$;
   }
-  private paramsP: Params;
+  private params$: Params;
 
-  private currentUser: User;
+  public currentUser: User;
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
     private authenticationService: AuthenticationService,
-    public service: BackpackPaginationSearchService
-  ) {
+    public service: BackpackPaginationSearchService,
+    public userService: UserService) {
     if (!this.authenticationService.currentUserValue) {
       this.router.navigate(['/login?returnUrl=backpack']);
     }
     this.authenticationService.currentUser.subscribe(
       x => {
-        this.currentUser = x;
+        this.currentUser = new User(x);
         if (this.userId === undefined) { this.userId = x.id; }
       });
   }
@@ -58,9 +73,8 @@ export class BackpackComponent implements OnInit {
   }
 
   init() {
-    if (this.userId && this.params) {
-      this.service.init(this.router, this.route, this.params);
+    if (this.userId && this.backpackId && this.params) {
+      this.service.initSelected(this.backpackId);
     }
   }
-
 }

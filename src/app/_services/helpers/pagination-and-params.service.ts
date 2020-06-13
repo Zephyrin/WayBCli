@@ -151,6 +151,18 @@ export abstract class PaginationAndParamsService<T> {
     return this.changePage();
   }
 
+  public initSelected(id: number) {
+    this.errors = new FormErrors();
+    this.loading = true;
+    const obs = this.httpService.get(id);
+    obs.subscribe(response => {
+      this.selected = this.newValue(response);
+      this.loading = false;
+    }, error => {
+      this.errors.formatError(error);
+    });
+  }
+
   setSelected(value: T) {
     if (!this.loading) {
       if (this.selected !== value) {
