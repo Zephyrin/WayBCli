@@ -1,0 +1,38 @@
+<p>
+  Hi !<br />
+  Here you can populate default values into the database. If values already
+  exists, they will not be override.<br />
+  Values will be validated.
+</p>
+<p>
+  Create all default Categories and their Sub-categories
+  <button class="btn btn-ligth" (click)="addDefaultValuesCategory()">
+    <mat-icon [inline]="true">add</mat-icon>Add default values</button
+  ><br />
+</p>
+<app-top-errors [errors]="categoryError"></app-top-errors>
+<ul>
+  <li *ngFor="let cat of categoryService.values" class="category">
+    {{ cat.name }} has {{ cat.subCategories.length }} sub-categories.<br />
+    <ul>
+      <li *ngFor="let sub of cat.subCategories" class="subcategory">
+        {{ sub.name }}
+      </li>
+    </ul>
+  </li>
+</ul>
+<p>
+  Create all default Brands
+  <button class="btn btn-ligth" (click)="addDefaultValuesBrand()">
+    <mat-icon [inline]="true">add</mat-icon>
+  </button>
+</p>
+<app-top-errors [errors]="brandError"></app-top-errors>
+<ul>
+  <li *ngFor="let brand of brandService.values" class="subcategory">
+    {{ brand.name }} <img *ngIf="brand.logo && brand.logo.hasUrl()"
+    [src]="brand.logo.url()"
+    [alt]="brand.logo.description"
+    class="rounded img-thumbnail" />
+  </li>
+</ul>

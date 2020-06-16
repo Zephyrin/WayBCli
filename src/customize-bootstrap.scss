@@ -6,7 +6,8 @@
 //$light: lighten($primary, 20%);
 /* $dark: #0F1B07;
 $info: $primary;
- */@import "~bootstrap/scss/functions";
+ */
+@import "~bootstrap/scss/functions";
 @import '~bootstrap/scss/_variables.scss';
 @import '~bootstrap/scss/mixins';
 /* $card-cap-bg: $light; */ /* Card Header */
@@ -22,6 +23,11 @@ b {
   font-size: x-large;
   font-weight: bold;
 }
+.a {
+  color: #7eb51d;
+}
+
+.a :hover { color: darken($color: #7eb51d, $amount: 10%); }
 
 a { color: #7eb51d; }
 a :hover { color: darken($color: #7eb51d, $amount: 10%); }

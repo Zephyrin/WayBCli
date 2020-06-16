@@ -47,6 +47,8 @@ import { TheadComponent } from './_helpers/tables/thead/thead.component';
 import { ActionComponent } from './_helpers/action/action.component';
 import { BackpackModalComponent } from './backpack/backpack-modal/backpack-modal.component';
 import { BackpackComponent } from './backpack/backpack/backpack.component';
+import { EquipmentHelpComponent } from './equipment/equipment-help/equipment-help.component';
+import { PopulateComponent } from './equimpent/_admin/populate/populate.component';
 
 @NgModule({
   imports: [
@@ -93,7 +95,9 @@ import { BackpackComponent } from './backpack/backpack/backpack.component';
     ActionComponent,
     BackpackModalComponent,
     BackpackComponent,
-    ],
+    EquipmentHelpComponent
+,
+    PopulateComponent    ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },

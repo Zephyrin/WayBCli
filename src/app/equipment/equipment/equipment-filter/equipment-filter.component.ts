@@ -1,9 +1,8 @@
 import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 
 import { Equipment, User } from '@app/_models';
-import { Category, SubCategory } from '@app/_models';
+import { SubCategory } from '@app/_models';
 
-import { CategoryPaginationSearchService } from '@app/_services/category/category-pagination-search.service';
 import { EquipmentPaginationSearchService } from '@app/_services/equipment/equipment-pagination-search.service';
 import { BooleanEnum } from '@app/_enums/boolean.enum';
 

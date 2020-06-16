@@ -1,4 +1,4 @@
-<app-top-errors [service]="service"></app-top-errors>
+  <app-top-errors [errors]="service.errors"></app-top-errors>
 <fieldset [disabled]="service.loading">
   <app-validation-and-search class="d-block d-sm-block d-md-block d-lg-block d-xl-none"
                              [service]="service"></app-validation-and-search>
@@ -83,6 +83,6 @@
 </div>
 <fieldset [disabled]="service.loading">
   <app-pagination [pagination]="service"></app-pagination>
-  <app-top-errors [service]="service"></app-top-errors>
+    <app-top-errors [errors]="service.errors"></app-top-errors>
 </fieldset>
 <app-brand-update #brandModal></app-brand-update>

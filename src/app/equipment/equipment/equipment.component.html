@@ -1,86 +1,64 @@
+<app-equipment-help></app-equipment-help>
 <fieldset [disabled]="service.loading">
-  <app-equipment-filter #equipmentFilter></app-equipment-filter>
+  <div class="filterHelp">
+    <app-equipment-filter #equipmentFilter></app-equipment-filter>
 
-  <app-validation-and-search class="d-block d-sm-block d-md-block d-lg-block d-xl-none"
-                             [service]="service"></app-validation-and-search>
-  <div class="d-flex justify-content-between align-items-center">
-    <button class="btn btn-light d-flex justify-content-center align-content-between"
-            *ngIf="!service.isValidator"
-            (click)="equipmentUpdate.create()">
-      <mat-icon [inline]="true">add</mat-icon>
-    </button>
-    <app-validation-and-search class="d-none d-sm-none d-md-none d-lg-none d-xl-block"
-                               [service]="service">
+    <app-validation-and-search class="d-block d-sm-block d-md-block d-lg-block d-xl-none" [service]="service">
     </app-validation-and-search>
-    <app-pagination [pagination]="service"></app-pagination>
+    <div class="d-flex justify-content-between align-items-center">
+      <button class="btn btn-light d-flex justify-content-center align-content-between" *ngIf="!service.isValidator"
+        (click)="equipmentUpdate.create()">
+        <mat-icon [inline]="true">add</mat-icon>
+      </button>
+      <app-validation-and-search class="d-none d-sm-none d-md-none d-lg-none d-xl-block" [service]="service">
+      </app-validation-and-search>
+      <app-pagination [pagination]="service"></app-pagination>
+    </div>
   </div>
 </fieldset>
-<div
-     class="table-responsive-sm table-responsive-md table-responsive-lg table-responsive-xl">
-  <app-top-errors [service]="service"></app-top-errors>
+<div class="table-responsive-sm table-responsive-md table-responsive-lg table-responsive-xl">
+  <app-top-errors [errors]="service.errors"></app-top-errors>
 
   <fieldset [disabled]="service.loading">
     <table class="table">
       <thead>
         <tr class="align-items-center">
-          <th scope="col"
-              class="col-md-2 col-sm-9 col-xs-9 align-middle">
-            <app-thead [service]="service"
-                       [text]="'Name'"
-                       [sortBy]="sortByEnum.name"></app-thead>
+          <th scope="col" class="col-md-2 col-sm-9 col-xs-9 align-middle">
+            <app-thead [service]="service" [text]="'Name'" [sortBy]="sortByEnum.name"></app-thead>
           </th>
-          <th scope="col"
-              class="col-md-4 d-none d-sm-table-cell align-middle">
-            <app-thead [service]="service"
-                       [text]="'Description'"
-                       [sortBy]="sortByEnum.description"></app-thead>
+          <th scope="col" class="col-md-4 d-none d-sm-table-cell align-middle">
+            <app-thead [service]="service" [text]="'Description'" [sortBy]="sortByEnum.description"></app-thead>
           </th>
-          <th scope="col"
-              class="col-md-1 d-none d-sm-table-cell d-md-table-cell align-middle">
-            <app-thead [service]="service"
-                       [text]="'Brand'"
-                       [sortBy]="sortByEnum.brand"></app-thead>
+          <th scope="col" class="col-md-1 d-none d-sm-table-cell d-md-table-cell align-middle">
+            <app-thead [service]="service" [text]="'Brand'" [sortBy]="sortByEnum.brand"></app-thead>
           </th>
-          <th scope="col"
-              class="col-md-2 d-none d-sm-table-cell d-md-table-cell align-middle">
-            <app-thead [service]="service"
-                       [text]="'Sub-Category'"
-                       [sortBy]="sortByEnum.subCategory"></app-thead>
+          <th scope="col" class="col-md-2 d-none d-sm-table-cell d-md-table-cell align-middle">
+            <app-thead [service]="service" [text]="'Sub-Category'" [sortBy]="sortByEnum.subCategory"></app-thead>
           </th>
-          <th scope="col"
-              class="col-1 col-sm-1 col-xs-1 align-middle">
-            <app-thead [service]="service"
-                       [text]="'Weight'"
-                       [sortBy]="sortByEnum.weight"></app-thead>
+          <th scope="col" class="col-1 col-sm-1 col-xs-1 align-middle">
+            <app-thead [service]="service" [text]="'Weight'" [sortBy]="sortByEnum.weight"></app-thead>
           </th>
-          <th scope="col"
-              class="col-1 col-sm-1 col-xs-1 align-middle">
-            <app-thead [service]="service"
-                       [text]="'Price'"
-                       [sortBy]="sortByEnum.price"></app-thead>
+          <th scope="col" class="col-1 col-sm-1 col-xs-1 align-middle">
+            <app-thead [service]="service" [text]="'Price'" [sortBy]="sortByEnum.price"></app-thead>
           </th>
-          <th scope="col"
-              class="col-1 col-sm-1 col-xs-1 align-middle">Own<br />Whishes</th>
+          <th scope="col" class="col-1 col-sm-1 col-xs-1 align-middle">Own<br />Whishes</th>
         </tr>
       </thead>
       <ng-container *ngFor="let equipment of service.values">
-        <tr (click)="service.setSelected(equipment)"
-            (dblclick)="updateDblClick(equipment)"
-            [class.active]="equipment == service.selected"
-            class="pointer">
+        <tr (click)="service.setSelected(equipment)" (dblclick)="updateDblClick(equipment)"
+          [class.active]="equipment == service.selected" class="pointer">
           <td class="align-middle"><b>{{equipment.name}}</b>
           </td>
           <td class="d-none d-sm-table-cell align-middle">
             {{equipment.description | slice:0:75}}{{equipment.description.length > 75 ? '...' : ''}}
           </td>
           <td class="d-none d-sm-table-cell d-md-table-cell align-middle"
-              *ngIf="equipment.brand?.logo.hasUrl() || false">
-            <img [src]="equipment.brand?.logo.url()"
-                  [alt]="equipment.brand?.logo.description"
-                 class="img-thumbnail rounded mx-auto d-block" />
+            *ngIf="equipment.brand?.logo.hasUrl() || false">
+            <img [src]="equipment.brand?.logo.url()" [alt]="equipment.brand?.logo.description"
+              class="img-thumbnail rounded mx-auto d-block" />
           </td>
           <td class="d-none d-sm-table-cell d-md-table-cell align-middle"
-              *ngIf="!equipment.brand?.logo.hasUrl() || false">
+            *ngIf="!equipment.brand?.logo.hasUrl() || false">
             {{equipment.brand?.name || ''}}
           </td>
           <td class="d-none d-sm-table-cell d-md-table-cell align-middle">
@@ -88,32 +66,24 @@
           <td class="align-middle">{{equipment.compute('weight')}}g</td>
           <td class="align-middle">{{equipment.compute('price')}}</td>
           <td class="align-middle">
-            <div class="btn-group"
-                 role="group"
-                 aria-label="Tools">
-              <app-action [service]="service"
-                          [value]="equipment"
-                          (update)="equipmentUpdate.update(equipment)"
-                          (delete)="equipmentUpdate.onDelete(equipment)">
+            <div class="btn-group" role="group" aria-label="Tools">
+              <app-action [service]="service" [value]="equipment" (update)="equipmentUpdate.update(equipment)"
+                (delete)="equipmentUpdate.onDelete(equipment)">
               </app-action>
               <button class="btn btn-light d-flex justify-content-center align-content-between"
-                      (click)="haveOwnedModal.open(equipment)">
-                <mat-icon (click)="haveOwnedModal.open(equipment)"
-                          [inline]="true"
-                          *ngIf="!equipment.has">add</mat-icon>
-                <mat-icon (click)="haveOwnedModal.open(equipment)"
-                          [inline]="true"
-                          *ngIf="equipment.has">add_shopping_cart</mat-icon>
+                (click)="haveOwnedModal.open(equipment)">
+                <mat-icon (click)="haveOwnedModal.open(equipment)" [inline]="true" *ngIf="!equipment.has">add</mat-icon>
+                <mat-icon (click)="haveOwnedModal.open(equipment)" [inline]="true" *ngIf="equipment.has">
+                  add_shopping_cart</mat-icon>
               </button>
             </div>
           </td>
         </tr>
         <tr *ngIf="service.selected === equipment">
           <td colspan="7">
-            <app-characteristic [parentData]="equipment"
-                                (create)="characteristicModal.create(equipment)"
-                                (update)="characteristicModal.update(equipment, $event)"
-                                (delete)="characteristicModal.delete(equipment, $event)">
+            <app-characteristic [parentData]="equipment" (create)="characteristicModal.create(equipment)"
+              (update)="characteristicModal.update(equipment, $event)"
+              (delete)="characteristicModal.delete(equipment, $event)">
             </app-characteristic>
           </td>
         </tr>
@@ -124,15 +94,12 @@
 </div>
 <fieldset [disabled]="service.loading">
   <app-pagination [pagination]="service"></app-pagination>
-  <app-top-errors [service]="service"></app-top-errors>
+    <app-top-errors [errors]="service.errors"></app-top-errors>
 </fieldset>
-<app-user-owned-update #haveOwnedModal
-                       (done)="onDoneHave($event)"></app-user-owned-update>
+<app-user-owned-update #haveOwnedModal (done)="onDoneHave($event)"></app-user-owned-update>
 
-<app-equipment-update #equipmentUpdate
-                      [equipments]="service.values"
-                      [characteristicModal]="characteristicModal"
-                      (updateDone)="service.createUpdateDelete($event)">
+<app-equipment-update #equipmentUpdate [equipments]="service.values" [characteristicModal]="characteristicModal"
+  (updateDone)="service.createUpdateDelete($event)">
 </app-equipment-update>
 
 <app-characteristic-update #characteristicModal>

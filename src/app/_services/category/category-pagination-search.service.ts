@@ -1,3 +1,5 @@
+import { BooleanEnum } from './../../_enums/boolean.enum';
+import { isUndefined } from 'util';
 import { Injectable, SimpleChange } from '@angular/core';
 import { Params } from '@angular/router';
 import { HttpParams, HttpResponse } from '@angular/common/http';
@@ -20,9 +22,9 @@ export class CategoryPaginationSearchService extends ValidationAndSearchService<
   public eq: string = undefined;
   public greater: string = undefined;
   public greaterOrEq: string = undefined;
-
+  public noPagination = BooleanEnum.undefined;
   constructor(
-    private service: CategoryService) {
+    public service: CategoryService) {
     super(service);
   }
 
@@ -65,6 +67,9 @@ export class CategoryPaginationSearchService extends ValidationAndSearchService<
         }
       }
     }
+    if (params && params.hasOwnProperty('noPagination')) {
+      this.noPagination = params.noPagination === 'true' ? BooleanEnum.true : BooleanEnum.false;
+    }
   }
 
   initWithParams(
@@ -95,12 +100,16 @@ export class CategoryPaginationSearchService extends ValidationAndSearchService<
       if (this.greaterOrEq) { val = 'ge' + this.greaterOrEq; }
       httpParams = httpParams.append('subCategoryCount', val);
     }
+    if (this.noPagination) {
+      httpParams = httpParams.append('noPagination', this.noPagination);
+    }
     return httpParams;
   }
 
   removeParamsFromUrl(query: {}) {
     super.removeParamsFromUrl(query);
     this.removeParam(query, 'subCategoryCount');
+    this.removeParam(query, 'noPagination');
   }
 
   newValue(x: any): Category {

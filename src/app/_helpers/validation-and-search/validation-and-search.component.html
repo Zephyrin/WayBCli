@@ -1,7 +1,6 @@
 <nav aria-label="Filter"
      class="navbar"
-     [ngClass]="{'navbar-expand-md': !isCombo}"
-     *ngIf="service.values?.length > 0 || false">
+     [ngClass]="{'navbar-expand-md': !isCombo}">
   <div [ngClass]="{'navbar-collapse': !isCombo, 'collapse': !isCombo}"
       class="filterDropdown">
     <ul class="navbar-nav align-items-sm-center">
@@ -28,7 +27,6 @@
                    id="searchText"
                    #searchText
                    type="search"
-                   [(ngModel)]="service.search"
                    placeholder="Search"
                    aria-label="Search">
             <div class="input-group-append">

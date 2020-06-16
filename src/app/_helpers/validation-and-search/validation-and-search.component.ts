@@ -24,6 +24,7 @@ export class ValidationAndSearchComponent<T> implements OnInit {
     this.searchForm = this.formBuilder.group({
       search: [this.service.search]
     });
+    this.searchForm.patchValue({search: this.service.search});
   }
   get booleanEnum() { return BooleanEnum; }
 

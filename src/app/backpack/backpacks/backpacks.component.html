@@ -1,17 +1,18 @@
 <p *ngIf="!hasBackpack()">You don't have any backpack yet.</p>
 <div *ngIf="displayHelp()">
   <p>A backpack is an equipment container. It summarizes all equipments you want
-    to take with you in travelling or hiking.</p>
+    to take with you in travelling or hiking. Then you can know the total weight and the price for this backpack. At the end, you will have a check list to don't forget anything.
+  </p>
 </div>
 <div *ngIf="firstThingToDo()">
-  <h5>First thing to do before creating a backpack:</h5>
-  <p class="d-none d-md-none d-lg-block">The first thing to do is to get or
+  <h5>First thing to do before creating a backpack</h5>
+  <p class="d-none d-md-none d-lg-block">is to get or
     create some equipments using Equipment panel. You can find it under the
     left side panel <span class="pointer a"
           role="button"
           (click)="showEquipmentHelp()">Equipments</span>.
   </p>
-  <p class="d-block d-sm-none">The first thing to do is to get or create some
+  <p class="d-block d-sm-none">is to get or create some
     equipments using Equipment menu. You can find it into the menu <button
             class="navbar-toggler"
             type="button"
@@ -25,9 +26,10 @@
                 [inline]="true">more_vert</mat-icon>
       <mat-icon class="fa-menu-open"
                 [inline]="true">more_horiz</mat-icon>
-    </button>.</p>
+    </button>. Then click on Equipment.</p>
+    <p>See you there ;)</p>
 </div>
-<app-top-errors [service]="service"></app-top-errors>
+  <app-top-errors [errors]="service.errors"></app-top-errors>
 <fieldset [disabled]="service.loading">
   <app-validation-and-search class="d-block d-sm-block d-md-block d-lg-block d-xl-none"
                              [service]="service"
@@ -92,6 +94,6 @@
 </div>
 <fieldset [disabled]="service.loading">
   <app-pagination [pagination]="service"></app-pagination>
-  <app-top-errors [service]="service"></app-top-errors>
+    <app-top-errors [errors]="service.errors"></app-top-errors>
 </fieldset>
 <app-backpack-modal #backpackModal></app-backpack-modal>

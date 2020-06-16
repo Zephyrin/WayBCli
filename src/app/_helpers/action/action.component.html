@@ -33,7 +33,7 @@
   </li>
 </ul>
 <div class="col d-none d-md-none d-lg-block"
-     *ngIf="service.canEditOrDelete(value)">
+     *ngIf="service.canEditOrDelete(value); else cannotEdit">
   <div class="btn-group"
        role="group"
        aria-label="Tools">
@@ -60,5 +60,11 @@
                 *ngIf="service.isValidator"></app-switch>
   </div>
 </div>
+<ng-template #cannotEdit>
+  <app-switch [value]="value.validate"
+                [disabled]="service.loading"
+                (isChecked)="service.updateValidate(value)"
+                *ngIf="service.isValidator"></app-switch>
+</ng-template>
 <span *ngIf="service.loading && service.selected === value"
       class="spinner-border spinner-border-sm mr-1"></span>

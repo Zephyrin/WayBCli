@@ -10,6 +10,7 @@ import { BrandComponent } from './equipment/brand/brand/brand.component';
 import { BackpacksComponent } from './backpack/backpacks/backpacks.component';
 import { UserManagementComponent } from './_admins/user-management/user-management.component';
 import { BackpackComponent } from './backpack/backpack/backpack.component';
+import { PopulateComponent } from './equimpent/_admin/populate/populate.component';
 
 const routes: Routes = [
     { path: '', component: BackpacksComponent, canActivate: [AuthGuard] },
@@ -24,6 +25,7 @@ const routes: Routes = [
     { path: 'equipmentsValidator', component: EquipmentComponent},
     { path: 'usersManagement', component: UserManagementComponent},
     { path: 'backpack', component: BackpackComponent },
+    { path: 'populateValues', component: PopulateComponent },
     // otherwise redirect to home
     { path: '**', redirectTo: '' }
 ];

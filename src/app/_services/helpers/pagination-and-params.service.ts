@@ -326,9 +326,9 @@ export abstract class PaginationAndParamsService<T> {
     let ret = headers.get('X-Total-Count');
     this.pagination.totalCount = parseInt(ret === null ? '0' : ret, 10);
     ret = headers.get('X-Pagination-Count');
-    this.pagination.paginationCount = parseInt(ret === null ? '0' : ret, 10);
+    this.pagination.paginationCount = parseInt(ret === null ? '1' : ret, 10);
     ret = headers.get('X-Pagination-Page');
-    this.goTo(parseInt(ret === null ? '0' : ret, 10));
+    this.goTo(parseInt(ret === null ? '1' : ret, 10));
     ret = headers.get('X-Pagination-Limit');
     this.setLimit(parseInt(ret === null ? '0' : ret, 10));
     this.pagination.lastPage = Math.ceil(

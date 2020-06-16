@@ -1,5 +1,5 @@
+import { FormErrors } from '@app/_errors/form-error';
 import { Component, OnInit, Input } from '@angular/core';
-import { PaginationAndParamsService } from '@app/_services/helpers/pagination-and-params.service';
 
 @Component({
   selector: 'app-top-errors',
@@ -7,7 +7,7 @@ import { PaginationAndParamsService } from '@app/_services/helpers/pagination-an
   styleUrls: ['./top-errors.component.scss']
 })
 export class TopErrorsComponent implements OnInit {
-  @Input() service: PaginationAndParamsService<any>;
+  @Input() errors: FormErrors;
   constructor() { }
 
   ngOnInit(): void {

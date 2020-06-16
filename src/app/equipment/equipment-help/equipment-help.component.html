@@ -1,0 +1,38 @@
+<div *ngIf="displayHelp()">
+    <p>An equipment is the one you put into your backpack for hikking or travelling.
+        It contains some basics characteristics like weight or price for a specific size.<br />
+        The default view, show all equipments you own or you wish.
+    </p>
+    <p>
+        Into the filter menu
+        <ng-container class="d-none d-sm-none d-md-none d-lg-block"><span class="pointer a" role="button"
+                (click)="showFilterSimblink('filterHelp')">below</span></ng-container>
+        <ng-container class="d-block d-sm-none d-md-none"><button
+                class="navbar-toggler topright d-block d-sm-none" type="button" data-toggle="collapse"
+                data-target=".filterDropdown" aria-expanded="false" aria-label="Toggle filter"
+                (click)="showFilterSimblink('filterHelp')">
+                <mat-icon [inline]="true">search</mat-icon>
+            </button></ng-container>, you can modify the equipment's list.
+    </p>
+    <p *ngIf="service.categoryService?.values?.length > 0; else elseCategoryBlock">The first row allow
+        you to filter on
+        category or sub-category.
+        A category is a type of equipments like <em>Clothes</em> or <em>Sleeping</em>. A sub-category is
+        more specific
+        than category. Into Clothes category you can distinguish <em>Pants</em> and <em>T-Shirts</em>.
+        Depending on what you are looking for, you can specify which sub category you want to display.
+    </p>
+    <ng-template #elseCategoryBlock>Congratulation, you just install Way B. ! First thing to do is to
+        create some
+        category and sub-category. Some more step and you will be able to add equipments and play with
+        it.
+        <br /> See you into Category page (you can find it on left side under <span
+            class="d-none d-md-none d-lg-inline-block pointer a" role="button"
+            (click)="showEquipmentHelp()">Category</span><span class="d-block d-sm-none"><button
+                class="navbar-toggler" type="button" data-toggle="collapse"
+                data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false"
+                (click)="showEquipmentHelp()" aria-label="Toggle navigation">
+                <mat-icon class="fa-menu-close" [inline]="true">more_vert</mat-icon>
+                <mat-icon class="fa-menu-open" [inline]="true">more_horiz</mat-icon>
+            </button></span>).</ng-template>
+</div>

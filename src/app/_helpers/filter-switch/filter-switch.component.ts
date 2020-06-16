@@ -1,10 +1,14 @@
-import { Component, Input, forwardRef, HostBinding } from '@angular/core';
+import {
+  Component,
+  Input,
+  forwardRef
+} from '@angular/core';
 import { ViewChild, EventEmitter, Output } from '@angular/core';
 import { Renderer2 } from '@angular/core';
 
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
-import { BooleanEnum} from '@app/_enums/boolean.enum';
+import { BooleanEnum } from '@app/_enums/boolean.enum';
 
 @Component({
   selector: 'app-filter-switch',
@@ -14,32 +18,17 @@ import { BooleanEnum} from '@app/_enums/boolean.enum';
     {
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => FilterSwitchComponent),
-      multi: true
-    }
-  ]
+      multi: true,
+    },
+  ],
 })
 export class FilterSwitchComponent implements ControlValueAccessor {
   @ViewChild('cmp', { static: false }) cmp;
 
   @Output() check = new EventEmitter();
 
-  @Input()
-  set disabled(disabled: boolean) {
-    this.disabledP = disabled;
-    if (this.disabledP) {
-      if (this.cmp) {
-        this.render.addClass(this.cmp.nativeElement, 'disabled');
-      }
-    } else {
-      if (this.cmp) {
-        this.render.removeClass(this.cmp.nativeElement, 'disabled');
-      }
-    }
-  }
+  @Input() disabled = false;
 
-  get disabled() { return this.disabledP; }
-
-  private disabledP = false;
   @Input()
   set value(val) {
     this.valueP = val;
@@ -53,11 +42,10 @@ export class FilterSwitchComponent implements ControlValueAccessor {
 
   @Input() text;
 
-  onChange: any = () => { };
-  onTouched: any = () => { };
+  onChange: any = () => {};
+  onTouched: any = () => {};
 
-
-  constructor(private render: Renderer2) { }
+  constructor(private render: Renderer2) {}
 
   registerOnChange(fn) {
     this.onChange = fn;
@@ -79,5 +67,7 @@ export class FilterSwitchComponent implements ControlValueAccessor {
     }
   }
 
-  get booleanEnum() { return BooleanEnum; }
+  get booleanEnum() {
+    return BooleanEnum;
+  }
 }

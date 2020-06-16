@@ -1,3 +1,6 @@
+import { Params } from '@angular/router';
+import { HttpParams } from '@angular/common/http';
+import { BooleanEnum } from './../../_enums/boolean.enum';
 import { Injectable } from '@angular/core';
 import { BrandService } from './brand.service';
 
@@ -12,8 +15,30 @@ import { ValidationAndSearchService } from '../helpers/validation-and-search.ser
 })
 export class BrandPaginationSearchService extends ValidationAndSearchService<Brand> {
 
-  constructor(private service: BrandService) {
+  public noPagination = BooleanEnum.undefined;
+
+  constructor(public service: BrandService) {
     super(service);
+  }
+
+  setDefaultParamsFromUrl(params: Params) {
+    super.setDefaultParamsFromUrl(params);
+    if (params && params.hasOwnProperty('noPagination')) {
+      this.noPagination = params.noPagination === 'true' ? BooleanEnum.true : BooleanEnum.false;
+    }
+  }
+
+  setHttpParameters(httpParams: HttpParams): HttpParams {
+    httpParams = super.setHttpParameters(httpParams);
+    if (this.noPagination) {
+      httpParams = httpParams.append('noPagination', this.noPagination);
+    }
+    return httpParams;
+  }
+
+  removeParamsFromUrl(query: {}) {
+    super.removeParamsFromUrl(query);
+    this.removeParam(query, 'noPagination');
   }
 
   getSortByEnum() {

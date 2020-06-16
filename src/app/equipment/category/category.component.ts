@@ -7,6 +7,7 @@ import { AuthenticationService } from '@app/_services';
 import { CategoryPaginationSearchService } from '@app/_services/category/category-pagination-search.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { SortByEnum } from '@app/_enums/category.enum';
+import { BooleanEnum } from '@app/_enums/boolean.enum';
 
 @Component({
   selector: 'app-category',
@@ -29,6 +30,7 @@ export class CategoryComponent implements OnInit {
     }
     if (window.location.pathname === '/categoriesValidator') {
       this.serviceP.isValidator = true;
+      this.isValidator = true;
     }
   }
 
@@ -37,7 +39,7 @@ export class CategoryComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
-      this.service.isValidator = this.isValidator;
+      this.service.noPagination = BooleanEnum.undefined;
       this.service.init(this.router, this.route, params);
     });
   }

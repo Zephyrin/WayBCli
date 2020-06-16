@@ -1,6 +1,6 @@
 <p *ngIf="backpackId === undefined && !service.loading">No backpack selected...
   nothing to show.</p>
-<app-top-errors [service]="service"></app-top-errors>
+  <app-top-errors [errors]="service.errors"></app-top-errors>
 <div class="row">
   <div class="col-10">
     <h3>Backpack {{service.selected?.name || ''}} <small

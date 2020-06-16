@@ -1,6 +1,7 @@
 <div (click)="clickCmp()"
       #cmp
-     class="pointer checkbox d-flex align-items-center">
+     class="pointer checkbox d-flex align-items-center"
+     [ngClass]="{'disabled': disabled}">
   <mat-icon *ngIf="value === booleanEnum.false || value === false" [inline]="true">
     check_box_outline_blank</mat-icon>
   <mat-icon *ngIf="value === booleanEnum.true || value === true" [inline]="true">check_box
