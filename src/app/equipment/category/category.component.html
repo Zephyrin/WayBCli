@@ -43,7 +43,7 @@
                        [sortBy]="sortByEnum.askValidate"></app-thead>
           </th>
           <th scope="col align-middle"
-              class="col-1 action align-middle">
+              class="col-1 action align-middle text-right">
             <app-thead [service]="service"
                        [text]="'Action'"
                        [sortBy]="isValidator ? sortByEnum.validate : sortByEnum.askValidate"></app-thead>
@@ -64,7 +64,7 @@
             <app-switch [value]="category.askValidate"
                         [disabled]="true"></app-switch>
           </td>
-          <td class="col-1 action align-middle">
+          <td class="col-1 action align-middle text-right">
             <app-action [service]="service"
                         [value]="category"
                         (delete)="categoryModal.onDelete(category)"
