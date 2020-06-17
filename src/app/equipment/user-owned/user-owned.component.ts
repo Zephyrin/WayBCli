@@ -11,7 +11,7 @@ declare var $: any;
 @Component({
   selector: 'app-user-owned',
   templateUrl: './user-owned.component.html',
-  styleUrls: ['./user-owned.component.scss']
+  styleUrls: ['./user-owned.component.scss'],
 })
 export class UserOwnedComponent implements OnInit {
   @ViewChild('cardFooterBody', { static: false }) cardFooterBody: ElementRef;
@@ -23,27 +23,27 @@ export class UserOwnedComponent implements OnInit {
   constructor(
     private authenticationService: AuthenticationService,
     private haveService: HaveService
-  ) {
-    this.authenticationService.currentUser.subscribe(
-      x => this.currentUser = x);
-  }
+  ) {}
 
   ngOnInit() {
-    if (this.currentUser.id !== undefined) {
-      this.loading = true;
-      this.haveService.getAll(this.currentUser.id)
+    // TODO Call two times because of the view I suppose (footer and side)
+    this.loading = true;
+    this.authenticationService.currentUser.subscribe((x) => {
+      this.currentUser = x;
+      this.haveService
+        .getAll(this.currentUser.id)
         .pipe(first())
-        .subscribe(haves => {
+        .subscribe((haves) => {
           this.loading = false;
           this.currentUser.haves = haves;
         });
-    }
+    });
   }
 
   get countWant() {
     let want = 0;
     if (this.currentUser && this.currentUser.haves) {
-      this.currentUser.haves.forEach(have => {
+      this.currentUser.haves.forEach((have) => {
         if (have.wantQuantity > 0) {
           want += have.wantQuantity;
         }
@@ -55,7 +55,7 @@ export class UserOwnedComponent implements OnInit {
   get countOwned() {
     let own = 0;
     if (this.currentUser && this.currentUser.haves) {
-      this.currentUser.haves.forEach(have => {
+      this.currentUser.haves.forEach((have) => {
         if (have.ownQuantity > 0) {
           own += have.ownQuantity;
         }
@@ -67,10 +67,13 @@ export class UserOwnedComponent implements OnInit {
   count(name) {
     let ret = 0;
     if (this.currentUser && this.currentUser.haves) {
-      this.currentUser.haves.forEach(have => {
-        if (have.characteristic !== undefined
-          && have.characteristic !== null
-          && have.ownQuantity > 0 && have.characteristic[name] > 0) {
+      this.currentUser.haves.forEach((have) => {
+        if (
+          have.characteristic !== undefined &&
+          have.characteristic !== null &&
+          have.ownQuantity > 0 &&
+          have.characteristic[name] > 0
+        ) {
           ret += have.characteristic[name] * have.ownQuantity;
         }
       });

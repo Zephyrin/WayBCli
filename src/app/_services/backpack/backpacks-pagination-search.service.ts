@@ -1,3 +1,4 @@
+import { HaveService } from '@app/_services/have.service';
 import { IntoBackpackService } from './../into-backpack.service';
 import { Injectable } from '@angular/core';
 import { BackpackHttpService } from './backpack.service';
@@ -34,7 +35,8 @@ export class BackpacksPaginationSearchService extends ValidationAndSearchService
 
   constructor(
     private service: BackpackHttpService,
-    private serviceIntoBackpack: IntoBackpackService
+    private serviceIntoBackpack: IntoBackpackService,
+    private haveService: HaveService
   ) {
     super(service);
   }
@@ -51,16 +53,20 @@ export class BackpacksPaginationSearchService extends ValidationAndSearchService
     const n = new Backpack(x);
     if (isInitSelected && this.user) {
       this.haves = [];
-      this.user.haves.forEach((val) => this.haves.push(Object.assign({}, val)));
-      this.haves.forEach((have) => {
-        const elts = n.intoBackpacks.filter(
-          (into) => into.equipment.id === have.id
-        );
-        if (elts.length > 0) {
-          elts.forEach((elt) => {
-            this.addInto(elt, have);
-          });
-        }
+      this.haveService.getAll(this.user.id).subscribe((haves) => {
+        this.loading = false;
+        this.haves = haves.map((have) => new Have(have));
+        this.haves.forEach((have) => {
+          const elts = n.intoBackpacks.filter(
+            (into) =>
+              into.equipment.characteristic.id === have.characteristic.id
+          );
+          if (elts.length > 0) {
+            elts.forEach((elt) => {
+              this.addInto(elt, have);
+            });
+          }
+        });
       });
     }
     return n;
@@ -161,10 +167,7 @@ export class BackpacksPaginationSearchService extends ValidationAndSearchService
       });
     }
     into.count = 0;
-    const index = this.selected.intoBackpacks.indexOf(into);
-    if (index >= 0) {
-      this.selected.intoBackpacks.splice(index, 1);
-    }
+    this.selected.removeInto(into);
   }
 
   /* Override methods */

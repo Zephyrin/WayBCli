@@ -4,12 +4,12 @@
 <app-top-errors [errors]="service.errors"></app-top-errors>
 <div class="row">
   <div class="col-10">
-    <h3>
-      Backpack {{ service.selected?.name || '' }}
+    <h1>
+      {{ service.selected?.name || '' }}
       <small *ngIf="currentUser.id != userId">
         created by {{ service.selected?.createdBy?.username || '' }}
       </small>
-    </h3>
+    </h1>
   </div>
   <div class="col-2">
     <a class="btn btn-ligth dropdown-toggle"
@@ -25,7 +25,7 @@
         role="menu"
         attr.aria-labelledby="action_{{ service.selected?.id || '0' }}"
         *ngIf="service.canEditOrDelete(service.selected)">
-      <li>
+      <li class="pointer">
         <mat-icon [inline]="true">update</mat-icon>
         Update
       </li>
@@ -36,9 +36,15 @@
     </ul>
   </div>
 </div>
-This backpack has
-{{ service.selected?.intoBackpacks?.length || '0' }} equipments. It weighs
-{{ service.selected?.countWeight() || '0' }}g.
+<span *ngIf="currentUser.id != userId">
+  This backpack has
+  {{ service.selected?.intoBackpacks?.length || '0' }} equipments.
+</span>
+<span *ngIf="currentUser.id == userId">You own {{ service.selected?.countTotalOwn() }} and you wish
+  {{ service.selected?.countTotalWish() }}, so that's {{ service.selected?.intoBackpacks?.length || '0' }}
+  equipments.</span>
+<br /> It weighs
+<b>{{ service.selected?.countWeight() || '0' }}g</b>.
 <h4>Equipments into backpack</h4>
 <p *ngIf="service.selected?.intoBackpacks?.length === 0 || false">
   There is no equipment into this backpack. Add an equipment from yours on the
@@ -47,59 +53,15 @@ This backpack has
 <div class="card-columns">
   <div class="card"
        *ngFor="let into of service.selected?.intoBackpacks || []">
-    <div class="card-header d-flex flex-row justify-content-between align-items-center pr-0">
-      <div>
-        <img [src]="into.equipment.equipment.brand.logo.url()"
-             [alt]="into.equipment.equipment.brand.logo.description"
-             class="card-img"
-             *ngIf="into.equipment.equipment.brand?.logo.hasUrl() || false" />
-      </div>
-      <div>
-        <h5 class="card-title">
-          {{ into.equipment.equipment.name }}
-        </h5>
-        <h6 class="card-subtitle mb-2 text-muted"
-            *ngIf="
-              (into.equipment.equipment.brand &&
-                !into.equipment.equipment.brand?.logo.hasUrl()) ||
-              false">
-          <small *ngIf="into.equipment.characteristic">
-            {{ into.equipment.characteristic.weight }}g
-          </small><br />
-          {{ into.equipment.equipment.brand.name }}
-          - {{ into.equipment.equipment.subCategory.name }}
-        </h6>
-        <h6 class="card-subtitle mb-2 text-muted"
-            *ngIf="
-              !into.equipment.equipment.brand ||
-              into.equipment.equipment.brand.logo.hasUrl()">
-          <small *ngIf="into.equipment.characteristic">
-            {{ into.equipment.characteristic.weight }}g
-          </small><br />
-          {{ into.equipment.equipment.subCategory.name }}
-        </h6>
-      </div>
-      <div class="btn-group pr-1"
-           role="button"
-           aria-label="Action">
-        <button type="button"
-                class="btn btn-light"
-                (click)="service.removeIntoBackpack(into, userId)">
-          <mat-icon [inline]="true">remove</mat-icon>
-        </button>
-        <button type="button"
-                class="btn btn-light"
-                data-toggle="collapse"
-                attr.data-target="#into_{{ into.equipment.id }}"
-                aria-expanded="false"
-                aria-label="Collapse description">
-          <mat-icon [inline]="true"
-                    class="expand_less">expand_less</mat-icon>
-          <mat-icon [inline]="true"
-                    class="expand_more">expand_more</mat-icon>
-        </button>
-      </div>
-    </div>
+    <ng-template [ngTemplateOutlet]="header"
+                 [ngTemplateOutletContext]="{
+                   equipment: into.equipment.equipment,
+                   characteristic: into.equipment.characteristic,
+                   into: into,
+                   expand: 'into',
+                   expandId: into.equipment.id
+                 }">
+    </ng-template>
     <div class="card-body collapse"
          id="into_{{ into.equipment.id }}">
       <p>
@@ -126,64 +88,15 @@ This backpack has
     <div class="card"
          *ngIf="(have.usedOwned === undefined || have.usedOwned === 0) &&
         (have.wantForUsed === undefined || have.wantForUsed === 0)">
-      <div class="card-header d-flex flex-row justify-content-between align-items-center pr-0">
-        <div>
-          <img [src]="have.equipment.brand.logo.url()"
-               [alt]="have.equipment.brand.logo.description"
-               class="card-img"
-               *ngIf="have.equipment.brand?.logo.hasUrl() || false" />
-        </div>
-        <div>
-          <h5 class="card-title">
-            {{ have.equipment.name }}
-          </h5>
-          <h6 class="card-subtitle mb-2 text-muted"
-              *ngIf="(have.equipment.brand &&
-                  !have.equipment.brand?.logo.hasUrl()) ||
-                false">
-
-            <small *ngIf="have.characteristic">
-              {{ have.characteristic.weight }}g
-            </small><br />
-            {{ have.equipment.brand.name }}
-            - {{ have.equipment.subCategory.name }}
-          </h6>
-          <h6 class="card-subtitle mb-2 text-muted"
-              *ngIf="!have.equipment.brand || have.equipment.brand.logo.hasUrl()">
-
-            <small *ngIf="have.characteristic">
-              {{ have.characteristic.weight }}g
-            </small><br />
-            {{ have.equipment.subCategory.name }}
-          </h6>
-        </div>
-
-        <div class="btn-group pr-1"
-             role="group"
-             aria-label="Action">
-          <button type="button"
-                  class="btn btn-light"
-                  (click)="service.addHaveToBackpack(have, userId)">
-            <mat-icon [inline]="true">add</mat-icon>
-          </button>
-          <button type="button"
-                  class="btn btn-light"
-                  data-toggle="collapse"
-                  attr.data-target="#have_{{ have.id }}"
-                  aria-expanded="false"
-                  aria-label="Collapse description">
-            <mat-icon [inline]="true"
-                      class="expand_less">
-              expand_less
-            </mat-icon>
-            <mat-icon [inline]="true"
-                      class="expand_more">
-              expand_more
-            </mat-icon>
-          </button>
-        </div>
-
-      </div>
+      <ng-template [ngTemplateOutlet]="header"
+                   [ngTemplateOutletContext]="{
+                      equipment: have.equipment,
+                      characteristic: have.characteristic,
+                      have: have,
+                      expand: 'have',
+                      expandId: have.id
+                    }">
+      </ng-template>
       <div class="card-body collapse"
            id="have_{{ have.id }}">
         <p>
@@ -203,6 +116,71 @@ This backpack has
 </div>
 
 <ng-template #header
-             let-equipment="equipment">
-
+             let-equipment="equipment"
+             let-characteristic="characteristic"
+             let-into="into"
+             let-have="have"
+             let-expand="expand"
+             let-expandId="expandId">
+  <div class="card-header d-flex flex-row justify-content-between align-items-center pr-0"
+       [ngClass]="{'wishOnly': isWishOnly(into, have)}">
+    <div>
+      <img [src]="equipment.brand.logo.url()"
+           [alt]="equipment.brand.logo.description"
+           class="card-img"
+           *ngIf="equipment.brand?.logo.hasUrl() || false" />
+    </div>
+    <div>
+      <h5 class="card-title">
+        <b>{{ equipment.name }}</b>
+      </h5>
+      <h6 class="card-subtitle mb-2 text-muted"
+          *ngIf="(equipment.brand && !equipment.brand?.logo.hasUrl()) ||
+                  false">
+        <small *ngIf="characteristic">
+          {{ characteristic.weight }}g
+        </small>
+        <small *ngIf="characteristic && (equipment.usedOwn + equipment.wantForUsed) > 1">
+          - {{ characteristic.weight * (equipment.usedOwn + equipment.wantForUsed) }}g
+        </small>
+        <br />
+        {{ equipment.brand.name }}
+        - {{ equipment.subCategory.name }}
+      </h6>
+      <h6 class="card-subtitle mb-2 text-muted"
+          *ngIf="!equipment.brand || equipment.brand.logo.hasUrl()">
+        <small *ngIf="characteristic">
+          {{ characteristic.weight }}g
+        </small><br />
+        {{ equipment.subCategory.name }}
+      </h6>
+    </div>
+    <div class="btn-group pr-1"
+         role="button"
+         aria-label="Action">
+      <button type="button"
+              *ngIf="into && currentUser.id == userId"
+              class="btn btn-light"
+              (click)="service.removeIntoBackpack(into, userId)">
+        <mat-icon [inline]="true">remove</mat-icon>
+      </button>
+      <button type="button"
+              class="btn btn-light"
+              *ngIf="have && currentUser.id == userId"
+              (click)="service.addHaveToBackpack(have, userId)">
+        <mat-icon [inline]="true">add</mat-icon>
+      </button>
+      <button type="button"
+              class="btn btn-light"
+              data-toggle="collapse"
+              attr.data-target="#{{ expand }}_{{ expandId }}"
+              aria-expanded="false"
+              aria-label="Collapse description">
+        <mat-icon [inline]="true"
+                  class="expand_less">expand_less</mat-icon>
+        <mat-icon [inline]="true"
+                  class="expand_more">expand_more</mat-icon>
+      </button>
+    </div>
+  </div>
 </ng-template>

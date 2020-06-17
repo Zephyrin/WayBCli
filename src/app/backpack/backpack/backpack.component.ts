@@ -1,3 +1,4 @@
+import { IntoBackpack } from '@app/_models/into-backpack';
 import { Component, OnInit, Input } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { AuthenticationService } from '@app/_services';
@@ -55,8 +56,7 @@ export class BackpackComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private authenticationService: AuthenticationService,
-    public service: BackpacksPaginationSearchService,
-    public userService: UserService
+    public service: BackpacksPaginationSearchService
   ) {
     if (!this.authenticationService.currentUserValue) {
       this.router.navigate(['/login?returnUrl=backpack']);
@@ -80,5 +80,18 @@ export class BackpackComponent implements OnInit {
     if (this.userId && this.backpackId && this.params) {
       this.service.initSelected(this.backpackId);
     }
+  }
+
+  isWishOnly(into: IntoBackpack, have: Have): boolean {
+    if (into) {
+      return (
+        into.equipment.wantForUsed !== undefined &&
+        into.equipment.wantForUsed > 0
+      );
+    }
+    if (have) {
+      return have.ownQuantity !== undefined && have.ownQuantity === 0;
+    }
+    return false;
   }
 }

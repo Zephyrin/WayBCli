@@ -8,6 +8,9 @@ export class Backpack {
   createdBy: User;
   private weight$ = 0;
   private price$ = 0;
+  private totalOwn$ = 0;
+  private totalWish$ = 0;
+
   constructor(backpack: Backpack = null) {
     if (backpack !== null && backpack !== undefined) {
       this.id = backpack.id;
@@ -19,6 +22,8 @@ export class Backpack {
       this.createdBy = new User(backpack.createdBy);
       this.price$ = backpack.price$;
       this.weight$ = backpack.weight$;
+      this.totalOwn$ = backpack.totalOwn$;
+      this.totalWish$ = backpack.totalWish$;
     }
   }
 
@@ -26,11 +31,23 @@ export class Backpack {
     this.intoBackpacks.push(into);
     this.weight$ += into.equipment.characteristic.weight;
     this.price$ += into.equipment.characteristic.price;
+    this.totalOwn$ += into.equipment.usedOwned ? into.equipment.usedOwned : 0;
+    this.totalWish$ += into.equipment.wantForUsed
+      ? into.equipment.wantForUsed
+      : 0;
   }
 
-  removeInto(iton: IntoBackpack) {
-    this.weight$ -= iton.equipment.characteristic.weight;
-    this.price$ -= iton.equipment.characteristic.price;
+  removeInto(into: IntoBackpack) {
+    const index = this.intoBackpacks.indexOf(into);
+    if (index >= 0) {
+      this.intoBackpacks.splice(index, 1);
+      this.weight$ -= into.equipment.characteristic.weight;
+      this.price$ -= into.equipment.characteristic.price;
+      this.totalOwn$ -= into.equipment.usedOwned ? into.equipment.usedOwned : 0;
+      this.totalWish$ -= into.equipment.wantForUsed
+        ? into.equipment.wantForUsed
+        : 0;
+    }
   }
 
   countWeight() {
@@ -55,5 +72,33 @@ export class Backpack {
       });
     }
     return this.price$;
+  }
+
+  countTotalWish() {
+    if (this.totalWish$ === undefined) {
+      this.totalWish$ = 0;
+    }
+    if (this.totalWish$ === 0) {
+      this.intoBackpacks.forEach((into) => {
+        this.totalWish$ += into.equipment.wantForUsed
+          ? into.equipment.wantForUsed
+          : 0;
+      });
+    }
+    return this.totalWish$;
+  }
+
+  countTotalOwn() {
+    if (this.totalOwn$ === undefined) {
+      this.totalOwn$ = 0;
+    }
+    if (this.totalOwn$ === 0) {
+      this.intoBackpacks.forEach((into) => {
+        this.totalOwn$ += into.equipment.usedOwned
+          ? into.equipment.usedOwned
+          : 0;
+      });
+    }
+    return this.totalOwn$;
   }
 }

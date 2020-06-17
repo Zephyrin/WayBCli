@@ -112,7 +112,7 @@ export abstract class PaginationAndParamsService<T> {
    * @param elt the element that has been added
    */
   addElement(elt: T): void {
-    this.values.push(this.newValue(elt));
+    this.values.push(this.newValue(elt, false));
     this.add();
   }
 
