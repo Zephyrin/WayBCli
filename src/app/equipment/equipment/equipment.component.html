@@ -23,14 +23,11 @@
     <table class="table">
       <thead>
         <tr class="align-items-center">
-          <th scope="col" class="col-md-2 col-sm-9 col-xs-9 align-middle">
+          <th scope="col" class="col-md-4 col-sm-9 col-xs-9 align-middle">
             <app-thead [service]="service" [text]="'Name'" [sortBy]="sortByEnum.name"></app-thead>
           </th>
           <th scope="col" class="col-md-3 d-none d-sm-table-cell align-middle">
             <app-thead [service]="service" [text]="'Link to manufacturer'" [sortBy]="sortByEnum.linkToManufacturer"></app-thead>
-          </th>
-          <th scope="col" class="col-md-2 d-none d-sm-table-cell d-md-table-cell align-middle">
-            <app-thead [service]="service" [text]="'Brand'" [sortBy]="sortByEnum.brand"></app-thead>
           </th>
           <th scope="col" class="col-md-2 d-none d-sm-table-cell d-md-table-cell align-middle">
             <app-thead [service]="service" [text]="'Sub-Category'" [sortBy]="sortByEnum.subCategory"></app-thead>
@@ -47,22 +44,17 @@
       <ng-container *ngFor="let equipment of service.values">
         <tr (click)="service.setSelected(equipment)" (dblclick)="updateDblClick(equipment)"
           [class.active]="equipment == service.selected" class="pointer">
-          <td class="align-middle"><b>{{equipment.name}}</b>
+          <td class="align-middle d-flex align-items-center">
+              <img *ngIf="equipment.brand?.logo.hasUrl() || false" [src]="equipment.brand?.logo.url()" [alt]="equipment.brand?.logo.description"
+                class="img-thumbnail rounded float-left" />
+            <span *ngIf="!equipment.brand?.logo.hasUrl() || false">{{equipment.brand?.name || ''}}</span>
+            <b>{{equipment.name}}</b>
           </td>
           <td class="d-none d-sm-table-cell align-middle">
             <a [attr.href]="service.returnUrl(equipment.linkToManufacturer)"
                target="_blank"
               rel="noopener noreferrer">
             {{equipment.linkToManufacturer | slice:0:25}}{{equipment.linkToManufacturer?.length > 25 ? '...' : ''}}</a>
-          </td>
-          <td class="d-none d-sm-table-cell d-md-table-cell align-middle"
-            *ngIf="equipment.brand?.logo.hasUrl() || false">
-            <img [src]="equipment.brand?.logo.url()" [alt]="equipment.brand?.logo.description"
-              class="img-thumbnail rounded mx-auto d-block" />
-          </td>
-          <td class="d-none d-sm-table-cell d-md-table-cell align-middle"
-            *ngIf="!equipment.brand?.logo.hasUrl() || false">
-            {{equipment.brand?.name || ''}}
           </td>
           <td class="d-none d-sm-table-cell d-md-table-cell align-middle">
             {{equipment.subCategory.name}}</td>
