@@ -57,10 +57,6 @@ export class BrandPaginationSearchService extends ValidationAndSearchService<Bra
     return `${environment.mediaUrl}/${brand.logo.filePath}`;
   }
 
-  returnUrl(uri: string) {
-    return /^http(s)?:\/\//.test(uri) ? uri : 'https://' + uri;
-  }
-
   canEditOrDelete(brand: Brand) {
     return this.isValidator ? !brand.askValidate : !brand.validate;
   }

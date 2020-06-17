@@ -142,31 +142,32 @@
                 </div>
               </div>
             </div>
+            <!-- Form linkToManufacturer-->
             <div class="form-group row">
-              <label for="equipmentDescription"
-                     class="col-sm-2 col-form-label pointer">Description</label>
+              <label for="equipmentLinkToManufacturer"
+                     class="col-sm-2 col-form-label pointer">Link to manufacturer</label>
               <div class="col-sm-10">
-                <textarea id="equipmentDescription"
-                          type="text"
-                          formControlName="description"
-                          class="form-control"
-                          [ngClass]="{ 'is-invalid': hasError('description') }">
-                      </textarea>
-                <div *ngIf="hasError('description')"
+                <input type="url"
+                       id="equipmentLinkToManufacturer"
+                      formControlName="linkToManufacturer"
+                      class="form-control"
+                      [ngClass]="{ 'is-invalid': hasError('linkToManufacturer') }" />
+                <div *ngIf="hasError('linkToManufacturer')"
                      class="invalid-feedback">
-                  <div *ngIf="f.description.errors
-                            && f.description.errors.required">
-                    Description is required
+                  <div *ngIf="f.linkToManufacturer.errors
+                            && f.linkToManufacturer.errors.pattern">
+                    Invalid address
                   </div>
-                  <div *ngIf="errors.hasErrors['description']">
+                  <div *ngIf="errors.hasErrors['linkToManufacturer']">
                     <div
-                         *ngFor="let child of errors.errors['description'].errors">
+                         *ngFor="let child of errors.errors['linkToManufacturer'].errors">
                       {{child}}
                     </div>
                   </div>
                 </div>
               </div>
             </div>
+            <!-- End form linkToManufacturer -->
             <app-characteristic [parentData]="selected"
                                 (create)="characteristicModal.create(selected)"
                                 (update)="characteristicModal.update(selected, $event)"

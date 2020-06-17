@@ -2,7 +2,7 @@ export enum SortByEnum {
   name = 'name',
   validate = 'validate',
   askValidate = 'askValidate',
-  description = 'description',
+  linkToManufacturer = 'linkToManufacturer',
   brand = 'brand',
   own = 'own',
   whish = 'whish',

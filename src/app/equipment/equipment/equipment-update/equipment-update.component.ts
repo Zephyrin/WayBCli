@@ -99,10 +99,11 @@ export class EquipmentUpdateComponent implements OnInit {
     this.categoryService.isValidator = false;
     this.brandServiceP.init(undefined, undefined, undefined);
     this.brandServiceP.isValidator = false;
+    const urlRegex = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/;
     this.form = this.formBuilder.group({
       id: [''],
       name: ['', Validators.required],
-      description: [''],
+      linkToManufacturer: ['', Validators.pattern(urlRegex)],
       brand: [null],
       subCategory: [null, Validators.required],
       characteristics: [[]]

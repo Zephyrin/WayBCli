@@ -142,6 +142,14 @@ export abstract class PaginationAndParamsService<T> {
     }
   }
 
+  /**
+   * Construct a valid URL with https:// as default if not exists.
+   * @param uri Return a valid url with https:// as default.
+   */
+  returnUrl(uri: string): string {
+    return /^http(s)?:\/\//.test(uri) ? uri : 'https://' + uri;
+  }
+
   public init(router: Router, route: ActivatedRoute, params: Params): Observable<HttpResponse<T[]>> {
     this.route = route;
     this.router = router;

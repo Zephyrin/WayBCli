@@ -32,7 +32,6 @@ import { SubCategoryUpdateComponent } from './equipment/sub-category/sub-categor
 import { CategoryValidatorComponent } from './equipment/category/category-validator/category-validator.component';
 import { SubCategoryValidatorComponent } from './equipment/sub-category/sub-category-validator/sub-category-validator.component';
 import { BrandComponent } from './equipment/brand/brand/brand.component';
-import { EquipmentValidatorComponent } from './equipment/equipment/equipment-validator/equipment-validator.component';
 import { CharacteristicValidatorComponent } from './equipment/characteristic/characteristic-validator/characteristic-validator.component';
 import { BackpacksComponent } from './backpack/backpacks/backpacks.component';
 import { BrandFilterComponent } from './equipment/brand/brand-filter/brand-filter.component';
@@ -80,7 +79,6 @@ import { PopulateComponent } from './equimpent/_admin/populate/populate.componen
     CategoryValidatorComponent,
     SubCategoryValidatorComponent,
     BrandComponent,
-    EquipmentValidatorComponent,
     CharacteristicValidatorComponent,
     BackpacksComponent,
     BrandFilterComponent,

@@ -8,7 +8,7 @@ import { Validation } from './validation';
 export class Equipment extends Validation {
   id: number;
   name: string;
-  description: string;
+  linkToManufacturer: string;
   brand: Brand;
   characteristics: Characteristic[];
   subCategory: SubCategory;
@@ -24,7 +24,7 @@ export class Equipment extends Validation {
     if (eq) {
       this.id = eq.id;
       this.name = eq.name;
-      this.description = eq.description;
+      this.linkToManufacturer = eq.linkToManufacturer;
       if (eq.brand !== undefined && eq.brand !== null) {
         this.brand = new Brand(eq.brand);
       }

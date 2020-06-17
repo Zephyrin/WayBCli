@@ -26,10 +26,10 @@
           <th scope="col" class="col-md-2 col-sm-9 col-xs-9 align-middle">
             <app-thead [service]="service" [text]="'Name'" [sortBy]="sortByEnum.name"></app-thead>
           </th>
-          <th scope="col" class="col-md-4 d-none d-sm-table-cell align-middle">
-            <app-thead [service]="service" [text]="'Description'" [sortBy]="sortByEnum.description"></app-thead>
+          <th scope="col" class="col-md-3 d-none d-sm-table-cell align-middle">
+            <app-thead [service]="service" [text]="'Link to manufacturer'" [sortBy]="sortByEnum.linkToManufacturer"></app-thead>
           </th>
-          <th scope="col" class="col-md-1 d-none d-sm-table-cell d-md-table-cell align-middle">
+          <th scope="col" class="col-md-2 d-none d-sm-table-cell d-md-table-cell align-middle">
             <app-thead [service]="service" [text]="'Brand'" [sortBy]="sortByEnum.brand"></app-thead>
           </th>
           <th scope="col" class="col-md-2 d-none d-sm-table-cell d-md-table-cell align-middle">
@@ -41,7 +41,7 @@
           <th scope="col" class="col-1 col-sm-1 col-xs-1 align-middle">
             <app-thead [service]="service" [text]="'Price'" [sortBy]="sortByEnum.price"></app-thead>
           </th>
-          <th scope="col" class="col-1 col-sm-1 col-xs-1 align-middle">Own<br />Whishes</th>
+          <th scope="col" class="col-1 col-sm-1 col-xs-1 align-middle text-right">Own<br />Whishes</th>
         </tr>
       </thead>
       <ng-container *ngFor="let equipment of service.values">
@@ -50,7 +50,10 @@
           <td class="align-middle"><b>{{equipment.name}}</b>
           </td>
           <td class="d-none d-sm-table-cell align-middle">
-            {{equipment.description | slice:0:75}}{{equipment.description.length > 75 ? '...' : ''}}
+            <a [attr.href]="service.returnUrl(equipment.linkToManufacturer)"
+               target="_blank"
+              rel="noopener noreferrer">
+            {{equipment.linkToManufacturer | slice:0:25}}{{equipment.linkToManufacturer?.length > 25 ? '...' : ''}}</a>
           </td>
           <td class="d-none d-sm-table-cell d-md-table-cell align-middle"
             *ngIf="equipment.brand?.logo.hasUrl() || false">
@@ -65,7 +68,7 @@
             {{equipment.subCategory.name}}</td>
           <td class="align-middle">{{equipment.compute('weight')}}g</td>
           <td class="align-middle">{{equipment.compute('price')}}</td>
-          <td class="align-middle">
+          <td class="align-middle text-right">
             <div class="btn-group" role="group" aria-label="Tools">
               <app-action [service]="service" [value]="equipment" (update)="equipmentUpdate.update(equipment)"
                 (delete)="equipmentUpdate.onDelete(equipment)">
