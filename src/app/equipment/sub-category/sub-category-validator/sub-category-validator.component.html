@@ -24,7 +24,7 @@
               <mat-icon [inline]="true">add</mat-icon>Sub-category name
             </button>
           </th>
-          <th class="col-1 action">Action</th>
+          <th class="col-1">Action</th>
         </tr>
       </thead>
       <tr *ngFor="let subCategory of subCategories"
@@ -35,7 +35,7 @@
         <td class="col-11">
           <b>{{subCategory.name}}</b>
         </td>
-        <td class="col-1 action">
+        <td class="col-1">
           <div class="btn-group"
                role="group"
                *ngIf="canEditOrDelete(subCategory)"

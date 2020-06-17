@@ -29,7 +29,7 @@
           <th scope="col"
               class="col-1"
               *ngIf="isValidator">Ask Validation</th>
-          <th class="col-1 action">Action</th>
+          <th class="col-1">Action</th>
         </tr>
       </thead>
       <tr *ngFor="let subCategory of subCategories"
@@ -45,7 +45,7 @@
           <app-switch [value]="subCategory.askValidate"
                       [disabled]="true"></app-switch>
         </td>
-        <td class="col-1 action">
+        <td class="col-1">
           <a class="btn btn-ligth dropdown-toggle d-block d-sm-none"
              id="action_sub_{{subCategory.id}}"
              role="button"
