@@ -4,17 +4,15 @@ import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
 import { environment } from '@environments/environment';
-import { AuthenticationService } from '@app/_services/authentication.service';
 
 import { Backpack } from '@app/_models/backpack.ts';
 import { User } from '@app/_models/';
-import { Router } from '@angular/router';
 import { HttpService } from '../http.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class BackpackService extends HttpService<Backpack> {
+export class BackpackHttpService extends HttpService<Backpack> {
   public userId: number;
   constructor(
     private http: HttpClient) {

@@ -13,7 +13,7 @@ export class Backpack {
       this.id = backpack.id;
       this.name = backpack.name;
       this.intoBackpacks = [];
-      backpack.intoBackpacks.forEach(into => {
+      backpack.intoBackpacks.forEach((into) => {
         this.intoBackpacks.push(new IntoBackpack(into));
       });
       this.createdBy = new User(backpack.createdBy);
@@ -24,13 +24,13 @@ export class Backpack {
 
   addInto(into: IntoBackpack) {
     this.intoBackpacks.push(into);
-    this.weight$ += into.have.characteristic.weight;
-    this.price$ += into.have.characteristic.price;
+    this.weight$ += into.equipment.characteristic.weight;
+    this.price$ += into.equipment.characteristic.price;
   }
 
   removeInto(iton: IntoBackpack) {
-    this.weight$ -= iton.have.characteristic.weight;
-    this.price$ -= iton.have.characteristic.price;
+    this.weight$ -= iton.equipment.characteristic.weight;
+    this.price$ -= iton.equipment.characteristic.price;
   }
 
   countWeight() {
@@ -38,8 +38,8 @@ export class Backpack {
       this.weight$ = 0;
     }
     if (this.weight$ === 0) {
-      this.intoBackpacks.forEach(into => {
-        this.weight$ += into.have.characteristic.weight * into.count;
+      this.intoBackpacks.forEach((into) => {
+        this.weight$ += into.equipment.characteristic.weight * into.count;
       });
     }
     return this.weight$;
@@ -50,8 +50,8 @@ export class Backpack {
       this.price$ = 0;
     }
     if (this.price$ === 0) {
-      this.intoBackpacks.forEach(into => {
-        this.price$ += into.have.characteristic.price * into.count;
+      this.intoBackpacks.forEach((into) => {
+        this.price$ += into.equipment.characteristic.price * into.count;
       });
     }
     return this.price$;

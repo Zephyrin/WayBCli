@@ -11,10 +11,11 @@ import { environment } from '@environments/environment';
 import { ValidationAndSearchService } from '../helpers/validation-and-search.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
-export class BrandPaginationSearchService extends ValidationAndSearchService<Brand> {
-
+export class BrandPaginationSearchService extends ValidationAndSearchService<
+  Brand
+> {
   public noPagination = BooleanEnum.undefined;
 
   constructor(public service: BrandService) {
@@ -24,7 +25,8 @@ export class BrandPaginationSearchService extends ValidationAndSearchService<Bra
   setDefaultParamsFromUrl(params: Params) {
     super.setDefaultParamsFromUrl(params);
     if (params && params.hasOwnProperty('noPagination')) {
-      this.noPagination = params.noPagination === 'true' ? BooleanEnum.true : BooleanEnum.false;
+      this.noPagination =
+        params.noPagination === 'true' ? BooleanEnum.true : BooleanEnum.false;
     }
   }
 
@@ -49,7 +51,7 @@ export class BrandPaginationSearchService extends ValidationAndSearchService<Bra
     return SortByEnum.name;
   }
 
-  newValue(x: any): Brand {
+  newValue(x: any, isInitSelected: boolean): Brand {
     return new Brand(x);
   }
 

@@ -3,10 +3,15 @@
   justify-content: center;
 }
 
-button[aria-expanded=false] .expand_less{
+button[aria-expanded='false'] .expand_less {
   display: none;
 }
 
-button[aria-expanded=true] .expand_more{
+button[aria-expanded='true'] .expand_more {
   display: none;
+}
+
+.card-img {
+  max-width: 100px;
+  max-height: 100px;
 }

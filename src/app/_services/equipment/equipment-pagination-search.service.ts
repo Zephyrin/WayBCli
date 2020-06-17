@@ -12,9 +12,11 @@ import { BrandPaginationSearchService } from '../brand/brand-pagination-search.s
 import { CategoryPaginationSearchService } from '../category/category-pagination-search.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
-export class EquipmentPaginationSearchService extends ValidationAndSearchService<Equipment> {
+export class EquipmentPaginationSearchService extends ValidationAndSearchService<
+  Equipment
+> {
   public currentUser: User;
 
   /* Search */
@@ -27,14 +29,15 @@ export class EquipmentPaginationSearchService extends ValidationAndSearchService
   constructor(
     private service: EquipmentService,
     public brandService: BrandPaginationSearchService,
-    public categoryService: CategoryPaginationSearchService) {
+    public categoryService: CategoryPaginationSearchService
+  ) {
     super(service);
     brandService.isValidator = false;
     categoryService.isValidator = false;
-    brandService.initDone.subscribe(x => {
+    brandService.initDone.subscribe((x) => {
       this.initBelongToBrand(undefined);
     });
-    categoryService.initDone.subscribe(x => {
+    categoryService.initDone.subscribe((x) => {
       this.initBelongToSub(undefined);
     });
     brandService.init(undefined, undefined, undefined);
@@ -48,10 +51,11 @@ export class EquipmentPaginationSearchService extends ValidationAndSearchService
     return SortByEnum.name;
   }
 
-  newValue(x: any): Equipment {
+  newValue(x: any, isInitSelected: boolean): Equipment {
     const equipment = new Equipment(x);
-    if (this.currentUser.haves.some(
-      have => have.equipment.id === equipment.id)) {
+    if (
+      this.currentUser.haves.some((have) => have.equipment.id === equipment.id)
+    ) {
       equipment.has = true;
     }
     return equipment;
@@ -104,20 +108,20 @@ export class EquipmentPaginationSearchService extends ValidationAndSearchService
     }
     if (this.brandService.values !== undefined && this.arrayBrands) {
       if (this.arrayBrands.length > 0) {
-        this.arrayBrands.forEach(x => {
-          this.brandService.values.forEach(brand => {
+        this.arrayBrands.forEach((x) => {
+          this.brandService.values.forEach((brand) => {
             if (brand.id === x) {
               brand.inFilter = BooleanEnum.true;
             }
           });
         });
-        this.brandService.values.forEach(brand => {
+        this.brandService.values.forEach((brand) => {
           if (brand.inFilter === BooleanEnum.undefined) {
             brand.inFilter = BooleanEnum.false;
           }
         });
       } else {
-        this.brandService.values.forEach(brand => {
+        this.brandService.values.forEach((brand) => {
           if (brand.inFilter === BooleanEnum.undefined) {
             brand.inFilter = BooleanEnum.true;
           }
@@ -132,25 +136,25 @@ export class EquipmentPaginationSearchService extends ValidationAndSearchService
     }
     if (this.categoryService.values !== undefined && this.arraySubCategories) {
       if (this.arraySubCategories.length > 0) {
-        this.arraySubCategories.forEach(x => {
-          this.categoryService.values.forEach(cat => {
-            cat.subCategories.forEach(sub => {
+        this.arraySubCategories.forEach((x) => {
+          this.categoryService.values.forEach((cat) => {
+            cat.subCategories.forEach((sub) => {
               if (sub.id === x) {
                 sub.inFilter = BooleanEnum.true;
               }
             });
           });
         });
-        this.categoryService.values.forEach(cat => {
-          cat.subCategories.forEach(sub => {
+        this.categoryService.values.forEach((cat) => {
+          cat.subCategories.forEach((sub) => {
             if (sub.inFilter === BooleanEnum.undefined) {
               sub.inFilter = BooleanEnum.false;
             }
           });
         });
       } else {
-        this.categoryService.values.forEach(cat => {
-          cat.subCategories.forEach(sub => {
+        this.categoryService.values.forEach((cat) => {
+          cat.subCategories.forEach((sub) => {
             if (sub.inFilter === BooleanEnum.undefined) {
               sub.inFilter = BooleanEnum.true;
             }
@@ -184,8 +188,8 @@ export class EquipmentPaginationSearchService extends ValidationAndSearchService
       let str = '[';
       let allInclude = true;
       let noneInclude = true;
-      this.categoryService.values.forEach(cat => {
-        cat.subCategories.forEach(sub => {
+      this.categoryService.values.forEach((cat) => {
+        cat.subCategories.forEach((sub) => {
           if (sub.inFilter === BooleanEnum.true) {
             str += sub.id + ',';
             noneInclude = false;
@@ -204,7 +208,7 @@ export class EquipmentPaginationSearchService extends ValidationAndSearchService
       let str = '[';
       let allInclude = true;
       let noneInclude = true;
-      this.brandService.values.forEach(brand => {
+      this.brandService.values.forEach((brand) => {
         if (brand.inFilter === BooleanEnum.true) {
           str += brand.id + ',';
           noneInclude = false;
@@ -224,7 +228,7 @@ export class EquipmentPaginationSearchService extends ValidationAndSearchService
   checkAllBrands() {
     let isAllChecked = true;
     let isAllUnchecked = true;
-    this.brandService.values.forEach(brand => {
+    this.brandService.values.forEach((brand) => {
       if (brand.inFilter !== BooleanEnum.true) {
         isAllChecked = false;
       } else {
@@ -239,7 +243,7 @@ export class EquipmentPaginationSearchService extends ValidationAndSearchService
     } else {
       val = BooleanEnum.true;
     }
-    this.brandService.values.forEach(brand => {
+    this.brandService.values.forEach((brand) => {
       brand.inFilter = val;
     });
     if (val === BooleanEnum.true) {
@@ -248,8 +252,10 @@ export class EquipmentPaginationSearchService extends ValidationAndSearchService
   }
 
   checkBrand(brand: Brand) {
-    brand.inFilter = brand.inFilter === BooleanEnum.true ?
-      BooleanEnum.false : BooleanEnum.true;
+    brand.inFilter =
+      brand.inFilter === BooleanEnum.true
+        ? BooleanEnum.false
+        : BooleanEnum.true;
     this.changePage();
   }
 
@@ -257,7 +263,7 @@ export class EquipmentPaginationSearchService extends ValidationAndSearchService
     let hasChecked = false;
     let hasUnchecked = false;
     if (this.brandService.values) {
-      this.brandService.values.forEach(brand => {
+      this.brandService.values.forEach((brand) => {
         if (brand.inFilter === BooleanEnum.true) {
           hasChecked = true;
         } else {
@@ -276,7 +282,7 @@ export class EquipmentPaginationSearchService extends ValidationAndSearchService
   checkAllSubCategories(category: Category) {
     let isAllChecked = true;
     let isAllUnchecked = true;
-    category.subCategories.forEach(sub => {
+    category.subCategories.forEach((sub) => {
       if (sub.inFilter !== BooleanEnum.true) {
         isAllChecked = false;
       } else {
@@ -291,22 +297,24 @@ export class EquipmentPaginationSearchService extends ValidationAndSearchService
     } else {
       val = BooleanEnum.true;
     }
-    category.subCategories.forEach(sub => {
+    category.subCategories.forEach((sub) => {
       sub.inFilter = val;
     });
     this.changePage();
   }
 
   checkSubCategories(subCategory: SubCategory) {
-    subCategory.inFilter = subCategory.inFilter === BooleanEnum.true ?
-      BooleanEnum.false : BooleanEnum.true;
+    subCategory.inFilter =
+      subCategory.inFilter === BooleanEnum.true
+        ? BooleanEnum.false
+        : BooleanEnum.true;
     this.changePage();
   }
 
   subCategoryAreAllChecked(category: Category) {
     let hasChecked = false;
     let hasUnchecked = false;
-    category.subCategories.forEach(sub => {
+    category.subCategories.forEach((sub) => {
       if (sub.inFilter === BooleanEnum.true) {
         hasChecked = true;
       } else {

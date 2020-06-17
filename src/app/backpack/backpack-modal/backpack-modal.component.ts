@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, SimpleChange, OnDestroy } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { BackpackPaginationSearchService } from '@app/_services/backpack/backpack-pagination-search.service';
+import { BackpacksPaginationSearchService } from '@app/_services/backpack/backpacks-pagination-search.service';
 import { Backpack } from '@app/_models';
 import { FormErrors } from '@app/_errors';
 import { Subscription } from 'rxjs';
@@ -31,7 +31,7 @@ export class BackpackModalComponent implements OnInit, OnDestroy {
   get isCreateForm() { return this.simpleChange && this.simpleChange.previousValue === null; }
   constructor(
     private formBuilder: FormBuilder,
-    public service: BackpackPaginationSearchService
+    public service: BackpacksPaginationSearchService
   ) { }
 
   ngOnInit(): void {

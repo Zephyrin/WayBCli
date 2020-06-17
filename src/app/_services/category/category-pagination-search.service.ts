@@ -12,10 +12,11 @@ import { ValidationAndSearchService } from '../helpers/validation-and-search.ser
 import { Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
-export class CategoryPaginationSearchService extends ValidationAndSearchService<Category> {
-
+export class CategoryPaginationSearchService extends ValidationAndSearchService<
+  Category
+> {
   /* Search */
   public lower: string = undefined;
   public lowerOrEq: string = undefined;
@@ -23,8 +24,7 @@ export class CategoryPaginationSearchService extends ValidationAndSearchService<
   public greater: string = undefined;
   public greaterOrEq: string = undefined;
   public noPagination = BooleanEnum.undefined;
-  constructor(
-    public service: CategoryService) {
+  constructor(public service: CategoryService) {
     super(service);
   }
 
@@ -42,7 +42,9 @@ export class CategoryPaginationSearchService extends ValidationAndSearchService<
     this.lower = this.lowerOrEq = this.eq = this.greater = this.greaterOrEq = undefined;
     if (params && params.hasOwnProperty('subCategoryCount')) {
       const $subCategoryCount = params.subCategoryCount;
-      const $match = /(l|le|e|g|ge)(\d+)((l|le|e|g|ge)(\d+))?/.exec($subCategoryCount);
+      const $match = /(l|le|e|g|ge)(\d+)((l|le|e|g|ge)(\d+))?/.exec(
+        $subCategoryCount
+      );
       for (let $i = 1; $i <= 3; $i = $i + 2) {
         if ($match[$i] !== undefined && $match[$i] !== undefined) {
           switch ($match[$i]) {
@@ -68,7 +70,8 @@ export class CategoryPaginationSearchService extends ValidationAndSearchService<
       }
     }
     if (params && params.hasOwnProperty('noPagination')) {
-      this.noPagination = params.noPagination === 'true' ? BooleanEnum.true : BooleanEnum.false;
+      this.noPagination =
+        params.noPagination === 'true' ? BooleanEnum.true : BooleanEnum.false;
     }
   }
 
@@ -78,8 +81,8 @@ export class CategoryPaginationSearchService extends ValidationAndSearchService<
     lowerOrEq: string,
     eq: string,
     greater: string,
-    greaterOrEq: string): Observable<HttpResponse<Category[]>> {
-
+    greaterOrEq: string
+  ): Observable<HttpResponse<Category[]>> {
     this.lower = lower;
     this.lowerOrEq = lowerOrEq;
     this.eq = eq;
@@ -91,13 +94,29 @@ export class CategoryPaginationSearchService extends ValidationAndSearchService<
   setHttpParameters(httpParams: HttpParams): HttpParams {
     httpParams = super.setHttpParameters(httpParams);
 
-    if (this.lower || this.lowerOrEq || this.eq || this.greater || this.greaterOrEq) {
+    if (
+      this.lower ||
+      this.lowerOrEq ||
+      this.eq ||
+      this.greater ||
+      this.greaterOrEq
+    ) {
       let val = '';
-      if (this.lower) { val = 'l' + this.lower; }
-      if (this.lowerOrEq) { val = 'le' + this.lowerOrEq; }
-      if (this.eq) { val = 'e' + this.eq; }
-      if (this.greater) { val = 'g' + this.greater; }
-      if (this.greaterOrEq) { val = 'ge' + this.greaterOrEq; }
+      if (this.lower) {
+        val = 'l' + this.lower;
+      }
+      if (this.lowerOrEq) {
+        val = 'le' + this.lowerOrEq;
+      }
+      if (this.eq) {
+        val = 'e' + this.eq;
+      }
+      if (this.greater) {
+        val = 'g' + this.greater;
+      }
+      if (this.greaterOrEq) {
+        val = 'ge' + this.greaterOrEq;
+      }
       httpParams = httpParams.append('subCategoryCount', val);
     }
     if (this.noPagination) {
@@ -112,7 +131,7 @@ export class CategoryPaginationSearchService extends ValidationAndSearchService<
     this.removeParam(query, 'noPagination');
   }
 
-  newValue(x: any): Category {
+  newValue(x: any, isInitSelected: boolean): Category {
     return new Category(x);
   }
 
@@ -123,5 +142,4 @@ export class CategoryPaginationSearchService extends ValidationAndSearchService<
   onUpdateDone(simple: SimpleChange) {
     this.createUpdateDelete(simple);
   }
-
 }

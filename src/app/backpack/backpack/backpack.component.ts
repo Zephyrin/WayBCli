@@ -1,14 +1,14 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { AuthenticationService } from '@app/_services';
-import { BackpackPaginationSearchService } from '@app/_services/backpack/backpack-pagination-search.service';
+import { BackpacksPaginationSearchService } from '@app/_services/backpack/backpacks-pagination-search.service';
 import { User, Have } from '@app/_models';
 import { UserService } from '@app/_services/user.service';
 
 @Component({
   selector: 'app-backpack',
   templateUrl: './backpack.component.html',
-  styleUrls: ['./backpack.component.scss']
+  styleUrls: ['./backpack.component.scss'],
 })
 export class BackpackComponent implements OnInit {
   @Input()
@@ -43,6 +43,7 @@ export class BackpackComponent implements OnInit {
     }
     this.init();
   }
+
   get params(): Params {
     return this.params$;
   }
@@ -54,20 +55,23 @@ export class BackpackComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private authenticationService: AuthenticationService,
-    public service: BackpackPaginationSearchService,
-    public userService: UserService) {
+    public service: BackpacksPaginationSearchService,
+    public userService: UserService
+  ) {
     if (!this.authenticationService.currentUserValue) {
       this.router.navigate(['/login?returnUrl=backpack']);
     }
-    this.authenticationService.currentUser.subscribe(
-      x => {
-        this.currentUser = new User(x);
-        if (this.userId === undefined) { this.userId = x.id; }
-      });
+    this.authenticationService.currentUser.subscribe((x) => {
+      this.currentUser = new User(x);
+      if (this.userId === undefined) {
+        this.userId = x.id;
+      }
+      this.service.user = this.currentUser;
+    });
   }
 
   ngOnInit(): void {
-    this.route.queryParams.subscribe(params => {
+    this.route.queryParams.subscribe((params) => {
       this.params = params;
     });
   }

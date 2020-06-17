@@ -9,10 +9,9 @@ import { SortService } from '../helpers/sort.service';
 import { FormErrors } from '@app/_errors';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class UserPaginationSearchService extends SortService<User> {
-
   /* Search */
   public sortBy = SortByEnum.username;
 
@@ -32,7 +31,7 @@ export class UserPaginationSearchService extends SortService<User> {
     return SortByEnum.username;
   }
 
-  newValue(x: any): User {
+  newValue(x: any, isInitSelected: boolean): User {
     return new User(x);
   }
 
@@ -51,12 +50,15 @@ export class UserPaginationSearchService extends SortService<User> {
       this.loading = true;
       const previousRole = user.roles;
       user.roles = [role];
-      this.service.update(user).subscribe(ret => {
-        this.endTransaction();
-      }, error => {
-        user.roles = previousRole;
-        this.endTransactionError(error);
-      });
+      this.service.update(user).subscribe(
+        (ret) => {
+          this.endTransaction();
+        },
+        (error) => {
+          user.roles = previousRole;
+          this.endTransactionError(error);
+        }
+      );
     }
   }
 

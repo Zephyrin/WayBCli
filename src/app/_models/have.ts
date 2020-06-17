@@ -8,12 +8,13 @@ export class Have {
   equipment: Equipment;
   characteristic: Characteristic;
 
-  /* Not used by server */
   /**
+   * Not used by server.
    * Number of equipment into a backpack that used this equipment.
    */
   usedOwned: number;
   /**
+   * Not used by server.
    * Number of equipment that the user should buy to complete the backpack.
    */
   wantForUsed: number;

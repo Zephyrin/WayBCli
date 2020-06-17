@@ -33,9 +33,7 @@ export abstract class PaginationAndParamsService<T> {
   private router: Router;
   private route: ActivatedRoute;
 
-  constructor(
-    httpService: HttpService<T>,
-    pagination: Pagination = null) {
+  constructor(httpService: HttpService<T>, pagination: Pagination = null) {
     this.httpService = httpService;
     if (pagination !== null) {
       this.pagination = pagination;
@@ -47,7 +45,7 @@ export abstract class PaginationAndParamsService<T> {
   /**
    * Create a value based on JSON response.
    */
-  abstract newValue(x: any): T;
+  abstract newValue(x: any, isInitSelected: boolean): T;
   /**
    * Set http parameters just before sending the request getAll().
    */
@@ -68,10 +66,10 @@ export abstract class PaginationAndParamsService<T> {
     httpParams = this.setHttpParameters(httpParams);
     this.paramsIntoUrl(httpParams);
     const obs = this.httpService.getAll(httpParams);
-    obs.subscribe(response => {
+    obs.subscribe((response) => {
       this.loading = false;
       this.setParametersFromResponse(response.headers);
-      this.values = response.body.map(x => this.newValue(x));
+      this.values = response.body.map((x) => this.newValue(x, false));
       this.initDone.emit(null);
       return response;
     });
@@ -81,14 +79,18 @@ export abstract class PaginationAndParamsService<T> {
   /**
    * Get the list of element.
    */
-  public list(): T[] { return this.values; }
+  public list(): T[] {
+    return this.values;
+  }
 
   /**
    * Display the name of an element.
    */
   public displayName(elt: T): string {
     const field = 'name';
-    if (elt.hasOwnProperty(field)) { return elt[field]; }
+    if (elt.hasOwnProperty(field)) {
+      return elt[field];
+    }
     return '';
   }
 
@@ -98,7 +100,9 @@ export abstract class PaginationAndParamsService<T> {
    */
   public getId(elt: T): number {
     const field = 'id';
-    if (elt.hasOwnProperty(field)) { return elt[field]; }
+    if (elt.hasOwnProperty(field)) {
+      return elt[field];
+    }
     return -1;
   }
 
@@ -150,7 +154,11 @@ export abstract class PaginationAndParamsService<T> {
     return /^http(s)?:\/\//.test(uri) ? uri : 'https://' + uri;
   }
 
-  public init(router: Router, route: ActivatedRoute, params: Params): Observable<HttpResponse<T[]>> {
+  public init(
+    router: Router,
+    route: ActivatedRoute,
+    params: Params
+  ): Observable<HttpResponse<T[]>> {
     this.route = route;
     this.router = router;
     this.errors = new FormErrors();
@@ -163,12 +171,15 @@ export abstract class PaginationAndParamsService<T> {
     this.errors = new FormErrors();
     this.loading = true;
     const obs = this.httpService.get(id);
-    obs.subscribe(response => {
-      this.selected = this.newValue(response);
-      this.loading = false;
-    }, error => {
-      this.errors.formatError(error);
-    });
+    obs.subscribe(
+      (response) => {
+        this.selected = this.newValue(response, true);
+        this.loading = false;
+      },
+      (error) => {
+        this.errors.formatError(error);
+      }
+    );
   }
 
   setSelected(value: T) {
@@ -195,29 +206,34 @@ export abstract class PaginationAndParamsService<T> {
       this.setSelected(value);
       this.loading = true;
       value[field] = !value[field];
-      this.httpService.update(value)
-        .subscribe(returnValue => {
+      this.httpService.update(value).subscribe(
+        (returnValue) => {
           this.loading = false;
-        }, (error: any) => {
+        },
+        (error: any) => {
           this.errors.formatError(error);
           value[field] = !value[field];
           this.loading = false;
-        });
+        }
+      );
     }
   }
 
   delete(simpleChange: SimpleChange) {
     this.loading = true;
     this.endTransactionError(undefined);
-    this.httpService.delete(simpleChange.previousValue).subscribe(next => {
-      this._delete(simpleChange);
-    }, error => {
-      if (error.status === 404) {
+    this.httpService.delete(simpleChange.previousValue).subscribe(
+      (next) => {
         this._delete(simpleChange);
-      } else {
-        this.endTransactionError(error);
+      },
+      (error) => {
+        if (error.status === 404) {
+          this._delete(simpleChange);
+        } else {
+          this.endTransactionError(error);
+        }
       }
-    });
+    );
   }
 
   private _delete(simpleChange: SimpleChange) {
@@ -316,10 +332,12 @@ export abstract class PaginationAndParamsService<T> {
   getHttpParameters() {
     let httpParams = new HttpParams();
     httpParams = httpParams.append(
-      'page', this.pagination.paginationPage.toString()
+      'page',
+      this.pagination.paginationPage.toString()
     );
     httpParams = httpParams.append(
-      'limit', this.pagination.paginationLimit.toString()
+      'limit',
+      this.pagination.paginationLimit.toString()
     );
     return httpParams;
   }
@@ -366,22 +384,19 @@ export abstract class PaginationAndParamsService<T> {
    *
    * @param httpParams Parameters use to call HTTP Get
    */
-  paramsIntoUrl(
-    httpParams: HttpParams) {
+  paramsIntoUrl(httpParams: HttpParams) {
     const query = {};
-    httpParams.keys().forEach(key => {
+    httpParams.keys().forEach((key) => {
       const val = httpParams.get(key);
       query[key] = val;
     });
     this.removeParamsFromUrl(query);
     if (this.router && this.route) {
-      this.router.navigate(
-        [],
-        {
-          relativeTo: this.route,
-          queryParams: query,
-          queryParamsHandling: 'merge'
-        });
+      this.router.navigate([], {
+        relativeTo: this.route,
+        queryParams: query,
+        queryParamsHandling: 'merge',
+      });
     }
   }
 
@@ -400,7 +415,9 @@ export abstract class PaginationAndParamsService<T> {
   setLimit(limit: number) {
     if (limit > 0 && this.pagination.paginationLimit !== limit) {
       this.pagination.paginationLimit = limit;
-      if (!this.isInit) { this.changePage(); }
+      if (!this.isInit) {
+        this.changePage();
+      }
     }
   }
 
@@ -423,7 +440,9 @@ export abstract class PaginationAndParamsService<T> {
     } else if (this.pagination.paginationPage > this.pagination.lastPage) {
       this.pagination.paginationPage = this.pagination.lastPage;
     } else {
-      if (!this.isInit) { this.changePage(); }
+      if (!this.isInit) {
+        this.changePage();
+      }
     }
   }
 
@@ -434,10 +453,16 @@ export abstract class PaginationAndParamsService<T> {
    * @param page the new page of pagination.
    */
   goTo(page: number) {
-    if (!this.isInit && page >= this.pagination.firstPage && page <= this.pagination.lastPage) {
+    if (
+      !this.isInit &&
+      page >= this.pagination.firstPage &&
+      page <= this.pagination.lastPage
+    ) {
       if (this.pagination.paginationPage !== page) {
         this.pagination.paginationPage = page;
-        if (!this.isInit) { this.changePage(); }
+        if (!this.isInit) {
+          this.changePage();
+        }
       }
     } else {
       this.pagination.paginationPage = page;
@@ -452,7 +477,9 @@ export abstract class PaginationAndParamsService<T> {
     if (this.pagination.paginationPage > this.pagination.lastPage) {
       this.pagination.paginationPage = this.pagination.lastPage;
     } else {
-      if (!this.isInit) { this.changePage(); }
+      if (!this.isInit) {
+        this.changePage();
+      }
     }
   }
 
@@ -471,7 +498,9 @@ export abstract class PaginationAndParamsService<T> {
    * page 3 with a limit of 10, then you already got 20 records.
    */
   posBeginCount() {
-    if (this.page() === 0) { return 0; }
+    if (this.page() === 0) {
+      return 0;
+    }
     return (this.page() - 1) * this.limit() + 1;
   }
 

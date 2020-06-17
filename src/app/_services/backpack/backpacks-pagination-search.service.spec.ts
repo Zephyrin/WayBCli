@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { BackpackPaginationSearchService } from './backpack-pagination-search.service';
+import { BackpacksPaginationSearchService } from './backpacks-pagination-search.service';
 
 describe('BackpackPaginationSearchService', () => {
-  let service: BackpackPaginationSearchService;
+  let service: BackpacksPaginationSearchService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(BackpackPaginationSearchService);
+    service = TestBed.inject(BackpacksPaginationSearchService);
   });
 
   it('should be created', () => {

@@ -1,14 +1,14 @@
 import { Component, OnInit, Input } from '@angular/core';
 
 import { AuthenticationService } from '@app/_services';
-import { BackpackPaginationSearchService } from '@app/_services/backpack/backpack-pagination-search.service';
+import { BackpacksPaginationSearchService } from '@app/_services/backpack/backpacks-pagination-search.service';
 import { User, Backpack } from '@app/_models';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 
 @Component({
   selector: 'app-backpacks',
   templateUrl: './backpacks.component.html',
-  styleUrls: ['./backpacks.component.scss']
+  styleUrls: ['./backpacks.component.scss'],
 })
 export class BackpacksComponent implements OnInit {
   @Input()
@@ -40,20 +40,21 @@ export class BackpacksComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private authenticationService: AuthenticationService,
-    public service: BackpackPaginationSearchService
+    public service: BackpacksPaginationSearchService
   ) {
     if (!this.authenticationService.currentUserValue) {
       this.router.navigate(['/login?returnUrl=%2f']);
     }
-    this.authenticationService.currentUser.subscribe(
-      x => {
-        this.currentUser = x;
-        if (this.userId === undefined) { this.userId = x.id; }
-      });
+    this.authenticationService.currentUser.subscribe((x) => {
+      this.currentUser = x;
+      if (this.userId === undefined) {
+        this.userId = x.id;
+      }
+    });
   }
 
   ngOnInit(): void {
-    this.route.queryParams.subscribe(params => {
+    this.route.queryParams.subscribe((params) => {
       this.params = params;
     });
   }
@@ -70,14 +71,19 @@ export class BackpacksComponent implements OnInit {
 
   updateClick(back: Backpack) {
     this.service.setSelected(back);
-    this.router.navigate(['backpack'], { queryParams: {backpackId: back.id, userId: this.userId}});
+    this.router.navigate(['backpack'], {
+      queryParams: { backpackId: back.id, userId: this.userId },
+    });
   }
 
-  deleteClick() {
-  }
+  deleteClick() {}
 
   hasBackpack(): boolean {
-    return this.service && this.service.values !== undefined && this.service.values.length > 0;
+    return (
+      this.service &&
+      this.service.values !== undefined &&
+      this.service.values.length > 0
+    );
   }
 
   displayHelp(): boolean {
@@ -85,16 +91,16 @@ export class BackpacksComponent implements OnInit {
   }
 
   firstThingToDo(): boolean {
-    return this.currentUser.haves.length === 0;
+    return this.currentUser.haves?.length === 0 || false;
   }
 
   showEquipmentHelp() {
     const equipmentHelps = document.getElementsByClassName('equipmentHelps');
-    Array.from(equipmentHelps).forEach(eq => {
+    Array.from(equipmentHelps).forEach((eq) => {
       eq.classList.add('helpers');
     });
-    setTimeout(x => {
-      Array.from(equipmentHelps).forEach(eq => {
+    setTimeout((x) => {
+      Array.from(equipmentHelps).forEach((eq) => {
         eq.classList.remove('helpers');
       });
     }, 5000);
