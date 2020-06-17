@@ -29,7 +29,6 @@ import { EquipmentUpdateComponent } from './equipment/equipment/equipment-update
 import { CharacteristicUpdateComponent } from './equipment/characteristic/characteristic-update/characteristic-update.component';
 import { CategoryUpdateComponent } from './equipment/category/category-update/category-update.component';
 import { SubCategoryUpdateComponent } from './equipment/sub-category/sub-category-update/sub-category-update.component';
-import { CategoryValidatorComponent } from './equipment/category/category-validator/category-validator.component';
 import { SubCategoryValidatorComponent } from './equipment/sub-category/sub-category-validator/sub-category-validator.component';
 import { BrandComponent } from './equipment/brand/brand/brand.component';
 import { CharacteristicValidatorComponent } from './equipment/characteristic/characteristic-validator/characteristic-validator.component';
@@ -76,7 +75,6 @@ import { PopulateComponent } from './equimpent/_admin/populate/populate.componen
     CharacteristicUpdateComponent,
     CategoryUpdateComponent,
     SubCategoryUpdateComponent,
-    CategoryValidatorComponent,
     SubCategoryValidatorComponent,
     BrandComponent,
     CharacteristicValidatorComponent,
