@@ -8,7 +8,7 @@ import { EquipmentPaginationSearchService } from '@app/_services/equipment/equip
 })
 export class EquipmentHelpComponent implements OnInit {
 
-  constructor(private service: EquipmentPaginationSearchService) { }
+  constructor(protected service: EquipmentPaginationSearchService) { }
 
   ngOnInit(): void {
   }

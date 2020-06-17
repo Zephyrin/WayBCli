@@ -8,6 +8,7 @@ import { AuthenticationService } from '@app/_services';
 import { Router, ActivatedRoute } from '@angular/router';
 import { BrandUpdateComponent } from '@app/equipment/brand/brand-update/brand-update.component';
 import { SortByEnum } from '@app/_enums/brand.enum';
+import { BooleanEnum } from '@app/_enums/boolean.enum';
 
 @Component({
   selector: 'app-brand',
@@ -36,6 +37,7 @@ export class BrandComponent implements OnInit {
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
       this.service.isValidator = this.isValidator;
+      this.service.noPagination = BooleanEnum.undefined;
       this.service.init(this.router, this.route, params);
     });
   }

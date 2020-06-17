@@ -1,0 +1,57 @@
+[
+  {
+    "name": "Clothes",
+    "SubCategories": [
+      { "name": "Trousers" },
+      { "name": "T-Shirts" },
+      { "name": "Sweaters" },
+      { "name": "Jackets" },
+      { "name": "Raincoats" },
+      { "name": "Underwears" },
+      { "name": "Shoes" },
+      { "name": "Gloves" },
+      { "name": "Others" }
+    ]
+  },
+  {
+    "name": "Sleeping",
+    "SubCategories": [
+      { "name": "Tents" },
+      { "name": "Sleeping bags" },
+      { "name": "Sleeping pags" },
+      { "name": "Pillows" },
+      { "name": "Others" },
+      { "name": "Hammocks" }
+    ]
+  },
+  {
+    "name": "Cooking",
+    "SubCategories": [
+      { "name": "Stoves" },
+      { "name": "Pot" },
+      { "name": "Cutleries" },
+      { "name": "Accessories" }
+    ]
+  },
+  {
+    "name": "Bags",
+    "SubCategories": [
+      { "name": "Backpacks" },
+      { "name": "Bags" },
+      { "name": "Waterproof bags" },
+      { "name": "Accesories" }
+    ]
+  },
+  {
+    "name": "Walking",
+    "SubCategories": [{ "name": "Polls" }, { "name": "Gaiters" }]
+  },
+  {
+    "name": "Accesories",
+    "SubCategories": [
+      { "name": "Lamps" },
+      { "name": "Pharmacies" },
+      { "name": "Knives" }
+    ]
+  }
+]

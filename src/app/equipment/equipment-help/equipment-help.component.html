@@ -14,7 +14,7 @@
                 <mat-icon [inline]="true">search</mat-icon>
             </button></ng-container>, you can modify the equipment's list.
     </p>
-    <p *ngIf="service.categoryService?.values?.length > 0; else elseCategoryBlock">The first row allow
+    <p *ngIf="service.categoryService?.values?.length > 0; else elseCategoryBlock">The first <span class="pointer a" role="button" (click)="showFilterSimblink('categoryFilterHelps')">row</span> allow
         you to filter on
         category or sub-category.
         A category is a type of equipments like <em>Clothes</em> or <em>Sleeping</em>. A sub-category is
@@ -28,10 +28,10 @@
         it.
         <br /> See you into Category page (you can find it on left side under <span
             class="d-none d-md-none d-lg-inline-block pointer a" role="button"
-            (click)="showEquipmentHelp()">Category</span><span class="d-block d-sm-none"><button
+            (click)="showFilterSimblink('categoryHelps')">Category</span><span class="d-block d-sm-none"><button
                 class="navbar-toggler" type="button" data-toggle="collapse"
                 data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false"
-                (click)="showEquipmentHelp()" aria-label="Toggle navigation">
+                (click)="showFilterSimblink('categoryHelps')" aria-label="Toggle navigation">
                 <mat-icon class="fa-menu-close" [inline]="true">more_vert</mat-icon>
                 <mat-icon class="fa-menu-open" [inline]="true">more_horiz</mat-icon>
             </button></span>).</ng-template>

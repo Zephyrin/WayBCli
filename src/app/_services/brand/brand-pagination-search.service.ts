@@ -62,6 +62,6 @@ export class BrandPaginationSearchService extends ValidationAndSearchService<Bra
   }
 
   canEditOrDelete(brand: Brand) {
-    return this.isValidator ? brand.askValidate : !brand.validate;
+    return this.isValidator ? !brand.askValidate : !brand.validate;
   }
 }

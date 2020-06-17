@@ -1,0 +1,72 @@
+[
+  {
+    "name": "DD Hammocks",
+    "uri": "https://www.ddhammocks.com/",
+    "logo": "logo_dd_hammocks.jpg"
+  },
+  {
+    "name": "Decathlon",
+    "uri": "https://www.decathlon.fr/",
+    "logo": "logo_decathlon.png"
+  },
+  {
+    "name": "Fjällräven",
+    "uri": "https://www.fjallraven.com/",
+    "logo": "logo_fjallraven.png"
+  },
+  {
+    "name": "Forclaz",
+    "uri": "https://www.forclaz.fr/",
+    "logo": "logo_forclaz.png"
+  },
+  {
+    "name": "Lestra",
+    "uri": "http://www.lestra-outdoor.fr/",
+    "logo": "logo_lestra.jpg"
+  },
+  {
+    "name": "Macpac",
+    "uri": "https://www.macpac.co.nz/",
+    "logo": "logo_macpac.jpg"
+  },
+  {
+    "name": "Millet",
+    "uri": "https://www.millet.fr/",
+    "logo": "logo_millet.png"
+  },
+  {
+    "name": "MSR",
+    "uri": "https://www.msrgear.com/",
+    "logo": "logo_msrgear.jpg"
+  },
+  {
+    "name": "Opinel",
+    "uri": "https://www.opinel.com/",
+    "logo": "logo_opinel.jpg"
+  },
+  {
+    "name": "Sea to summit",
+    "uri": "https://seatosummit.com/",
+    "logo": "logo_seatosummit.png"
+  },
+  {
+    "name": "Svord",
+    "uri": "http://www.svord.com/index.php",
+    "logo": "logo_svord.png"
+  },
+  {
+    "name": "The north face",
+    "uri": "https://www.thenorthface.com/",
+    "logo": "logo_thenorthface.jpg"
+  },
+  {
+    "name": "Therm-a-rest",
+    "uri": "https://www.thermarest.com/",
+    "logo": "logo_thermarest.jpg"
+  },
+  {
+    "name": "X-Moove",
+    "uri": "http://www.x-moove.com/",
+    "logo": "logo_x-moove.png"
+  }
+]
