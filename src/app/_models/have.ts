@@ -12,12 +12,12 @@ export class Have {
    * Not used by server.
    * Number of equipment into a backpack that used this equipment.
    */
-  usedOwned: number;
+  usedOwned = 0;
   /**
    * Not used by server.
    * Number of equipment that the user should buy to complete the backpack.
    */
-  wantForUsed: number;
+  wantForUsed = 0;
 
   constructor(have: Have = null) {
     if (have) {
@@ -28,6 +28,12 @@ export class Have {
       this.characteristic = new Characteristic(have.characteristic);
       this.usedOwned = have.usedOwned;
       this.wantForUsed = have.wantForUsed;
+      if (!this.usedOwned) {
+        this.usedOwned = 0;
+      }
+      if (!this.wantForUsed) {
+        this.wantForUsed = 0;
+      }
     }
   }
 }

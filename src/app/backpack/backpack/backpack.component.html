@@ -41,7 +41,8 @@
   {{ service.selected?.intoBackpacks?.length || '0' }} equipments.
 </span>
 <span *ngIf="currentUser.id == userId">You own {{ service.selected?.countTotalOwn() }} and you wish
-  {{ service.selected?.countTotalWish() }}, so that's {{ service.selected?.intoBackpacks?.length || '0' }}
+  {{ service.selected?.countTotalWish() }}, so that's {{ service.selected?.intoBackpacks?.length || '0' }} different
+  equipments and {{ service.selected?.countTotal() }}
   equipments.</span>
 <br /> It weighs
 <b>{{ service.selected?.countWeight() || '0' }}g</b>.
@@ -64,20 +65,46 @@
     </ng-template>
     <div class="card-body collapse"
          id="into_{{ into.equipment.id }}">
-      <p>
+      <div class="d-flex">
         {{ into.equipment.characteristic?.gender | titlecase }}, Size:
         {{ into.equipment.characteristic?.size }},
         {{ into.equipment.characteristic?.price | currency }}
-        <br />
-        Used: {{ into.equipment.usedOwned ? into.equipment.usedOwned : '0' }} on
-        {{ into.equipment.ownQuantity }}
-        owned
-        <br />
-        <ng-container *ngIf="into.equipment.wantForUsed > 0 || into.equipment.wantQuantity > 0">
-          Wished: {{ into.equipment.wantForUsed ? into.equipment.wantForUsed : '0' }} on
+      </div>
+      <div class="d-flex align-items-center">
+        <span class="mr-auto">
+          Used: {{ into.equipment.usedOwned }} on
+          {{ into.equipment.ownQuantity }}
+          owned
+        </span>
+        <ng-template [ngTemplateOutlet]="addRemoveBtns"
+                     [ngTemplateOutletContext]="{
+                  shouldBeVisible: into.equipment.wantForUsed <= 0,
+                  into: into,
+                  shouldRemoveAll: into.equipment.usedOwned > 1,
+                  valRemoveAll: -into.equipment.usedOwned,
+                  shouldRemoveOne: into.equipment.usedOwned > 0,
+                  shouldAddOne: into.equipment.usedOwned < into.equipment.ownQuantity,
+                  shouldAddAll: into.equipment.usedOwned < into.equipment.ownQuantity - 1,
+                  valAddAll: into.equipment.ownQuantity - into.equipment.usedOwned
+                }"></ng-template>
+      </div>
+      <div class="d-flex align-items-center">
+        <div class="mr-auto">
+          Wished: {{ into.equipment.wantForUsed }} on
           {{ into.equipment.wantQuantity }}
-        </ng-container>
-      </p>
+        </div>
+        <ng-template [ngTemplateOutlet]="addRemoveBtns"
+                     [ngTemplateOutletContext]="{
+          shouldBeVisible: into.equipment.usedOwned >= into.equipment.ownQuantity,
+          into: into,
+          shouldRemoveAll: into.equipment.wantForUsed > 1,
+          valRemoveAll: -into.equipment.wantForUsed,
+          shouldRemoveOne: into.equipment.wantForUsed > 0,
+          shouldAddOne: into.equipment.wantForUsed < into.equipment.wantQuantity,
+          shouldAddAll: into.equipment.wantForUsed < into.equipment.wantQuantity - 1,
+          valAddAll: into.equipment.wantQuantity - into.equipment.wantForUsed
+        }"></ng-template>
+      </div>
     </div>
   </div>
 </div>
@@ -86,8 +113,7 @@
      *ngIf="currentUser.id == userId">
   <ng-container *ngFor="let have of service.haves">
     <div class="card"
-         *ngIf="(have.usedOwned === undefined || have.usedOwned === 0) &&
-        (have.wantForUsed === undefined || have.wantForUsed === 0)">
+         *ngIf="have.usedOwned == 0 && have.wantForUsed == 0">
       <ng-template [ngTemplateOutlet]="header"
                    [ngTemplateOutletContext]="{
                       equipment: have.equipment,
@@ -161,13 +187,13 @@
       <button type="button"
               *ngIf="into && currentUser.id == userId"
               class="btn btn-light"
-              (click)="service.removeIntoBackpack(into, userId)">
+              (click)="service.updateOrRemoveIntoBackpack(into, userId, -1)">
         <mat-icon [inline]="true">remove</mat-icon>
       </button>
       <button type="button"
               class="btn btn-light"
               *ngIf="have && currentUser.id == userId"
-              (click)="service.addHaveToBackpack(have, userId)">
+              (click)="service.addHaveToBackpack(have, userId, 1)">
         <mat-icon [inline]="true">add</mat-icon>
       </button>
       <button type="button"
@@ -182,5 +208,45 @@
                   class="expand_more">expand_more</mat-icon>
       </button>
     </div>
+  </div>
+</ng-template>
+<ng-template #addRemoveBtns
+             let-shouldBeVisible="shouldBeVisible"
+             let-into="into"
+             let-shouldRemoveAll="shouldRemoveAll"
+             let-valRemoveAll="valRemoveAll()"
+             let-shouldRemoveOne="shouldRemoveOne"
+             let-shouldAddOne="shouldAddOne"
+             let-shouldAddAll="shouldAddAll"
+             let-valAddAll="valAddAll">
+  <div class="btn-group mr-0 pr-0"
+       *ngIf="currentUser.id == userId"
+       [ngClass]="{disabled: !shouldBeVisible}"
+       role="group"
+       aria-label="Tools">
+    <button type="button"
+            [ngClass]="{disabled: !shouldRemoveAll}"
+            (click)="service.updateOrRemoveIntoBackpack(into, userId, valRemoveAll)"
+            class="btn btn-light d-flex justify-content-center align-content-between">
+      <mat-icon [inline]="true">remove_circle</mat-icon>
+    </button>
+    <button type="button"
+            [ngClass]="{disabled: !shouldRemoveOne}"
+            (click)="service.updateOrRemoveIntoBackpack(into, userId, -1)"
+            class="btn btn-light d-flex justify-content-center align-content-between">
+      <mat-icon [inline]="true">remove</mat-icon>
+    </button>
+    <button type="button"
+            [ngClass]="{disabled: !shouldAddOne}"
+            (click)="service.updateOrRemoveIntoBackpack(into, userId, 1)"
+            class="btn btn-light d-flex justify-content-center align-content-between">
+      <mat-icon [inline]="true">add</mat-icon>
+    </button>
+    <button type="button"
+            [ngClass]="{disabled: !shouldAddAll}"
+            (click)="service.updateOrRemoveIntoBackpack(into, userId, valAddAll)"
+            class="btn btn-light d-flex justify-content-center align-content-between">
+      <mat-icon [inline]="true">add_circle</mat-icon>
+    </button>
   </div>
 </ng-template>

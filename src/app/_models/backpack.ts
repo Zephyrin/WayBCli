@@ -31,22 +31,34 @@ export class Backpack {
     this.intoBackpacks.push(into);
     this.weight$ += into.equipment.characteristic.weight;
     this.price$ += into.equipment.characteristic.price;
-    this.totalOwn$ += into.equipment.usedOwned ? into.equipment.usedOwned : 0;
-    this.totalWish$ += into.equipment.wantForUsed
-      ? into.equipment.wantForUsed
-      : 0;
+    this.totalOwn$ += into.equipment.usedOwned;
+    this.totalWish$ += into.equipment.wantForUsed;
   }
 
-  removeInto(into: IntoBackpack) {
+  updateInto(into: IntoBackpack, nbAddUsed: number, nbAddWant: number) {
+    this.weight$ +=
+      into.equipment.characteristic.weight * (nbAddUsed + nbAddWant);
+    this.price$ +=
+      into.equipment.characteristic.price * (nbAddUsed + nbAddWant);
+    this.totalOwn$ += nbAddUsed;
+    this.totalWish$ += nbAddWant;
+  }
+
+  removeInto(
+    into: IntoBackpack,
+    nb: number,
+    nbRemoveUsed: number,
+    nbRemoveWant: number
+  ) {
     const index = this.intoBackpacks.indexOf(into);
     if (index >= 0) {
-      this.intoBackpacks.splice(index, 1);
-      this.weight$ -= into.equipment.characteristic.weight;
-      this.price$ -= into.equipment.characteristic.price;
-      this.totalOwn$ -= into.equipment.usedOwned ? into.equipment.usedOwned : 0;
-      this.totalWish$ -= into.equipment.wantForUsed
-        ? into.equipment.wantForUsed
-        : 0;
+      this.weight$ -= into.equipment.characteristic.weight * nb;
+      this.price$ -= into.equipment.characteristic.price * nb;
+      this.totalOwn$ -= nbRemoveUsed;
+      this.totalWish$ -= nbRemoveWant;
+      if (into.count <= 0) {
+        this.intoBackpacks.splice(index, 1);
+      }
     }
   }
 
@@ -100,5 +112,9 @@ export class Backpack {
       });
     }
     return this.totalOwn$;
+  }
+
+  countTotal() {
+    return this.totalOwn$ + this.totalWish$;
   }
 }

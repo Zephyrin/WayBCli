@@ -1,4 +1,3 @@
-
 /* $brand-primary: #75B1A9; */
 //$primary: #5C821A;
 /* $secondary: #C6D166;
@@ -7,7 +6,7 @@
 /* $dark: #0F1B07;
 $info: $primary;
  */
-@import "~bootstrap/scss/functions";
+@import '~bootstrap/scss/functions';
 @import '~bootstrap/scss/_variables.scss';
 @import '~bootstrap/scss/mixins';
 /* $card-cap-bg: $light; */ /* Card Header */
@@ -27,20 +26,30 @@ b {
   color: #7eb51d;
 }
 
-.a :hover { color: darken($color: #7eb51d, $amount: 10%); }
+.a :hover {
+  color: darken($color: #7eb51d, $amount: 10%);
+}
 
-a { color: #7eb51d; }
-a :hover { color: darken($color: #7eb51d, $amount: 10%); }
-.pointer { cursor: pointer }
-a { cursor: pointer }
+a {
+  color: #7eb51d;
+}
+a :hover {
+  color: darken($color: #7eb51d, $amount: 10%);
+}
+.pointer {
+  cursor: pointer;
+}
+a {
+  cursor: pointer;
+}
 .table tr.active td {
-    background-color: $light !important;
-    /* color: black; */
+  background-color: $light !important;
+  /* color: black; */
 }
 
 .active-link {
   /* color: white; */
-  background-color:$light !important;
+  background-color: $light !important;
 }
 
 .description {
@@ -49,54 +58,54 @@ a { cursor: pointer }
 }
 
 .dropdown .right {
-position: absolute;
-right: 10px;
-top: 0;
+  position: absolute;
+  right: 10px;
+  top: 0;
 }
 
-.dropdown-submenu>.dropdown-menu {
-top: 0;
-left: 100%;
-margin-top: -6px;
-margin-left: -1px;
--webkit-border-radius: 0 6px 6px 6px;
--moz-border-radius: 0 6px 6px;
-border-radius: 0 6px 6px 6px;
-background-color: $light;
+.dropdown-submenu > .dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  -webkit-border-radius: 0 6px 6px 6px;
+  -moz-border-radius: 0 6px 6px;
+  border-radius: 0 6px 6px 6px;
+  background-color: $light;
 }
 
-.dropdown-submenu:hover>.dropdown-menu {
-display: block;
+.dropdown-submenu:hover > .dropdown-menu {
+  display: block;
 }
 
-.dropdown-submenu>div:after {
-display: block;
-content: " ";
-float: right;
-width: 0;
-height: 0;
-border-color: transparent;
-border-style: solid;
-border-width: 5px 0 5px 5px;
-border-left-color: #ccc;
-margin-top: 5px;
-margin-right: -10px;
+.dropdown-submenu > div:after {
+  display: block;
+  content: ' ';
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #ccc;
+  margin-top: 5px;
+  margin-right: -10px;
 }
 
-.dropdown-submenu:hover>div:after {
-border-left-color: #fff;
+.dropdown-submenu:hover > div:after {
+  border-left-color: #fff;
 }
 
 .dropdown-submenu.pull-left {
-float: none;
+  float: none;
 }
 
-.dropdown-submenu.pull-left>.dropdown-menu {
-left: -100%;
-margin-left: 10px;
--webkit-border-radius: 6px 0 6px 6px;
--moz-border-radius: 6px 0 6px 6px;
-border-radius: 6px 0 6px 6px;
+.dropdown-submenu.pull-left > .dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  -webkit-border-radius: 6px 0 6px 6px;
+  -moz-border-radius: 6px 0 6px 6px;
+  border-radius: 6px 0 6px 6px;
 }
 
 .img-thumbnail {
@@ -106,7 +115,7 @@ border-radius: 6px 0 6px 6px;
 /* Align last column of table to the right */
 tbody tr td:last-child {
   white-space: nowrap;
-  width: 1%
+  width: 1%;
 }
 
 .helpers {
@@ -119,4 +128,8 @@ tbody tr td:last-child {
   50% {
     opacity: 0;
   }
+}
+
+.disabled {
+  cursor: default !important;
 }

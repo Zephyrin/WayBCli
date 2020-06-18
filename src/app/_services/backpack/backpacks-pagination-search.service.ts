@@ -79,12 +79,12 @@ export class BackpacksPaginationSearchService extends ValidationAndSearchService
     return false;
   }
 
-  addHaveToBackpack(have: Have, userId: number) {
+  addHaveToBackpack(have: Have, userId: number, nb: number) {
     this.errors = new FormErrors();
     if (this.selected !== undefined) {
       this.loading = true;
       const into = new IntoBackpack(null);
-      into.count = 1;
+      into.count = nb;
       into.equipment = have;
       this.serviceIntoBackpack.userId = userId;
       this.serviceIntoBackpack.backpackId = this.selected.id;
@@ -103,26 +103,44 @@ export class BackpacksPaginationSearchService extends ValidationAndSearchService
     }
   }
 
-  removeIntoBackpack(into: IntoBackpack, userId: number) {
+  updateOrRemoveIntoBackpack(into: IntoBackpack, userId: number, nb: number) {
     this.errors = new FormErrors();
     if (this.selected !== undefined) {
       this.loading = true;
       this.serviceIntoBackpack.userId = userId;
       this.serviceIntoBackpack.backpackId = this.selected.id;
-      this.serviceIntoBackpack.delete(into).subscribe(
-        (success) => {
-          this.deleteInto(into);
-          this.loading = false;
-        },
-        (error) => {
-          if (error.statusCode === '404') {
-            this.deleteInto(into);
-          } else {
+      into.count = into.count + nb;
+      if (into.count > 0) {
+        this.serviceIntoBackpack.update(into).subscribe(
+          (succes) => {
+            if (nb < 0) {
+              this.deleteInto(into, -nb);
+            } else {
+              this.updateInto(into, nb);
+            }
+            this.loading = false;
+          },
+          (error) => {
             this.errors.formatError(error);
+            this.loading = false;
           }
-          this.loading = false;
-        }
-      );
+        );
+      } else {
+        this.serviceIntoBackpack.delete(into).subscribe(
+          (success) => {
+            this.deleteInto(into, -nb);
+            this.loading = false;
+          },
+          (error) => {
+            if (error.statusCode === '404') {
+              this.deleteInto(into, -nb);
+            } else {
+              this.errors.formatError(error);
+            }
+            this.loading = false;
+          }
+        );
+      }
     }
   }
 
@@ -133,12 +151,6 @@ export class BackpacksPaginationSearchService extends ValidationAndSearchService
         elt.equipment.usedOwned - elt.equipment.ownQuantity;
       elt.equipment.usedOwned = have.ownQuantity;
     }
-    if (have.usedOwned === undefined) {
-      have.usedOwned = 0;
-    }
-    if (have.wantForUsed === undefined) {
-      have.wantForUsed = 0;
-    }
     have.usedOwned += elt.count;
     if (have.ownQuantity < have.usedOwned) {
       have.wantForUsed = have.usedOwned - have.ownQuantity;
@@ -146,17 +158,49 @@ export class BackpacksPaginationSearchService extends ValidationAndSearchService
     }
   }
 
-  private deleteInto(into: IntoBackpack): void {
+  private updateInto(into: IntoBackpack, nb: number): void {
+    let nbAddUsed = nb;
+    let nbAddWant = 0;
+    into.equipment.usedOwned += nb;
+    if (into.equipment.usedOwned > into.equipment.ownQuantity) {
+      nbAddWant = into.equipment.usedOwned - into.equipment.ownQuantity;
+      nbAddUsed -= nbAddWant;
+      into.equipment.wantForUsed += nbAddWant;
+      into.equipment.usedOwned = into.equipment.ownQuantity;
+    }
+    const haves = this.haves.filter((elt) => elt.id === into.equipment.id);
+    haves.forEach((have) => {
+      have.usedOwned += nb;
+      if (have.usedOwned > have.ownQuantity) {
+        have.wantForUsed += have.usedOwned - have.ownQuantity;
+        have.usedOwned = have.ownQuantity;
+      }
+    });
+    this.selected.updateInto(into, nbAddUsed, nbAddWant);
+  }
+  /**
+   * Remove nb IntoBackpacks from the backpack.
+   *
+   * @param into The equipment/characteristic that will be removed.
+   * @param nb The number of equipment/characteristic that will be removed.
+   */
+  private deleteInto(into: IntoBackpack, nb: number): void {
+    let nbRemoveUsed = 0;
+    let nbRemoveWant = nb;
+    into.equipment.wantForUsed -= nb;
+    if (into.equipment.wantForUsed < 0) {
+      into.equipment.usedOwned += into.equipment.wantForUsed;
+      nbRemoveUsed -= into.equipment.wantForUsed;
+      nbRemoveWant = nb - nbRemoveUsed;
+      if (into.equipment.usedOwned < 0) {
+        into.equipment.usedOwned = 0;
+      }
+      into.equipment.wantForUsed = 0;
+    }
     const haves = this.haves.filter((elt) => elt.id === into.equipment.id);
     if (haves.length > 0) {
       haves.forEach((have) => {
-        if (have.wantForUsed === undefined) {
-          have.wantForUsed = 0;
-        }
-        if (have.usedOwned === undefined) {
-          have.usedOwned = 0;
-        }
-        have.wantForUsed -= into.count;
+        have.wantForUsed -= nb;
         if (have.wantForUsed < 0) {
           have.usedOwned += have.wantForUsed;
           have.wantForUsed = 0;
@@ -166,8 +210,7 @@ export class BackpacksPaginationSearchService extends ValidationAndSearchService
         }
       });
     }
-    into.count = 0;
-    this.selected.removeInto(into);
+    this.selected.removeInto(into, nb, nbRemoveUsed, nbRemoveWant);
   }
 
   /* Override methods */
