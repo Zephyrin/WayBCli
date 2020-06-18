@@ -4,26 +4,24 @@ import { EquipmentPaginationSearchService } from '@app/_services/equipment/equip
 @Component({
   selector: 'app-equipment-help',
   templateUrl: './equipment-help.component.html',
-  styleUrls: ['./equipment-help.component.scss']
+  styleUrls: ['./equipment-help.component.scss'],
 })
 export class EquipmentHelpComponent implements OnInit {
+  constructor(public service: EquipmentPaginationSearchService) {}
 
-  constructor(protected service: EquipmentPaginationSearchService) { }
-
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   displayHelp() {
     return this.service?.values?.length > 0 || true;
   }
 
-  showFilterSimblink(classHelp: string)  {
+  showFilterSimblink(classHelp: string) {
     const filterHelps = document.getElementsByClassName(classHelp);
-    Array.from(filterHelps).forEach(fi => {
+    Array.from(filterHelps).forEach((fi) => {
       fi.classList.add('helpers');
     });
-    setTimeout(x => {
-      Array.from(filterHelps).forEach(fi => {
+    setTimeout((x) => {
+      Array.from(filterHelps).forEach((fi) => {
         fi.classList.remove('helpers');
       });
     }, 5000);
